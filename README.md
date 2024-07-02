@@ -41,5 +41,5 @@ DB_HOST=tu_host_de_base_de_datos
     npm start
 
 
-Licencia
+## Licencia
 Este proyecto está bajo la Licencia MIT.
