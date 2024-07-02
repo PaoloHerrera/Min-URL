@@ -25,8 +25,8 @@ Min-URL es un servicio de acortador de URLs desarrollado con Node.js, Express y 
 
 2. Instala dependencias:
 
-  ```bash
-  npm install
+    ```bash
+    npm install
 
 4. Crea un archivo .env en la carpeta /backend/ del proyecto y configura las variables de entorno según sea necesario:
 
@@ -37,8 +37,8 @@ DB_HOST=tu_host_de_base_de_datos
 
 5. Inicia el servidor:
 
-  ```bash
-  npm start
+    ```bash
+    npm start
 
 
 Licencia
