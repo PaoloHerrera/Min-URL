@@ -17,7 +17,6 @@ export default class UrlController {
     let initialAttemps = 0
     let iterationShortUrl = true
     let resultUrl, shorturl, ip
-    console.log(req.body.originalUrl)
 
     while (iterationShortUrl) {
       if (initialAttemps === maxAttemps) {
@@ -32,7 +31,6 @@ export default class UrlController {
       try {
         const nanoid = await NanoidController.createNanoId(lengthShortUrl)
         shorturl = nanoid()
-        console.log(shorturl)
       } catch (error) {
         return res.status(400).json({ error: JSON.parse('No fue posible crear la shorturl') })
       }
@@ -58,22 +56,20 @@ export default class UrlController {
       }
       resultUrl = validateUrl(objectUrl)
 
-      console.log(resultUrl)
-
       if (!resultUrl.success) {
         return res.status(400).json({ error: JSON.parse(resultUrl.error.message) })
       }
 
       // Intenta insertar la shortURL en la base de datos
       try {
-        await UrlModel.create(objectUrl)
+        await UrlModel.create(resultUrl.data)
         iterationShortUrl = false
       } catch (error) {
         console.log('Error al crear una nueva url: ', error.message)
       }
       initialAttemps++
     }
-
-    res.status(201).json(resultUrl.data)
+    const fullShortUrl = `${req.protocol}://${req.get('host')}/${resultUrl.data.shorturl}`
+    res.status(201).json({ fullShortUrl })
   }
 }
