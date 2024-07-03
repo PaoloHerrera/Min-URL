@@ -4,6 +4,7 @@ import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { corsMiddleware } from './middleware/cors.js'
 import routesUrl from './routes/url.js'
+import routesShortUrl from './routes/shorturl.js'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
@@ -20,6 +21,7 @@ dotenv.config({ path: envPath })
 
 // Routes
 app.use('/api/urls', routesUrl)
+app.use('/', routesShortUrl)
 
 app.get('/', (req, res) => {
   res.send('Hello World')

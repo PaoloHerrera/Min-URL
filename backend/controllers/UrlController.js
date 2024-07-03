@@ -72,4 +72,24 @@ export default class UrlController {
     const fullShortUrl = `${req.protocol}://${req.get('host')}/${resultUrl.data.shorturl}`
     res.status(201).json({ fullShortUrl })
   }
+
+  static async getShortUrl (req, res) {
+    const shorturl = req.params.id
+
+    // Se consulta en la base de datos si existe la shorturl creada
+    try {
+      const url = await UrlModel.findOne({ where: { shorturl } })
+
+      if (!url) res.status(404).redirect('/')
+
+      // Si la url fue encontrada se actualiza la cantidad de clicks. Sumando +1
+      await url.increment({ clicks: 1 })
+
+      // Luego se crea el log con los datos de quien ingresó al link
+
+      res.redirect(url.longurl)
+    } catch (error) {
+      console.log('Error al leer la url: ', error.message)
+    }
+  }
 }
