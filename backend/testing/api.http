@@ -2,5 +2,5 @@ POST http://localhost:1234/api/urls
 Content-Type: application/json
 
 {
-  "originalUrl": "www.youtube.com"
+  "originalUrl": "www.google.com"
 }
