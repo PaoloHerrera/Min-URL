@@ -44,6 +44,10 @@ export const UrlModel = sequelize.define('url', {
     type: DataTypes.STRING(10),
     allowNull: true
   },
+  region: {
+    type: DataTypes.STRING(10),
+    allowNull: true
+  },
   timezone: {
     type: DataTypes.STRING(255),
     allowNull: true
