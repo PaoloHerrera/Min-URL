@@ -1,8 +1,10 @@
 import crypto from 'node:crypto'
 import geoip from 'geoip-lite'
 import { UrlModel } from '../models/Url.js'
+import { LogUrlModel } from '../models/LogUrl.js'
 import NanoidController from './NanoidController.js'
 import { validateUrl } from '../schema/url.js'
+import { validateLogUrl } from '../schema/logurl.js'
 import { addHttpScheme } from '../utils/utils.js'
 import axios from 'axios'
 
@@ -41,6 +43,8 @@ export default class UrlController {
       } catch (error) {
         return res.status(400).json({ error: JSON.parse('No fue posible crear la shorturl') })
       }
+      // Usuario anónimo.
+      // TODO: Incorporar usuario registrado
       const geo = geoip.lookup(ip)
       const objectUrl = {
         longurl: addHttpScheme(req.body.originalUrl),
@@ -85,11 +89,39 @@ export default class UrlController {
       // Si la url fue encontrada se actualiza la cantidad de clicks. Sumando +1
       await url.increment({ clicks: 1 })
 
-      // Luego se crea el log con los datos de quien ingresó al link
+      console.log(url.dataValues.id_url)
+
+      /* Luego se crea el log con los datos de quien ingresó al link */
+      // Se lee la ip
+      const response = await axios.get('https://api.ipify.org?format=json')
+      const ip = response.data.ip
+
+      const geo = geoip.lookup(ip)
+      const objectLogUrl = {
+        url_id_url: url.dataValues.id_url,
+        id_logurl_hash: crypto.randomUUID(),
+        ip_address: ip,
+        country: geo.country,
+        region: geo.region,
+        timezone: geo.timezone,
+        city: geo.city,
+        latitude: geo.ll[0],
+        longitude: geo.ll[1]
+      }
+
+      const resultLogUrl = validateLogUrl(objectLogUrl)
+
+      if (!resultLogUrl.success) {
+        return res.status(400).json({ error: JSON.parse(resultLogUrl.error.message) })
+      }
+
+      // Inserta el Log en la base de datos
+      await LogUrlModel.create(resultLogUrl.data)
 
       res.redirect(url.longurl)
     } catch (error) {
       console.log('Error al leer la url: ', error.message)
+      return res.status(400).json({ error: JSON.parse(error.message) })
     }
   }
 }
