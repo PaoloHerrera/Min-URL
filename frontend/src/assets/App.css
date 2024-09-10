@@ -5,6 +5,7 @@
 
 .App {
   text-align: center;
+  font-family: 'Roboto', sans-serif;
 }
 
 .App-logo {
@@ -21,4 +22,11 @@
   justify-content: center;
   font-size: calc(10px + 2vmin);
   color: black;
+}
+
+.loading-indicator {
+  text-align: -webkit-center;
+}
+.loading-circle {
+  color: #006fee
 }

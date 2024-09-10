@@ -1,14 +1,10 @@
-import logo from './resources/Logo-transformed.png'
-import InputShortUrl from './components/InputShortUrl'
-import './App.css'
+import HomePage from './pages/HomePage'
+import './assets/App.css'
 
 function App () {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <InputShortUrl />
-      </header>
+      <HomePage />
     </div>
   )
 }

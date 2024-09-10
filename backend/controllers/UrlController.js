@@ -28,7 +28,7 @@ export default class UrlController {
       // Verifica si el largo de la shorturl es mayor a 10. Si es así no crea la shorturl
       if (lengthShortUrl > 10) {
         iterationShortUrl = false
-        return res.status(400).json({ error: JSON.parse('No fue posible crear la shorturl') })
+        return res.status(400).json({ error: JSON.parse('No fue posible crear la shorturl. Inténtelo de nuevo.') })
       }
       try {
         const nanoid = await NanoidController.createNanoId(lengthShortUrl)
