@@ -1,12 +1,30 @@
-import React from 'react'
+import React, { useState } from 'react'
 import ShortUrlForm from '../components/ShortUrlForm'
 import logo from '../assets/Logo-transformed.png'
+import LoadingIndicator from '../components/LoadingIndicator'
+import ShortUrlReady from '../components/ShortUrlReady'
 
 export default function HomePage () {
+  const [loading, setLoading] = useState(false)
+  const [formReady, setFormReady] = useState(true)
+  const [shortUrlReady, setShortUrlReady] = useState(false)
+  const [urlValue, setUrlValue] = useState('')
+
+  const sendUrl = (url) => {
+    setLoading(true)
+    setUrlValue(url)
+    setTimeout(() => {
+      setFormReady(false)
+      setLoading(false)
+      setShortUrlReady(true)
+    }, 10000)
+  }
   return (
     <header className="App-header">
       <img src={logo} className="App-logo" alt="logo" />
-      <ShortUrlForm />
+      { formReady && <ShortUrlForm sendUrl={sendUrl} /> }
+      { loading && <LoadingIndicator /> }
+      { shortUrlReady && <ShortUrlReady url={urlValue}/>}
     </header>
   )
 }

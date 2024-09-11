@@ -3,13 +3,12 @@ import { Button, Input } from '@nextui-org/react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArrowRight } from '@fortawesome/free-solid-svg-icons'
 
-import LoadingIndicator from './LoadingIndicator'
 import validateURL from '../utils/validateURL'
 
-export default function ShortUrlForm () {
-  const [loading, setLoading] = useState(false)
+export default function ShortUrlForm ({ sendUrl }) {
   const [urlValue, setUrlValue] = useState('')
   const [isInvalidURL, setInvalidURL] = useState()
+  const [loading, setLoading] = useState(false)
 
   const handleChange = (event) => {
     setUrlValue(event.target.value)
@@ -19,6 +18,7 @@ export default function ShortUrlForm () {
     if (validateURL(urlValue)) {
       setInvalidURL(false)
       setLoading(true)
+      sendUrl(urlValue)
     } else {
       setInvalidURL(true)
     }
@@ -51,7 +51,6 @@ export default function ShortUrlForm () {
           }
         >
         </Input>
-        {loading && <LoadingIndicator /> }
       </div>
 
   )
