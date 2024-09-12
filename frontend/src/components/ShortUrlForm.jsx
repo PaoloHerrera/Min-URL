@@ -19,6 +19,7 @@ export default function ShortUrlForm ({ sendUrl }) {
       setInvalidURL(false)
       setLoading(true)
       sendUrl(urlValue)
+      setLoading(false)
     } else {
       setInvalidURL(true)
     }

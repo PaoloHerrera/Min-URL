@@ -1,18 +1,14 @@
 import React, { useRef } from 'react'
 import { QRCode } from 'react-qr-code'
-import { Button, Card, CardBody, Popover, PopoverContent, PopoverTrigger } from '@nextui-org/react'
-import { faClipboard, faGlobe, faLink } from '@fortawesome/free-solid-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { Button, Card, CardBody, Snippet } from '@nextui-org/react'
 import * as htmlToImage from 'html-to-image'
 
-export default function ShortUrlReady ({ url, createNewShortUrl }) {
-  const shortURL = 'https://min-url/A43x5'
-
+export default function ShortUrlReady ({ url, createNewShortUrl, shortURL }) {
   const qrCodeRef = useRef(null)
 
-  const copyToClipboard = () => {
-    navigator.clipboard.writeText(shortURL)
-  }
+  // const copyToClipboard = () => {
+  //   navigator.clipboard.writeText(shortURL)
+  // }
 
   const downloadQRCode = () => {
     htmlToImage
@@ -39,7 +35,7 @@ export default function ShortUrlReady ({ url, createNewShortUrl }) {
           <div className="mb-5 ml-5 mt-5 col-span-3 sm:col-span-4">
             <p><strong>QR CODE</strong></p>
           </div>
-          <div className="mt-5 text-right col-span-5 sm:col-span-8 mr-2">
+          <div className="mt-5 text-right col-span-9 sm:col-span-8 mr-2">
             <Button
               color="primary"
               variant="solid"
@@ -52,36 +48,13 @@ export default function ShortUrlReady ({ url, createNewShortUrl }) {
           </div>
           <div className="col-span-12 items-center sm:col-span-8 mt-5">
             <div className="grid grid-cols-12 items-center col-span-12 sm:col-span-8 mr-2 sm:gap-2">
-              <div className="col-span-1 sm:col-span-2">
-                <FontAwesomeIcon icon={faGlobe} className="primary-color" />
-              </div>
-              <div className="col-span-11 sm:col-span-10">
-                <p className="truncate-url">{url}</p>
+              <div className="col-span-12 sm:col-span-12">
+              <Snippet symbol="♾️" variant="bordered" color="primary" className="truncate-url w-full" hideCopyButton>{url}</Snippet>
               </div>
             </div>
             <div className="grid grid-cols-12 items-center col-span-12 sm:col-span-8 mr-2 sm:gap-2">
-              <div className="col-span-1 sm:col-span-2">
-                <FontAwesomeIcon icon={faLink} className="primary-color" />
-              </div>
-              <div className="col-span-9 sm:col-span-8">
-                <p className="short-url">{shortURL}</p>
-              </div>
-              <div className="col-span-2 text-right">
-                <Popover placement="right">
-                  <PopoverTrigger>
-                    <Button
-                      isIconOnly
-                      onClick={copyToClipboard}
-                    >
-                      <FontAwesomeIcon icon={faClipboard} className="primary-color" />
-                    </Button>
-                  </PopoverTrigger>
-                  <PopoverContent>
-                    <div className="px-1 py-2">
-                      <div className="text-small font-bold"> Short URL Copied! </div>
-                    </div>
-                  </PopoverContent>
-                </Popover>
+              <div className="col-span-12 sm:col-span-12">
+                <Snippet symbol="🔗" variant="bordered" color="success" className="w-full">{shortURL}</Snippet>
               </div>
             </div>
           </div>
