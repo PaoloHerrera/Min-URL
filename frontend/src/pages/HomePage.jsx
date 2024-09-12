@@ -19,12 +19,20 @@ export default function HomePage () {
       setShortUrlReady(true)
     }, 10000)
   }
+
+  const createNewShortUrl = () => {
+    setLoading(false)
+    setShortUrlReady(false)
+    setUrlValue('')
+    setFormReady(true)
+  }
+
   return (
     <header className="App-header">
       <img src={logo} className="App-logo" alt="logo" />
       { formReady && <ShortUrlForm sendUrl={sendUrl} /> }
       { loading && <LoadingIndicator /> }
-      { shortUrlReady && <ShortUrlReady url={urlValue}/>}
+      { shortUrlReady && <ShortUrlReady url={urlValue} createNewShortUrl={createNewShortUrl}/>}
     </header>
   )
 }

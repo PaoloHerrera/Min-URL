@@ -27,6 +27,17 @@
 .loading-indicator {
   text-align: -webkit-center;
 }
-.loading-circle {
+.primary-color {
   color: #006fee
+}
+
+.truncate-url {
+  width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 14px;
+}
+.short-url {
+  font-size: 14px;
 }
