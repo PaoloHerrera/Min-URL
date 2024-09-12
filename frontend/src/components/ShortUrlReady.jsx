@@ -1,14 +1,31 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import { QRCode } from 'react-qr-code'
 import { Button, Card, CardBody, Popover, PopoverContent, PopoverTrigger } from '@nextui-org/react'
 import { faClipboard, faGlobe, faLink } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import * as htmlToImage from 'html-to-image'
 
 export default function ShortUrlReady ({ url, createNewShortUrl }) {
   const shortURL = 'https://min-url/A43x5'
 
+  const qrCodeRef = useRef(null)
+
   const copyToClipboard = () => {
     navigator.clipboard.writeText(shortURL)
+  }
+
+  const downloadQRCode = () => {
+    htmlToImage
+      .toPng(qrCodeRef.current)
+      .then(function (dataUrl) {
+        const link = document.createElement('a')
+        link.href = dataUrl
+        link.download = 'qr-code.png'
+        link.click()
+      })
+      .catch(function (error) {
+        console.error('Error to donwloading QR code:', error)
+      })
   }
 
   return (
@@ -26,10 +43,11 @@ export default function ShortUrlReady ({ url, createNewShortUrl }) {
             <Button
               color="primary"
               variant="solid"
+              onClick={downloadQRCode}
             >Download PNG
             </Button>
           </div>
-          <div className="mb-5 ml-5 col-span-3 sm:col-span-4">
+          <div className="mb-5 ml-5 col-span-3 sm:col-span-4" ref={qrCodeRef}>
             <QRCode value={url} size={130}/>
           </div>
           <div className="col-span-12 items-center sm:col-span-8 mt-5">
