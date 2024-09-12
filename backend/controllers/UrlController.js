@@ -89,8 +89,6 @@ export default class UrlController {
       // Si la url fue encontrada se actualiza la cantidad de clicks. Sumando +1
       await url.increment({ clicks: 1 })
 
-      console.log(url.dataValues.id_url)
-
       /* Luego se crea el log con los datos de quien ingresó al link */
       // Se lee la ip
       const response = await axios.get('https://api.ipify.org?format=json')
