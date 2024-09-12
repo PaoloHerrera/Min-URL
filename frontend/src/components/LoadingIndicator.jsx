@@ -1,11 +1,14 @@
-import { faCircleNotch } from '@fortawesome/free-solid-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { CircularProgress } from '@nextui-org/react'
 
 export default function LoadingIndicator () {
   return (
-    <div className="loading-indicator mt-10">
-      <p>Generating short URL, please wait...</p>
-      <FontAwesomeIcon icon={faCircleNotch} className='flex animate-spin primary-color fa-xl'/>
+    <div className="loading-indicator mt-5">
+      <div className="grid grid-cols-1">
+        <p>Generating Short URL, please wait...</p>
+      </div>
+      <div className="grid grid-cols-1 justify-items-center mt-3">
+        <CircularProgress size="lg" aria-label="Loading..." />
+      </div>
     </div>
   )
 }
