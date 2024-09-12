@@ -4,3 +4,4 @@
 /backend/data/
 /backend/docker-compose.yml
 /frontend/node_modules
+/backend/testing/api.http
