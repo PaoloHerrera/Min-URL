@@ -26,8 +26,8 @@ export default function HomePage () {
       setFormReady(false)
       setLoading(false)
       setShortUrlReady(true)
-    } catch {
-      setError("We couldn't generate your Short URL at this time. Please try again later.")
+    } catch (error) {
+      setError(error.response.data.message)
     } finally {
       setLoading(false)
     }
