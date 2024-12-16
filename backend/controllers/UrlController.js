@@ -35,12 +35,12 @@ export default class UrlController {
     y así sucesivamente hasta que se pueda crear la shortURL. (Máximo largo 10) */
 
     // Capturamos la ip del usuario
-    let ip = req.ip || req.headers['x-forwarded-for'] || '127.0.0.1'
+    let ip = req.ip
     let lengthShortUrl = SHORTURL_VALUES.initialLength
     const maxAttempts = SHORTURL_VALUES.maxAttempts
     let resultUrl, shorturl
 
-    if (ip === '::1') ip = '179.60.65.177'
+    if (ip === '::1') ip = process.env.LOCAL_IP
 
     const geo = getGeoLocation(ip)
 
@@ -90,9 +90,9 @@ export default class UrlController {
     const shorturl = req.params.id
 
     // Capturamos la ip del usuario
-    let ip = req.ip || req.headers['x-forwarded-for'] || '127.0.0.1'
+    let ip = req.ip
 
-    if (ip === '::1') ip = '179.60.65.177'
+    if (ip === '::1') ip = process.env.LOCAL_IP
     const geo = getGeoLocation(ip)
 
     // Se consulta en la base de datos si existe la shorturl creada
