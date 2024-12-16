@@ -6,79 +6,94 @@ import NanoidController from './NanoidController.js'
 import { validateUrl } from '../schema/url.js'
 import { validateLogUrl } from '../schema/logurl.js'
 import { addHttpScheme } from '../utils/utils.js'
-import axios from 'axios'
+import { SHORTURL_VALUES } from '../constants.js'
+
+// Función para obtener geolocalización
+const getGeoLocation = (ip) => geoip.lookup(ip) || {}
+
+// Esta función permite crear una ShortUrl con intentos
+const generateShortUrl = async (length, maxAttempts) => {
+  let attempts = 0
+  let shorturl = ''
+  while (attempts < maxAttempts) {
+    try {
+      const nanoid = await NanoidController.createNanoId(length)
+      shorturl = nanoid()
+      break
+    } catch (error) {
+      attempts++
+      if (attempts >= maxAttempts) throw new Error('No fue posible crear la shorturl')
+    }
+  }
+  return shorturl
+}
 
 export default class UrlController {
   static async createShortUrl (req, res) {
     /* Primero se crea la ShortURL de largo 3 y con 20 intentos.
-  Si no es posible insertar en la base de datos se aumenta el largo en 1 y se vuelve a intentar 20 veces
-  y así sucesivamente hasta que se pueda crear la shortURL. (Máximo largo 10) */
+    Si no es posible insertar en la base de datos se aumenta el largo en 1 y se vuelve a intentar 20 veces
+    y así sucesivamente hasta que se pueda crear la shortURL. (Máximo largo 10) */
 
-    let lengthShortUrl = 3
-    const maxAttemps = 20
-    let initialAttemps = 0
-    let iterationShortUrl = true
-    let resultUrl, shorturl, ip
+    // Capturamos la ip del usuario
+    let ip = req.ip || req.headers['x-forwarded-for'] || '127.0.0.1'
+    let lengthShortUrl = SHORTURL_VALUES.initialLength
+    const maxAttempts = SHORTURL_VALUES.maxAttempts
+    let resultUrl, shorturl
 
-    while (iterationShortUrl) {
-      if (initialAttemps === maxAttemps) {
-        initialAttemps = 0
-        lengthShortUrl++
-      }
-      // Verifica si el largo de la shorturl es mayor a 10. Si es así no crea la shorturl
-      if (lengthShortUrl > 10) {
-        iterationShortUrl = false
-        return res.status(400).json({ error: JSON.parse('No fue posible crear la shorturl. Inténtelo de nuevo.') })
-      }
+    if (ip === '::1') ip = '179.60.65.177'
+
+    const geo = getGeoLocation(ip)
+
+    // Verifica si geo es vacío
+    if (Object.keys(geo).length === 0) {
+      return res.status(400).json({ error: 'No fue posible crear la shorturl. Inténtelo de nuevo.' })
+    }
+
+    while (lengthShortUrl <= SHORTURL_VALUES.maxLength) {
       try {
-        const nanoid = await NanoidController.createNanoId(lengthShortUrl)
-        shorturl = nanoid()
-      } catch (error) {
-        return res.status(400).json({ error: JSON.parse('No fue posible crear la shorturl') })
-      }
-      // Solamente prueba en modo local
-      try {
-        const response = await axios.get('https://api.ipify.org?format=json')
-        ip = response.data.ip
-      } catch (error) {
-        return res.status(400).json({ error: JSON.parse('No fue posible crear la shorturl') })
-      }
-      // Usuario anónimo.
-      // TODO: Incorporar usuario registrado
-      const geo = geoip.lookup(ip)
-      const objectUrl = {
-        longurl: addHttpScheme(req.body.originalUrl),
-        id_url_hash: crypto.randomUUID(),
-        shorturl,
-        ip_address: ip,
-        country: geo.country,
-        region: geo.region,
-        timezone: geo.timezone,
-        city: geo.city,
-        latitude: geo.ll[0],
-        longitude: geo.ll[1]
-      }
-      resultUrl = validateUrl(objectUrl)
+        shorturl = await generateShortUrl(lengthShortUrl, maxAttempts)
+        // Usuario anónimo.
+        // TODO: Incorporar usuario registrado
+        const objectUrl = {
+          longurl: addHttpScheme(req.body.originalUrl),
+          id_url_hash: crypto.randomUUID(),
+          shorturl,
+          ip_address: ip,
+          country: geo.country,
+          region: geo.region,
+          timezone: geo.timezone,
+          city: geo.city,
+          latitude: geo.ll[0],
+          longitude: geo.ll[1]
+        }
 
-      if (!resultUrl.success) {
-        return res.status(400).json({ error: JSON.parse(resultUrl.error.message) })
-      }
+        resultUrl = validateUrl(objectUrl)
 
-      // Intenta insertar la shortURL en la base de datos
-      try {
+        if (!resultUrl.success) {
+          return res.status(400).json({ error: resultUrl.error.message })
+        }
+
         await UrlModel.create(resultUrl.data)
-        iterationShortUrl = false
+
+        const fullShortUrl = `${req.protocol}://${req.get('host')}/${resultUrl.data.shorturl}`
+        return res.status(201).json({ fullShortUrl })
       } catch (error) {
         console.log('Error al crear una nueva url: ', error.message)
+        if (lengthShortUrl <= SHORTURL_VALUES.maxLength) lengthShortUrl++
       }
-      initialAttemps++
     }
-    const fullShortUrl = `${req.protocol}://${req.get('host')}/${resultUrl.data.shorturl}`
-    res.status(201).json({ fullShortUrl })
+
+    return res.status(400).json({ error: 'No fue posible crear la shorturl. Inténtelo de nuevo.' })
   }
 
   static async getShortUrl (req, res) {
     const shorturl = req.params.id
+
+    // Capturamos la ip del usuario
+    let ip = req.ip || req.headers['x-forwarded-for'] || '127.0.0.1'
+
+    if (ip === '::1') ip = '179.60.65.177'
+    const geo = getGeoLocation(ip)
 
     // Se consulta en la base de datos si existe la shorturl creada
     try {
@@ -89,12 +104,6 @@ export default class UrlController {
       // Si la url fue encontrada se actualiza la cantidad de clicks. Sumando +1
       await url.increment({ clicks: 1 })
 
-      /* Luego se crea el log con los datos de quien ingresó al link */
-      // Se lee la ip
-      const response = await axios.get('https://api.ipify.org?format=json')
-      const ip = response.data.ip
-
-      const geo = geoip.lookup(ip)
       const objectLogUrl = {
         url_id_url: url.dataValues.id_url,
         id_logurl_hash: crypto.randomUUID(),
@@ -110,7 +119,7 @@ export default class UrlController {
       const resultLogUrl = validateLogUrl(objectLogUrl)
 
       if (!resultLogUrl.success) {
-        return res.status(400).json({ error: JSON.parse(resultLogUrl.error.message) })
+        return res.status(400).json({ error: resultLogUrl.error.message })
       }
 
       // Inserta el Log en la base de datos
@@ -119,7 +128,7 @@ export default class UrlController {
       res.redirect(url.longurl)
     } catch (error) {
       console.log('Error al leer la url: ', error.message)
-      return res.status(400).json({ error: JSON.parse(error.message) })
+      return res.status(400).json({ error: error.message })
     }
   }
 }
