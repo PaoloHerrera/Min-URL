@@ -46,7 +46,7 @@ export default class UrlController {
 
     // Verifica si geo es vacío
     if (Object.keys(geo).length === 0) {
-      return res.status(400).json({ error: 'No fue posible crear la shorturl. Inténtelo de nuevo.' })
+      return res.status(400).json({ message: "We couldn't generate your Short URL at this time. Please try again later." })
     }
 
     while (lengthShortUrl <= SHORTURL_VALUES.maxLength) {
@@ -83,7 +83,7 @@ export default class UrlController {
       }
     }
 
-    return res.status(400).json({ error: 'No fue posible crear la shorturl. Inténtelo de nuevo.' })
+    return res.status(400).json({ message: "We couldn't generate your Short URL at this time. Please try again later." })
   }
 
   static async getShortUrl (req, res) {

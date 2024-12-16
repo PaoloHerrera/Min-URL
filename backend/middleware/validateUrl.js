@@ -10,7 +10,7 @@ export const validateUrl = (req, res, next) => {
 
   // Verifica si la URL viene y es un string
   if (!originalUrl || typeof originalUrl !== 'string') {
-    return res.status(400).json({ error: 'URL inválida.' })
+    return res.status(400).json({ message: 'Invalid URL.' })
   }
 
   // Si falta el protocolo se añade
@@ -20,6 +20,6 @@ export const validateUrl = (req, res, next) => {
     req.body.originalUrl = originalUrl
     next()
   } else {
-    res.status(404).json({ error: 'La URL es inválida' })
+    res.status(404).json({ message: 'Invalid URL.' })
   }
 }
