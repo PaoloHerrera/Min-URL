@@ -29,9 +29,9 @@ importers:
       sequelize:
         specifier: 6.37.3
         version: 6.37.3(mysql2@3.10.1)
-      valid-url:
-        specifier: 1.0.9
-        version: 1.0.9
+      validator:
+        specifier: 13.12.0
+        version: 13.12.0
       zod:
         specifier: 3.23.8
         version: 3.23.8
@@ -1369,9 +1369,6 @@ packages:
   uuid@8.3.2:
     resolution: {integrity: sha512-+NYs2QeMWy+GWFOEm9xnn6HCDp0l7QBD7ml8zLUmJ+93Q5NF0NocErnwkTkXVFNiX3/fpC6afS8Dhb/gz7R7eg==}
     hasBin: true
-
-  valid-url@1.0.9:
-    resolution: {integrity: sha512-QQDsV8OnSf5Uc30CKSwG9lnhMPe6exHtTXLRYX8uMwKENy640pU+2BgBL0LRbDh/eYRahNCS7aewCx0wf3NYVA==}
 
   validator@13.12.0:
     resolution: {integrity: sha512-c1Q0mCiPlgdTVVVIJIrBuxNicYE+t/7oKeI9MWLj3fh/uq2Pxh/3eeWbVZ4OcGW1TUf53At0njHw5SMdA3tmMg==}
@@ -2967,8 +2964,6 @@ snapshots:
   utils-merge@1.0.1: {}
 
   uuid@8.3.2: {}
-
-  valid-url@1.0.9: {}
 
   validator@13.12.0: {}
 
