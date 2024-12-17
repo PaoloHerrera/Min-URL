@@ -2,7 +2,7 @@ import { Op } from 'sequelize'
 import { UrlModel } from '../models/Url.js'
 import { LIMITS_VALUES } from '../constants.js'
 
-export const limitRequestsMiddleware = async (req, res, next) => {
+export const limitRequests = async (req, res, next) => {
   try {
     let ip = req.ip
 

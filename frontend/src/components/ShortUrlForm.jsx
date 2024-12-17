@@ -1,58 +1,40 @@
-import { useState } from 'react'
-import { Button, Input } from '@nextui-org/react'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faArrowRight } from '@fortawesome/free-solid-svg-icons'
+import { Form, Input, Button, Alert } from '@nextui-org/react'
+import { useUrl } from '../hooks/useUrl'
+import { useShortUrl } from '../hooks/useShortUrl'
 
-import validateURL from '../utils/validateURL'
+export function ShortUrlForm () {
+  const { url, setUrl, isInvalid, validateURL } = useUrl()
+  const { getShortUrl, error } = useShortUrl()
 
-export default function ShortUrlForm ({ sendUrl }) {
-  const [urlValue, setUrlValue] = useState('')
-  const [isInvalidURL, setInvalidURL] = useState()
-  const [loading, setLoading] = useState(false)
+  const handleSubmit = async (e) => {
+    e.preventDefault()
 
-  const handleChange = (event) => {
-    setUrlValue(event.target.value)
-  }
-
-  const handleClick = () => {
-    if (validateURL(urlValue)) {
-      setInvalidURL(false)
-      setLoading(true)
-      sendUrl(urlValue)
-      setLoading(false)
-    } else {
-      setInvalidURL(true)
+    if (validateURL(url)) {
+      getShortUrl({ url })
     }
   }
 
   return (
-      <div className="flex justify-center md:w-full grid grid-cols-1 gap-10">
-        <Input
-          className="max-w-xs max-w-md max-w-lg justify-self-center"
-          type="text"
-          placeholder="Enter URL"
-          size="lg"
-          disabled={loading}
-          value={urlValue}
-          onChange={handleChange}
-          isInvalid={isInvalidURL}
-          errorMessage="Please enter a valid URL"
-          endContent={
-            <div className="flex gap-4 items-center">
-              <Button
-                color="primary"
-                variant="solid"
-                endContent={<FontAwesomeIcon icon={faArrowRight}/>}
-                disabled={loading}
-                onClick={handleClick}
-              >
-                <b>Short Link</b>
-              </Button>
-            </div>
-          }
-        >
-        </Input>
-      </div>
-
+    <Form onSubmit={handleSubmit} className='w-full max-w-md flex items-center'>
+      <Input
+        name='url'
+        placeholder='Enter your URL here'
+        color={isInvalid ? 'danger' : 'default'}
+        className='w-full'
+        errorMessage='Please enter a valid URL'
+        isInvalid={isInvalid}
+        value={url}
+        onValueChange={setUrl}
+      />
+      <Button
+        type='submit'
+        variant='contained'
+        className='w-full mt-4 bg-gradient-to-tr from-blue-500 to-black text-white shadow-lg'
+      >
+        Shorten URL
+      </Button>
+      {error &&
+        <Alert color='danger' title={`${error}`} />}
+    </Form>
   )
 }

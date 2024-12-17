@@ -1,9 +1,9 @@
 import HomePage from './pages/HomePage'
-import './assets/App.css'
+import './App.css'
 
 function App () {
   return (
-    <div className="App">
+    <div className='App'>
       <HomePage />
     </div>
   )
