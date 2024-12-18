@@ -3,15 +3,17 @@ import { useUrl } from '../hooks/useUrl'
 import { useShortUrl } from '../hooks/useShortUrl'
 
 export function ShortUrlForm () {
-  const { url, setUrl, isInvalid, validateURL } = useUrl()
+  const { url, setUrl, isInvalid, setInvalid } = useUrl()
   const { getShortUrl, error } = useShortUrl()
 
   const handleSubmit = async (e) => {
     e.preventDefault()
 
-    if (validateURL(url)) {
-      getShortUrl({ url })
-    }
+    const isValid = !setInvalid(url)
+
+    if (!isValid) return
+
+    getShortUrl({ url })
   }
 
   return (
@@ -34,7 +36,7 @@ export function ShortUrlForm () {
         Shorten URL
       </Button>
       {error &&
-        <Alert color='danger' title={`${error}`} />}
+        <Alert color='danger' title={error.message} />}
     </Form>
   )
 }

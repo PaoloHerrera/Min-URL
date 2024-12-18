@@ -1,19 +1,12 @@
 import { UrlContext } from '../context/url'
 import { useContext } from 'react'
-import validator from 'validator'
 
 export function useUrl () {
-  const { url, setUrl, isInvalid, setIsInvalid } = useContext(UrlContext)
+  const context = useContext(UrlContext)
 
-  const validateURL = (url) => {
-    if (validator.isURL(url)) {
-      setIsInvalid(false)
-      return true
-    } else {
-      setIsInvalid(true)
-      return false
-    }
+  if (context === undefined) {
+    throw new Error('useUrl must be used within a UrlProvider')
   }
 
-  return { url, setUrl, isInvalid, validateURL }
+  return context
 }

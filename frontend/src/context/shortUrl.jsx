@@ -1,4 +1,5 @@
-import { createContext, useState } from 'react'
+import { createContext } from 'react'
+import { useShortUrlReducer } from '../hooks/useShortUrlReducer'
 
 // 1. Create a new context with createContext and export it
 export const ShortUrlContext = createContext()
@@ -7,20 +8,10 @@ export const ShortUrlContext = createContext()
 
 export const ShortUrlProvider = ({ children }) => {
   // 3. Create a state to hold the shortUrl
-  const [shortUrl, setShortUrl] = useState('')
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState(null)
+  const shortUrlState = useShortUrlReducer()
 
   return (
-    <ShortUrlContext.Provider value={{
-      shortUrl,
-      setShortUrl,
-      loading,
-      setLoading,
-      error,
-      setError
-    }}
-    >
+    <ShortUrlContext.Provider value={shortUrlState}>
       {children}
     </ShortUrlContext.Provider>
   )

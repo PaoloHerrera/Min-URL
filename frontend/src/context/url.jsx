@@ -1,4 +1,5 @@
-import { createContext, useState } from 'react'
+import { createContext } from 'react'
+import { useUrlReducer } from '../hooks/useUrlReducer'
 
 // 1. Create a new context with createContext and export it
 export const UrlContext = createContext()
@@ -7,17 +8,10 @@ export const UrlContext = createContext()
 
 export const UrlProvider = ({ children }) => {
   // 3. Create a state to hold the url and shortUrl
-  const [url, setUrl] = useState('')
-  const [isInvalid, setIsInvalid] = useState(false)
+  const urlState = useUrlReducer()
 
   return (
-    <UrlContext.Provider value={{
-      url,
-      setUrl,
-      isInvalid,
-      setIsInvalid
-    }}
-    >
+    <UrlContext.Provider value={urlState}>
       {children}
     </UrlContext.Provider>
   )
