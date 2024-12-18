@@ -1,4 +1,4 @@
-import { useReducer } from 'react'
+import { useReducer, useCallback } from 'react'
 import { shortUrlReducer, initialShortUrlState, SHORT_URL_ACTION_TYPES } from '../reducers/shortUrlReducer'
 import { fetchUrl } from '../services/shortUrl'
 
@@ -13,7 +13,7 @@ export function useShortUrlReducer () {
     dispatchAction(SHORT_URL_ACTION_TYPES.SET_SHORT_URL, shortUrl)
   }
 
-  const getShortUrl = async ({ url }) => {
+  const getShortUrl = useCallback(async ({ url }) => {
     try {
       dispatchAction(SHORT_URL_ACTION_TYPES.SET_LOADING, true)
       const newShortUrl = await fetchUrl(url)
@@ -23,7 +23,7 @@ export function useShortUrlReducer () {
     } finally {
       dispatchAction(SHORT_URL_ACTION_TYPES.SET_LOADING, false)
     }
-  }
+  }, [setShortUrl])
 
   return { shortUrl: state.shortUrl, error: state.error, loading: state.loading, setShortUrl, getShortUrl }
 }

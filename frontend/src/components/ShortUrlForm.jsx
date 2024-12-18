@@ -1,19 +1,22 @@
 import { Form, Input, Button, Alert } from '@nextui-org/react'
 import { useUrl } from '../hooks/useUrl'
 import { useShortUrl } from '../hooks/useShortUrl'
+import { useCallback } from 'react'
+import debounce from 'just-debounce-it'
 
 export function ShortUrlForm () {
   const { url, setUrl, isInvalid, setInvalid } = useUrl()
-  const { getShortUrl, error } = useShortUrl()
+  const { getShortUrl, error, loading } = useShortUrl()
+
+  const debouncedGetShortUrl = useCallback(debounce((url) => {
+    getShortUrl({ url })
+  }, 300), [getShortUrl])
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-
     const isValid = !setInvalid(url)
-
     if (!isValid) return
-
-    getShortUrl({ url })
+    debouncedGetShortUrl(url)
   }
 
   return (
@@ -32,6 +35,7 @@ export function ShortUrlForm () {
         type='submit'
         variant='contained'
         className='w-full mt-4 bg-gradient-to-tr from-blue-500 to-black text-white shadow-lg'
+        isDisabled={loading}
       >
         Shorten URL
       </Button>
