@@ -36,7 +36,7 @@ export function ShortUrlForm () {
         Shorten URL
       </Button>
       {error &&
-        <Alert color='danger' title={error.message} />}
+        <Alert color='danger' title={error} />}
     </Form>
   )
 }

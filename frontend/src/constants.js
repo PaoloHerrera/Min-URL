@@ -1,0 +1,14 @@
+const DEV_CONSTANTS = {
+  SHORT_URL_API: 'http://localhost:1234/api/urls',
+  RECAPTCHA_SITE_KEY: '6LcW5J4qAAAAAAzPPQs8lMfNf_lFopw-qUDxvKni'
+}
+
+const PROD_CONSTANTS = {
+  SHORT_URL_API: 'https://short-url-api-2021.herokuapp.com/api/urls',
+  RECAPTCHA_SITE_KEY: '6LcW5J4qAAAAAAzPPQs8lMfNf_lFopw-qUDxvKni'
+}
+
+export const {
+  SHORT_URL_API,
+  RECAPTCHA_SITE_KEY
+} = process.env.NODE_ENV === 'development' ? DEV_CONSTANTS : PROD_CONSTANTS
