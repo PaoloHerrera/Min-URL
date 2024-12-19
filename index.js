@@ -14,9 +14,6 @@ app.use(express.json())
 app.use(corsMiddleware())
 app.disable('x-powered-by')
 
-// Habilitar trust proxy
-app.set('trust proxy', 1)
-
 const envPath = path.join(__dirname, '.env')
 
 // Configuración de dotenv
@@ -27,9 +24,7 @@ app.use('/api/urls', routesUrl)
 app.use('/', routesShortUrl)
 
 app.get('/', (req, res) => {
-  const userIp = req.headers['x-forwarded-for']?.split(',')[0] || req.socket.remoteAddress
-
-  console.log('IP del cliente:', userIp)
+  console.log('IP del cliente:', req.ip)
   return res.redirect('https://min-url.com')
 })
 

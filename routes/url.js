@@ -11,7 +11,7 @@ const routesUrl = Router()
 const generalLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
   max: 100,
-  keyGenerator: (req) => req.headers['x-forwarded-for']?.split(',')[0] || req.socket.remoteAddress,
+  trustproxy: false,
   message: 'Too many requests from this IP, please try again after 15 minutes.'
 })
 
