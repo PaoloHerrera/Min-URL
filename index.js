@@ -14,6 +14,9 @@ app.use(express.json())
 app.use(corsMiddleware())
 app.disable('x-powered-by')
 
+// Habilitar trust proxy
+app.set('trust proxy', 1)
+
 const envPath = path.join(__dirname, '.env')
 
 // Configuración de dotenv
