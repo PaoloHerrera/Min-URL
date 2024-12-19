@@ -11,7 +11,9 @@ const routesUrl = Router()
 const generalLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
   max: 100,
-  trustProxy: false,
+  standardHeaders: true,
+  legacyHeaders: false,
+  keyGenerator: (req) => req.ip,
   message: 'Too many requests from this IP, please try again after 15 minutes.'
 })
 
