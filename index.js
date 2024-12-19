@@ -15,7 +15,7 @@ app.use(corsMiddleware())
 app.disable('x-powered-by')
 
 // Habilitar trust proxy
-app.set('trust proxy', 1)
+app.set('trust proxy', true)
 
 const envPath = path.join(__dirname, '.env')
 
