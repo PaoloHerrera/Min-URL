@@ -1,0 +1,8 @@
+.env
+data/
+node_modules/
+public/
+*.log
+testing/
+init.sql
+docker-compose.yml
