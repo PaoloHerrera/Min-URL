@@ -44,6 +44,9 @@ export default class UrlController {
 
     const geo = getGeoLocation(ip)
 
+    console.log('geo: ', geo)
+    console.log('ip: ', ip)
+
     // Verifica si geo es vacío
     if (Object.keys(geo).length === 0) {
       return res.status(400).json({ message: "We couldn't generate your Short URL at this time. Please try again later." })
