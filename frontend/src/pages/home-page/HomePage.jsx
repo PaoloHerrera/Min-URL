@@ -1,7 +1,7 @@
-import { useShortUrl } from '../hooks/useShortUrl'
-import LoadingIndicator from '../components/LoadingIndicator'
-import ShortUrlReady from '../components/ShortUrlReady'
-import { ShortUrlForm } from '../components/ShortUrlForm'
+import { useShortUrl } from '@hooks/useShortUrl'
+import LoadingIndicator from '@components/LoadingIndicator'
+import ShortUrlReady from './components/ShortUrlReady'
+import { ShortUrlForm } from './components/ShortUrlForm'
 
 export default function HomePage () {
   const { shortUrl, loading } = useShortUrl()

@@ -1,10 +1,10 @@
 const DEV_CONSTANTS = {
-  SHORT_URL_API: 'http://localhost:1234/api/urls',
+  SHORT_URL_API: 'https://go.min-url.com/api/urls',
   RECAPTCHA_SITE_KEY: '6LcW5J4qAAAAAAzPPQs8lMfNf_lFopw-qUDxvKni'
 }
 
 const PROD_CONSTANTS = {
-  SHORT_URL_API: 'https://short-url-api-2021.herokuapp.com/api/urls',
+  SHORT_URL_API: 'https://go.min-url.com/api/urls',
   RECAPTCHA_SITE_KEY: '6LcW5J4qAAAAAAzPPQs8lMfNf_lFopw-qUDxvKni'
 }
 
