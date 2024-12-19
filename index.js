@@ -27,7 +27,7 @@ app.use('/api/urls', routesUrl)
 app.use('/', routesShortUrl)
 
 app.get('/', (req, res) => {
-  res.send('Hello World')
+  return res.redirect('https://min-url.com')
 })
 
 // favicon
