@@ -5,7 +5,7 @@ const DEV_CONSTANTS = {
 
 const PROD_CONSTANTS = {
   SHORT_URL_API: 'https://go.min-url.com/api/urls',
-  RECAPTCHA_SITE_KEY: '6LcW5J4qAAAAAAzPPQs8lMfNf_lFopw-qUDxvKni'
+  RECAPTCHA_SITE_KEY: '6LeD4aAqAAAAALwnUkhz9hUnF-hy2zR-6rfvDbJh'
 }
 
 export const {
