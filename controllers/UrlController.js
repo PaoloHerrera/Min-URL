@@ -99,7 +99,7 @@ export default class UrlController {
     try {
       const url = await UrlModel.findOne({ where: { shorturl } })
 
-      if (!url) res.status(404).redirect('/')
+      if (!url) return res.status(404).json({ message: 'Short URL not found' })
 
       // Si la url fue encontrada se actualiza la cantidad de clicks. Sumando +1
       await url.increment({ clicks: 1 })
