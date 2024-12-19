@@ -11,7 +11,7 @@ export default function ShortUrlReady () {
   return (
     <>
       <p className='mt-4 text-left'>
-        Your short URL and QR Code is ready! Share it with your friends
+        Your short URL and QR Code is ready! Share it with everyone!
       </p>
       <Card
         className='border-none bg-transparent w-full mt-10'

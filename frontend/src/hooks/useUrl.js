@@ -1,4 +1,4 @@
-import { UrlContext } from '../context/url'
+import { UrlContext } from '../context/UrlContext'
 import { useContext } from 'react'
 
 export function useUrl () {

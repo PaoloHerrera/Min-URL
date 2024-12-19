@@ -1,18 +1,18 @@
-import HomePage from './pages/home-page/HomePage'
 import './App.css'
-import { UrlProvider } from './context/url'
-import { ShortUrlProvider } from './context/shortUrl'
+import { UrlProvider } from './context/UrlProvider'
+import { ShortUrlProvider } from './context/ShortUrlProvider'
 import NavbarComponent from './components/NavbarComponent'
+import { FormComponent } from './components/forms/FormComponent'
 
 function App () {
   return (
     <UrlProvider>
       <ShortUrlProvider>
         <div className='App min-h-[100vh]'>
-          <NavbarComponent />
-          <main>
-            <HomePage />
-          </main>
+          <header className='min-h-[100vh] flex flex-col items-center'>
+            <NavbarComponent />
+            <FormComponent />
+          </header>
         </div>
       </ShortUrlProvider>
     </UrlProvider>

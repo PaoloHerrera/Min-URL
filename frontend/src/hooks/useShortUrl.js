@@ -1,5 +1,5 @@
 import { useContext } from 'react'
-import { ShortUrlContext } from '../context/shortUrl'
+import { ShortUrlContext } from '../context/ShortUrlContext'
 
 export function useShortUrl () {
   const context = useContext(ShortUrlContext)

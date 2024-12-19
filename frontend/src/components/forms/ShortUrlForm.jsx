@@ -23,12 +23,15 @@ export function ShortUrlForm () {
   }
 
   return (
-    <Form onSubmit={handleSubmit} className='w-full max-w-md flex items-center mt-10'>
-      <p className='mt-4 text-left mb-4'>
-        Enter a URL to get a short link and a shareable QR code!
+    <Form onSubmit={handleSubmit} className='w-full max-w-full flex items-center mt-10 gap-5 flex-col'>
+      <p className='text-left sm:text-2xl text-md'>
+        Free URL shortener with QR code. Just paste your link below!
       </p>
 
-      <InputUrl />
+      <div className='w-full mt-5'>
+        <InputUrl />
+
+      </div>
 
       <SubmitButton />
 

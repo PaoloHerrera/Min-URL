@@ -16,14 +16,13 @@ nav {
 }
 
 label {
-  font-size: 16px;
+  font-size: 14px !important;
   font-weight: 600;
   color: white !important;
 }
-.short-url-container {
-  font-size: 20px;
-  font-weight: 600;
-  background-color: #0f3167;
+.secondary-color {
+  color: #0f3167;
+  background-color: #fff;
 }
 
 .loading-indicator {
