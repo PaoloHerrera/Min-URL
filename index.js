@@ -27,6 +27,11 @@ app.get('/', (req, res) => {
   res.send('Hello World')
 })
 
+// favicon
+app.get('/favicon.ico', (req, res) => {
+  res.status(204).end()
+})
+
 const PORT = process.env.PORT || 3000
 
 app.listen(PORT, () => {
