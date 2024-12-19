@@ -27,6 +27,7 @@ app.use('/api/urls', routesUrl)
 app.use('/', routesShortUrl)
 
 app.get('/', (req, res) => {
+  console.log('IP del cliente:', req.ip)
   return res.redirect('https://min-url.com')
 })
 
