@@ -15,7 +15,7 @@ app.use(corsMiddleware())
 app.disable('x-powered-by')
 
 // Habilitar trust proxy
-app.set('trust proxy', true)
+app.set('trust proxy', 1)
 
 const envPath = path.join(__dirname, '.env')
 
@@ -27,7 +27,9 @@ app.use('/api/urls', routesUrl)
 app.use('/', routesShortUrl)
 
 app.get('/', (req, res) => {
-  console.log('IP del cliente:', req.ip)
+  const userIp = req.headers['x-forwarded-for']?.split(',')[0] || req.connection.remoteAddress
+
+  console.log('IP del cliente:', userIp)
   return res.redirect('https://min-url.com')
 })
 
