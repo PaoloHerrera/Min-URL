@@ -1,6 +1,4 @@
 import { useShortUrl } from '../hooks/useShortUrl'
-import logo from '../assets/Logo-transformed.png'
-import { Image } from '@nextui-org/react'
 import LoadingIndicator from '../components/LoadingIndicator'
 import ShortUrlReady from '../components/ShortUrlReady'
 import { ShortUrlForm } from '../components/ShortUrlForm'
@@ -9,17 +7,17 @@ export default function HomePage () {
   const { shortUrl, loading } = useShortUrl()
 
   return (
-    <main className='flex flex-col items-center justify-center min-h-[50vh] py-2'>
-      <Image
-        alt='Min-URL Logo'
-        src={logo}
-        className='pointer-events-none'
-        width={600}
-      />
-      {!shortUrl && <ShortUrlForm />}
+    <article className='flex flex-col items-center py-2 short-url-container pl-6 pr-6'>
+      <section className='w-full max-w-2xl flex flex-col items-center mt-10'>
+        <h1 className='text-4xl font-bold mt-10 text-left'>
+          Build stronger links
+        </h1>
 
-      {loading ? <LoadingIndicator /> : shortUrl && <ShortUrlReady />}
+        {!shortUrl && <ShortUrlForm />}
 
-    </main>
+        {loading ? <LoadingIndicator /> : shortUrl && <ShortUrlReady />}
+      </section>
+
+    </article>
   )
 }

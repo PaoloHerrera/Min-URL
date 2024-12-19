@@ -20,10 +20,15 @@ export function ShortUrlForm () {
   }
 
   return (
-    <Form onSubmit={handleSubmit} className='w-full max-w-md flex items-center'>
+    <Form onSubmit={handleSubmit} className='w-full max-w-md flex items-center mt-10'>
+      <p className='mt-4 text-left mb-4'>
+        Enter a URL to get a short link and a shareable QR code!
+      </p>
       <Input
+        label='Insert your long URL here'
+        labelPlacement='outside'
         name='url'
-        placeholder='Enter your URL here'
+        placeholder='https://example.com/my-long-url'
         color={isInvalid ? 'danger' : 'default'}
         className='w-full'
         errorMessage='Please enter a valid URL'
