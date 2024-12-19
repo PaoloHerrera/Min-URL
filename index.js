@@ -27,7 +27,7 @@ app.use('/api/urls', routesUrl)
 app.use('/', routesShortUrl)
 
 app.get('/', (req, res) => {
-  const userIp = req.headers['x-forwarded-for']?.split(',')[0] || req.connection.remoteAddress
+  const userIp = req.headers['x-forwarded-for']?.split(',')[0] || req.socket.remoteAddress
 
   console.log('IP del cliente:', userIp)
   return res.redirect('https://min-url.com')
