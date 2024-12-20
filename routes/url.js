@@ -3,6 +3,7 @@ import UrlController from '../controllers/UrlController.js'
 import { validateUrl } from '../middleware/validateUrl.js'
 import { limitRequests } from '../middleware/limitRequests.js'
 import { verifyRecaptcha } from '../middleware/verifyRecaptcha.js'
+import { checkForbiddenExtension } from '../middleware/checkForbiddenExtension.js'
 import rateLimit from 'express-rate-limit'
 
 const routesUrl = Router()
@@ -18,6 +19,6 @@ const generalLimiter = rateLimit({
 })
 
 routesUrl.use('/', generalLimiter)
-routesUrl.post('/', verifyRecaptcha, limitRequests, validateUrl, UrlController.createShortUrl)
+routesUrl.post('/', verifyRecaptcha, checkForbiddenExtension, limitRequests, validateUrl, UrlController.createShortUrl)
 
 export default routesUrl
