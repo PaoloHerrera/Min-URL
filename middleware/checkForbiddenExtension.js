@@ -25,10 +25,14 @@ const forbiddenExtensions = [
   '.torrent', '.svg'
 ]
 
+// Función para verificar si la extensión del archivo es prohibida
+// Recibe una URL y devuelve true si la extensión es prohibida
+// o false si no lo es
 function hasForbiddenExtension (url) {
   try {
     const urlPath = new URL(url).pathname
-    const extension = urlPath.split('.').pop()
+    const lastPart = urlPath.split('/').pop()
+    const extension = lastPart.includes('.') ? `.${lastPart.split('.').pop()}` : ''
     return forbiddenExtensions.includes(`.${extension}`)
   } catch (error) {
     console.log('Error en la función hasForbiddenExtension:', error)
