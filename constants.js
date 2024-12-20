@@ -5,5 +5,5 @@ export const SHORTURL_VALUES = {
 }
 
 export const LIMITS_VALUES = {
-  limitShortUrlPerDay: 3
+  limitShortUrlPerDay: 20
 }
