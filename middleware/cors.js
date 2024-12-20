@@ -6,7 +6,10 @@ const ACCEPTED_ORIGINS = [
   'http://localhost:3000',
   'http://localhost:5173',
   'http://localhost:5174',
-  'https://min-url.com/'
+  'https://min-url.com',
+  'https://www.min-url.com',
+  'http://min-url.com',
+  'http://www.min-url.com'
 ]
 
 export const corsMiddleware = ({ acceptedOrigins = ACCEPTED_ORIGINS } = {}) => cors({

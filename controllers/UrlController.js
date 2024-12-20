@@ -22,7 +22,7 @@ const generateShortUrl = async (length, maxAttempts) => {
       break
     } catch (error) {
       attempts++
-      if (attempts >= maxAttempts) throw new Error('No fue posible crear la shorturl')
+      if (attempts >= maxAttempts) throw new Error('Error creating Short URL. Please try again later.')
     }
   }
   return shorturl
