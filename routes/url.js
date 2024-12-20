@@ -19,6 +19,6 @@ const generalLimiter = rateLimit({
 })
 
 routesUrl.use('/', generalLimiter)
-routesUrl.post('/', verifyRecaptcha, checkForbiddenExtension, limitRequests, validateUrl, UrlController.createShortUrl)
+routesUrl.post('/', verifyRecaptcha, limitRequests, validateUrl, checkForbiddenExtension, UrlController.createShortUrl)
 
 export default routesUrl
