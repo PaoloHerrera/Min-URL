@@ -22,6 +22,6 @@ export async function fetchUrl (url) {
     })
     return response.data.fullShortUrl
   } catch (error) {
-    throw new Error(error.response?.data?.message || 'Error al acortar la URL')
+    throw new Error(error.response?.data?.message || 'An error occurred. Please try again later.')
   }
 }
