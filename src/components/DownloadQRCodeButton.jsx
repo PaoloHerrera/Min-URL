@@ -24,7 +24,7 @@ export default function DownloadQRCodeButton({ qrCodeRef }) {
 
 	return (
 		<Button
-			className="bg-gradient-to-tr from-blue-500 to-black text-white"
+			className="text-white bg-[#1d4980]"
 			variant="solid"
 			onPress={downloadQRCode}
 		>

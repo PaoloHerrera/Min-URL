@@ -14,14 +14,14 @@ export default function ShortUrlReady() {
 				Your short URL and QR Code is ready! Share it with everyone!
 			</p>
 			<Card
-				className="border-none bg-transparent w-full mt-10"
+				className="border-none bg-[#f7f4e1] w-full mt-10"
 				shadow="md"
 				fullWidth
 			>
 				<CardBody>
 					<div className="grid grid-cols-8 sm:grid-cols-12 sm:gap-2">
 						<div className="mb-5 ml-5 mt-5 col-span-3 sm:col-span-4">
-							<p className="text-white">
+							<p className="text-black text-lg">
 								<strong>QR CODE</strong>
 							</p>
 						</div>

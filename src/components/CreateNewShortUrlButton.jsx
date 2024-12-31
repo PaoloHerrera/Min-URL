@@ -13,7 +13,7 @@ export default function CreateNewShortUrlButton() {
 
 	return (
 		<Button
-			className="bg-gradient-to-tr from-green-500 to-black text-white"
+			className="text-white bg-[#149c6e] w-full mt-4"
 			variant="solid"
 			onPress={() => handleCreateNewShortUrl()}
 		>
