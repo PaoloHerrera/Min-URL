@@ -36,6 +36,7 @@ app.get('/', (req, res) => {
 	console.log(`X-Real-IP: ${req.headers['x-real-ip']}`)
 	console.log(`X-Forwarded-For: ${req.headers['x-forwarded-for']}`)
 	console.log(`Remote Address: ${req.socket.remoteAddress}`)
+	console.log(`IP: ${req.ip}`)
 
 	console.log('IP del cliente:', ipv4)
 	return res.redirect('https://min-url.com')
