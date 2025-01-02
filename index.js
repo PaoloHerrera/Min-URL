@@ -27,17 +27,17 @@ app.use('/api/urls', routesUrl)
 app.use('/', routesShortUrl)
 
 app.get('/', (req, res) => {
-  console.log('IP del cliente:', req.ip)
-  return res.redirect('https://min-url.com')
+	console.log('IP del cliente:', req.ip)
+	return res.redirect('https://min-url.com')
 })
 
 // favicon
 app.get('/favicon.ico', (req, res) => {
-  return res.status(204).end()
+	return res.status(204).end()
 })
 
 const PORT = process.env.PORT || 3000
 
 app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`)
+	console.log(`Server running on port ${PORT}`)
 })

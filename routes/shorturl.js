@@ -1,7 +1,7 @@
 import { Router } from 'express'
-import UrlController from '../controllers/UrlController.js'
+import { getShortUrl } from '../controllers/UrlController.js'
 const routesShortUrl = Router()
 
-routesShortUrl.get('/:id', UrlController.getShortUrl)
+routesShortUrl.get('/:id', getShortUrl)
 
 export default routesShortUrl

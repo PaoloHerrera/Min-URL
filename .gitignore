@@ -6,3 +6,4 @@ public/
 testing/
 init.sql
 docker-compose.yml
+.codegpt
