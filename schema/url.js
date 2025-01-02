@@ -6,7 +6,7 @@ const urlSchema = z.object({
 	longurl: z.string().url({ message: 'Invalid url' }),
 	shorturl: z.string(),
 	clicks: z.number().int().default(0),
-	ip_address: z.string().ip({ version: 'v4' }),
+	ip_address: z.string().ip({ version: 'v4' | 'v6' }),
 	country: z.string().optional(),
 	region: z.string().optional(),
 	timezone: z.string().optional(),

@@ -39,7 +39,7 @@ export const UrlModel = sequelize.define(
 			defaultValue: 0,
 		},
 		ip_address: {
-			type: DataTypes.STRING(32),
+			type: DataTypes.STRING(50),
 			allowNull: false,
 		},
 		country: {

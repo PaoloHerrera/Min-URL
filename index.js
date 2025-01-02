@@ -27,18 +27,8 @@ app.use('/api/urls', routesUrl)
 app.use('/', routesShortUrl)
 
 app.get('/', (req, res) => {
-	const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress
+	console.log(`IP del cliente: ${req.ip}`)
 
-	// Si recibes una dirección IPv6, puedes intentar extraer la dirección IPv4
-	const ipv4 = ip.includes(':') ? ip.split(',')[0].split(':').pop() : ip
-
-	console.log(`CF-CONNECTING-IP: ${req.headers['cf-connecting-ip']}`)
-	console.log(`X-Real-IP: ${req.headers['x-real-ip']}`)
-	console.log(`X-Forwarded-For: ${req.headers['x-forwarded-for']}`)
-	console.log(`Remote Address: ${req.socket.remoteAddress}`)
-	console.log(`IP: ${req.ip}`)
-
-	console.log('IP del cliente:', ipv4)
 	return res.redirect('https://min-url.com')
 })
 

@@ -25,7 +25,7 @@ export const LogUrlModel = sequelize.define(
 			unique: true,
 		},
 		ip_address: {
-			type: DataTypes.STRING(32),
+			type: DataTypes.STRING(50),
 			allowNull: false,
 		},
 		country: {
