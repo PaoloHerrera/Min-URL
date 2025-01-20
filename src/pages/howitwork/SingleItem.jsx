@@ -9,7 +9,9 @@ export default function SingleStep({ item }) {
 					<img src={item.image} alt={item.title} className="h-full w-auto" />
 				</div>
 				<div className="flex flex-col pr-6 items-center justify-center lg:w-1/2">
-					<h3 className="text-xl font-bold lg:text-3xl">{item.title}</h3>
+					<h3 className="text-xl font-bold lg:text-3xl text-[#1d4980]">
+						{item.title}
+					</h3>
 				</div>
 			</div>
 		</section>
