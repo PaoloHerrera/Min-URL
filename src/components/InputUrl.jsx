@@ -1,5 +1,6 @@
 import { Input } from '@nextui-org/react'
 import { useUrl } from '../hooks/useUrl'
+import './InputUrl.css'
 
 export default function InputUrl() {
 	const { url, setUrl, isInvalid } = useUrl()
@@ -7,6 +8,7 @@ export default function InputUrl() {
 		<Input
 			label="Insert your long URL here"
 			labelPlacement="outside"
+			variant="faded"
 			name="url"
 			placeholder="https://example.com/my-long-url"
 			color={isInvalid ? 'danger' : 'default'}
