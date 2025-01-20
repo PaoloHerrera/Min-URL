@@ -10,6 +10,7 @@ export default function SingleImageItem({ item }) {
 				alt={item.title}
 				width={500}
 				className="h-full w-auto"
+				loading="lazy"
 			/>
 		</div>
 	)
