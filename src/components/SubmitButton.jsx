@@ -10,7 +10,7 @@ export default function SubmitButton() {
 			className="w-full mt-4 bg-gradient-to-tr from-blue-500 to-black text-white shadow-lg"
 			isDisabled={loading}
 		>
-			Shorten URL
+			Minify URL
 		</Button>
 	)
 }
