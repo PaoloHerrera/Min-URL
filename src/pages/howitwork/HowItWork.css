@@ -1,0 +1,9 @@
+.progress {
+  position: sticky;
+  top: 5em;
+  left: 0;
+  z-index: 1000;
+  width: 100%;
+  color: #f57c00;
+
+}
