@@ -2,6 +2,13 @@
 @tailwind components;
 @tailwind utilities;
 
+
+html {
+  scroll-snap-type: y mandatory;
+  scroll-behavior: smooth;
+  scroll-padding-top: 4rem;
+}
+
 body {
   color: white;
   background-color: #0f3167;
@@ -57,4 +64,9 @@ label {
   0%, 100% { transform: translateX(0); }
   20%, 60% { transform: translateX(-5px); }
   40%, 80% { transform: translateX(5px); }
+}
+
+section {
+  height: calc(100vh - 4rem);
+  scroll-snap-align: center;
 }
