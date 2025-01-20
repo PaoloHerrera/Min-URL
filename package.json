@@ -10,6 +10,7 @@
 	},
 	"devDependencies": {
 		"@biomejs/biome": "1.9.4",
+		"@types/react": "^19.0.7",
 		"autoprefixer": "10.4.20",
 		"postcss": "8.4.49",
 		"tailwindcss": "3.4.16",
@@ -22,6 +23,7 @@
 		"framer-motion": "11.15.0",
 		"html-to-image": "1.11.11",
 		"just-debounce-it": "3.2.0",
+		"motion": "12.0.0",
 		"react": "19.0.0",
 		"react-dom": "19.0.0",
 		"react-qr-code": "2.0.15",
