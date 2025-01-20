@@ -6,14 +6,16 @@ import { ShortUrlForm } from './ShortUrlForm'
 export function FormComponent() {
 	const { shortUrl, loading } = useShortUrl()
 	return (
-		<section className="w-full max-w-2xl flex flex-col items-center mt-20 pl-6 pr-6">
-			<h1 className="sm:text-6xl font-bold mt-10 text-left text-3xl">
-				Build stronger links
-			</h1>
+		<section>
+			<article className="w-full max-w-6xl flex flex-col items-center mt-20 pl-6 pr-6">
+				<h1 className="sm:text-6xl font-bold mt-10 text-left text-3xl">
+					Build stronger links
+				</h1>
 
-			{!shortUrl && <ShortUrlForm />}
+				{!shortUrl && <ShortUrlForm />}
 
-			{loading ? <LoadingIndicator /> : shortUrl && <ShortUrlReady />}
+				{loading ? <LoadingIndicator /> : shortUrl && <ShortUrlReady />}
+			</article>
 		</section>
 	)
 }
