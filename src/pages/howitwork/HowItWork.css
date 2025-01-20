@@ -1,7 +1,14 @@
 .progress {
   position: sticky;
-  top: 5em;
+  top: 6em;
   left: 0;
   z-index: 1000;
   width: 100%;
+}
+
+.progress-bar {
+  position: sticky;
+  height: 10px;
+  background-color: orange;
+  margin-top: 10px;
 }
