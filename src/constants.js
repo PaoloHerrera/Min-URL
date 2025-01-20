@@ -14,22 +14,22 @@ export const { SHORT_URL_API, RECAPTCHA_SITE_KEY } =
 export const HOW_MIN_URL_IT_WORKS = [
 	{
 		id: 1,
-		title: '1. Enter the URL of the website you want to minify',
+		title: '🔗 Enter the URL of the website you want to minify',
 		image: '/01.webp',
 	},
 	{
 		id: 2,
-		title: '2. Click the "Minify URL" button',
+		title: '✅ Click the "Minify URL" button',
 		image: '/02.webp',
 	},
 	{
 		id: 3,
-		title: '3. Wait a few seconds for the magic to happen',
+		title: '⏳ Wait a few seconds for the magic to happen',
 		image: '/03.webp',
 	},
 	{
 		id: 4,
-		title: '4. Done! You have a new minified URL and QR Code. Share it!',
+		title: '📤 Done! You have a new minified URL and QR Code. Share it!',
 		image: '/04.webp',
 	},
 ]
