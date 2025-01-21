@@ -1,7 +1,8 @@
 import { Form } from '@heroui/react'
 import { useUrl } from '@hooks/useUrl'
 import { useShortUrl } from '@hooks/useShortUrl'
-import { useCallback, useState } from 'react'
+import { useRecaptcha } from '@hooks/useRecaptcha'
+import { useCallback } from 'react'
 import debounce from 'just-debounce-it'
 import InputUrl from '@components/InputUrl'
 import SubmitButton from '@components/SubmitButton'
@@ -11,7 +12,7 @@ import { RECAPTCHA_SITE_KEY } from '../../constants'
 export function ShortUrlForm() {
 	const { url, setInvalid } = useUrl()
 	const { getShortUrl } = useShortUrl()
-	const [isRecaptchaLoaded, setRecaptchaLoaded] = useState(false)
+	const { isLoaded, loadRecaptcha } = useRecaptcha(RECAPTCHA_SITE_KEY)
 
 	const debouncedGetShortUrl = useCallback(
 		debounce((url) => {
@@ -20,29 +21,14 @@ export function ShortUrlForm() {
 		[],
 	)
 
-	const loadRecaptcha = () => {
-		const script = document.createElement('script')
-		script.src = `https://www.google.com/recaptcha/api.js?render=${RECAPTCHA_SITE_KEY}`
-		script.async = true
-		document.head.appendChild(script)
-
-		return script
-	}
-
 	const handleSubmit = async (e) => {
 		e.preventDefault()
 		const isValid = !setInvalid(url)
 		if (!isValid) return
 
-		if (!isRecaptchaLoaded) {
-			const script = loadRecaptcha()
-
-			script.onload = () => {
-				setRecaptchaLoaded(true)
-
-				debouncedGetShortUrl(url)
-			}
-			document.head.appendChild(script)
+		if (!isLoaded) {
+			await loadRecaptcha()
+			debouncedGetShortUrl(url)
 		} else {
 			debouncedGetShortUrl(url)
 		}
