@@ -13,6 +13,7 @@ Este proyecto utiliza las siguientes tecnologías:
 - **React-qr-code**: Un generador de códigos QR para React.
 - **Validator**: Una biblioteca para validación de datos.
 - **HeroUI**: Un conjunto de componentes de interfaz de usuario para React.
+- **Google ReCaptcha V3**: Un servicio de protección contra bots que ayuda a prevenir el abuso en la aplicación mediante la verificación de usuarios reales.
 
 ## Características
 
@@ -31,6 +32,9 @@ Este proyecto utiliza las siguientes tecnologías:
 ## Requisitos Fundamentales
 
 Para asegurar el correcto funcionamiento de la aplicación, es indispensable tener el [backend de Min-URL](https://github.com/PaoloHerrera/Min-URL-backend) en ejecución. Este componente es crucial ya que maneja la lógica de acortamiento de URLs. Asegúrate de seguir las instrucciones de instalación y configuración del repositorio del backend antes de iniciar el frontend.
+
+Además, se deben cambiar las constantes DEV_CONSTANTS y PROD_CONSTANTS en el archivo constants.js. 
+Ambas constantes contienen la URL hacia donde se realizan las solicitudes de la API para generar shorturl y las keys de Google ReCaptcha V3.
 
 ## Instalación
 
