@@ -28,6 +28,9 @@ Este proyecto utiliza las siguientes tecnologías:
 - **Caducidad de enlaces**: Permite establecer una fecha de caducidad para los enlaces, después de la cual dejarán de funcionar.
 - **Protección con contraseña**: Permite proteger los enlaces acortados con una contraseña para mayor seguridad.
 
+## Requisitos Fundamentales
+
+Para asegurar el correcto funcionamiento de la aplicación, es indispensable tener el [backend de Min-URL](https://github.com/PaoloHerrera/Min-URL-backend) en ejecución. Este componente es crucial ya que maneja la lógica de acortamiento de URLs. Asegúrate de seguir las instrucciones de instalación y configuración del repositorio del backend antes de iniciar el frontend.
 
 ## Instalación
 
@@ -47,7 +50,7 @@ Para instalar y ejecutar este proyecto localmente, sigue estos pasos:
   ```
 4. Inicia la aplicación:
   ```bash
-  npm start
+  npm run dev
   ```
 
 ## Contribuciones
