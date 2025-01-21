@@ -1,4 +1,4 @@
-import { Snippet } from '@nextui-org/react'
+import { Snippet } from "@heroui/react"
 import { useUrl } from '@hooks/useUrl'
 import { useShortUrl } from '@hooks/useShortUrl'
 

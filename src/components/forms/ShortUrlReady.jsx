@@ -1,5 +1,5 @@
 import React, { useRef } from 'react'
-import { Card, CardBody } from '@nextui-org/react'
+import { Card, CardBody } from "@heroui/react"
 import DownloadQRCodeButton from '@components/DownloadQRCodeButton'
 import CreateNewShortUrlButton from '@components/CreateNewShortUrlButton'
 import { QRCodeDisplay } from '@components/QRCodeDisplay'

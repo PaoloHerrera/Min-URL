@@ -1,5 +1,5 @@
 import { MinUrlLogo } from '../assets/Icons'
-import { Navbar, NavbarBrand } from '@nextui-org/react'
+import { Navbar, NavbarBrand } from "@heroui/react"
 
 export default function NavbarComponent() {
 	return (

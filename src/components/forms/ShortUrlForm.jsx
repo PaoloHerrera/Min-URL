@@ -1,4 +1,4 @@
-import { Form } from '@nextui-org/react'
+import { Form } from "@heroui/react"
 import { useUrl } from '@hooks/useUrl'
 import { useShortUrl } from '@hooks/useShortUrl'
 import { useCallback } from 'react'

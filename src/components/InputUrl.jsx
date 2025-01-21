@@ -1,4 +1,4 @@
-import { Input } from '@nextui-org/react'
+import { Input } from "@heroui/react"
 import { useUrl } from '../hooks/useUrl'
 import './InputUrl.css'
 

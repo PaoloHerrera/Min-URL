@@ -1,4 +1,4 @@
-import { Button } from '@nextui-org/react'
+import { Button } from "@heroui/react"
 import * as htmlToImage from 'html-to-image'
 import { useUrl } from '@hooks/useUrl'
 

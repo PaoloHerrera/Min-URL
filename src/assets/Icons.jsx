@@ -1,5 +1,5 @@
 import logo from './logo.svg'
-import { Image } from '@nextui-org/react'
+import { Image } from "@heroui/react"
 
 export function MinUrlLogo() {
 	return (
