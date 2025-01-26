@@ -37,13 +37,13 @@ export function ShortUrlForm() {
 	return (
 		<Form
 			onSubmit={handleSubmit}
-			className="w-full max-w-full flex items-center mt-10 gap-5 flex-col"
+			className="w-full max-w-full flex items-center gap-5 flex-col"
 		>
-			<p className="text-left sm:text-2xl text-md">
+			<p className="text-left sm:text-xl text-md">
 				Free URL shortener with QR code. Just paste your link below!
 			</p>
 
-			<div className="w-full mt-5">
+			<div className="w-full">
 				<InputUrl />
 			</div>
 
