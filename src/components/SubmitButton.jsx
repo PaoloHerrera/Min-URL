@@ -7,7 +7,7 @@ export default function SubmitButton() {
 		<Button
 			type="submit"
 			variant="contained"
-			className="w-full mt-4 bg-gradient-to-tr from-blue-500 to-black text-white shadow-lg"
+			className="w-full bg-gradient-to-tr from-blue-500 to-black text-white shadow-lg"
 			isDisabled={loading}
 		>
 			Minify URL
