@@ -1,10 +1,14 @@
 import { Router } from 'express'
-import { createShortUrl } from '../controllers/UrlController.js'
+import { createShortUrl, sendShortUrl } from '../controllers/UrlController.js'
 import { validateUrl } from '../middleware/validateUrl.js'
-import { limitRequests } from '../middleware/limitRequests.js'
+import { limitShortUrlPerDay } from '../middleware/limitRequests.js'
+import { insertDirectPurpose } from '../middleware/insertPurpose.js'
 import { verifyRecaptcha } from '../middleware/verifyRecaptcha.js'
 import { checkForbiddenExtension } from '../middleware/checkForbiddenExtension.js'
+import { verifyGeoIp } from '../middleware/verifyIp.js'
 import rateLimit from 'express-rate-limit'
+import { handleAsyncError } from '../utils/utils.js'
+import { handleUrlErrors } from '../middleware/urlMiddlewares.js'
 
 const routesUrl = Router()
 
@@ -22,10 +26,15 @@ routesUrl.use('/', generalLimiter)
 routesUrl.post(
 	'/',
 	verifyRecaptcha,
-	limitRequests,
+	limitShortUrlPerDay,
 	validateUrl,
 	checkForbiddenExtension,
-	createShortUrl,
+	verifyGeoIp,
+	insertDirectPurpose,
+	handleAsyncError(createShortUrl),
+	sendShortUrl,
 )
+
+routesUrl.use(handleUrlErrors)
 
 export default routesUrl
