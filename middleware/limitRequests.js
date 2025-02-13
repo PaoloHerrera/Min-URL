@@ -2,39 +2,55 @@ import { Op } from 'sequelize'
 import { UrlModel } from '../models/Url.js'
 import { LIMITS_VALUES } from '../constants.js'
 
-export const limitRequests = async (req, res, next) => {
-	try {
-		let ip = req.ip
+const getStartOfDay = (date) => {
+	const startOfDay = new Date(date)
+	startOfDay.setHours(0, 0, 0, 0)
+	return startOfDay
+}
 
-		if (ip === '::1') {
-			ip = process.env.LOCAL_IP
-		}
+// Este middleware se encarga de limitar el número de solicitudes de un usuario por día
+// Si se supera el límite, se devuelve un error 429
+const createRateLimitMiddleware = (purpose, limitType) => {
+	return async (req, res, next) => {
+		try {
+			const ip = req.ip
+			const startOfDay = getStartOfDay(new Date())
+			const limit = LIMITS_VALUES[limitType]
 
-		// Se toma el día actual y se setea la hora a medianoche
-		const startOfDay = new Date()
-		startOfDay.setHours(0, 0, 0, 0)
-
-		const urlCount = await UrlModel.count({
-			where: {
-				ip_address: ip,
-				created_at: {
-					[Op.gte]: startOfDay, // Mayor o igual a la medianoche de hoy
+			const urlCount = await UrlModel.count({
+				where: {
+					ip_address: ip,
+					purpose,
+					created_at: {
+						[Op.gte]: startOfDay, // Mayor o igual a la medianoche de hoy
+					},
 				},
-			},
-		})
+			})
 
-		if (urlCount >= LIMITS_VALUES.limitShortUrlPerDay) {
-			return res.status(429).json({
-				message: `Limit of ${LIMITS_VALUES.limitShortUrlPerDay} URLs per day reached. Try again tomorrow.`,
+			// Si el límite de solicitudes es superior al límite fijado, se devuelve un error 429
+			if (urlCount >= limit) {
+				const typeLimit = purpose === 'direct' ? 'URL' : 'QR Code'
+				return res.status(429).json({
+					message: `Limit of ${limit} ${typeLimit} per day reached. Try again tomorrow.`,
+				})
+			}
+
+			next()
+		} catch (error) {
+			console.error('Error en el middleware de límite de solicitudes:', error)
+			res.status(500).json({
+				message: 'Server error. Try again later.',
 			})
 		}
-
-		// Si no se ha alcanzado el límite, pasa al siguiente middleware o controlador
-		next()
-	} catch (error) {
-		console.error('Error en el middleware de límite de solicitudes:', error)
-		res.status(500).json({
-			message: 'Server error. Try again later.',
-		})
 	}
 }
+
+export const limitShortUrlPerDay = createRateLimitMiddleware(
+	'direct',
+	'limitShortUrlPerDay',
+)
+
+export const limitQRCodePerDay = createRateLimitMiddleware(
+	'qr',
+	'limitQRCodePerDay',
+)
