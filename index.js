@@ -5,6 +5,7 @@ import { fileURLToPath } from 'node:url'
 import { corsMiddleware } from './middleware/cors.js'
 import routesUrl from './routes/url.js'
 import routesShortUrl from './routes/shorturl.js'
+import routesQrCode from './routes/qrcode.js'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
@@ -23,7 +24,8 @@ const envPath = path.join(__dirname, '.env')
 dotenv.config({ path: envPath })
 
 // Routes
-app.use('/api/urls', routesUrl)
+app.use('/direct/shorten', routesUrl)
+app.use('/qr/qrcode', routesQrCode)
 app.use('/', routesShortUrl)
 
 app.get('/', (req, res) => {
