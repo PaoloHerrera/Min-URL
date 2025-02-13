@@ -28,7 +28,7 @@ export const UrlModel = sequelize.define(
 			type: DataTypes.TEXT,
 			allowNull: false,
 		},
-		shorturl: {
+		slug: {
 			type: DataTypes.STRING,
 			allowNull: false,
 			unique: true,
@@ -37,6 +37,32 @@ export const UrlModel = sequelize.define(
 			type: DataTypes.INTEGER.UNSIGNED,
 			allowNull: false,
 			defaultValue: 0,
+		},
+		purpose: {
+			type: DataTypes.ENUM('direct', 'qr', 'api'),
+			allowNull: false,
+		},
+		qr_url: {
+			type: DataTypes.TEXT,
+			allowNull: true,
+		},
+		password: {
+			type: DataTypes.BOOLEAN,
+			allowNull: false,
+			defaultValue: false,
+		},
+		password_text: {
+			type: DataTypes.STRING(128),
+			allowNull: true,
+		},
+		expiration: {
+			type: DataTypes.BOOLEAN,
+			allowNull: false,
+			defaultValue: false,
+		},
+		expiration_date: {
+			type: DataTypes.DATE,
+			allowNull: true,
 		},
 		ip_address: {
 			type: DataTypes.STRING(50),
