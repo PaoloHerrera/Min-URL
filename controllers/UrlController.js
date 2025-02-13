@@ -2,7 +2,6 @@ import crypto from 'node:crypto'
 import geoip from 'geoip-lite'
 import { UrlModel } from '../models/Url.js'
 import { LogUrlModel } from '../models/LogUrl.js'
-import { createNanoId } from './NanoidController.js'
 import { validateUrl } from '../schema/url.js'
 import { validateLogUrl } from '../schema/logurl.js'
 import { addHttpScheme } from '../utils/utils.js'
@@ -12,36 +11,50 @@ import { SHORTURL_VALUES } from '../constants.js'
 const getGeoLocation = (ip) => geoip.lookup(ip) || {}
 
 // Esta función permite crear una ShortUrl con intentos
-const generateShortUrl = async (length, maxAttempts) => {
+const generateShortUrl = async (longUrl, length, maxLength, maxAttempts) => {
 	let attempts = 0
-	let shorturl = ''
-	while (attempts < maxAttempts) {
+	let initialLength = length
+	const normalizedUrl = addHttpScheme(longUrl)
+
+	while (length <= maxLength) {
+		const inputForShortUrl = `${normalizedUrl}-${crypto.randomUUID()}`
+
+		//Se genera el hash de la url
+		const hash = crypto
+			.createHash('sha256')
+			.update(inputForShortUrl)
+			.digest('base64url')
+		const shorturl = hash.substring(0, length)
+
+		//Se verifica si la shorturl ya existe. Si no existe se devuelve la shorturl. Si ya existe se vuelve a intentar con un nuevo hash
 		try {
-			const nanoid = await createNanoId(length)
-			shorturl = nanoid()
-			break
+			const exists = await UrlModel.findOne({ where: { shorturl } })
+			if (!exists) return shorturl
 		} catch (error) {
-			attempts++
-			if (attempts >= maxAttempts)
-				throw new Error('Error creating Short URL. Please try again later.')
+			throw new Error('Error creating Short URL. Please try again later.')
+		}
+		attempts++
+
+		if (attempts >= maxAttempts) {
+			initialLength++
+			attempts = 0
 		}
 	}
-	return shorturl
+
+	throw new Error('Error creating Short URL. Please try again later.')
 }
 
-export async function createShortUrl(req, res) {
-	/* Primero se crea la ShortURL de largo 3 y con 20 intentos.
-    Si no es posible insertar en la base de datos se aumenta el largo en 1 y se vuelve a intentar 20 veces
-    y así sucesivamente hasta que se pueda crear la shortURL. (Máximo largo 10) */
-
+export const createShortUrl = async (req, res) => {
 	// Capturamos la ip del usuario
 	let ip = req.ip
-	let lengthShortUrl = SHORTURL_VALUES.initialLength
-	const maxAttempts = SHORTURL_VALUES.maxAttempts
-	let resultUrl
-	let shorturl
 
-	if (ip === '::1') ip = process.env.LOCAL_IP
+	const initialLength = SHORTURL_VALUES.initialLength
+	const maxAttempts = SHORTURL_VALUES.maxAttempts
+	const longUrl = req.body.originalUrl
+	const maxLength = SHORTURL_VALUES.maxLength
+	let resultUrl
+
+	if (ip === '::1' || ip === '::ffff:127.0.0.1') ip = process.env.LOCAL_IP
 
 	const geo = getGeoLocation(ip)
 
@@ -56,47 +69,44 @@ export async function createShortUrl(req, res) {
 		})
 	}
 
-	while (lengthShortUrl <= SHORTURL_VALUES.maxLength) {
-		try {
-			shorturl = await generateShortUrl(lengthShortUrl, maxAttempts)
-			// Usuario anónimo.
-			// TODO: Incorporar usuario registrado
-			const objectUrl = {
-				longurl: addHttpScheme(req.body.originalUrl),
-				id_url_hash: crypto.randomUUID(),
-				shorturl,
-				ip_address: ip,
-				country: geo.country,
-				region: geo.region,
-				timezone: geo.timezone,
-				city: geo.city,
-				latitude: geo.ll[0],
-				longitude: geo.ll[1],
-			}
+	try {
+		//Generamos la shorturl
+		const shorturl = await generateShortUrl(
+			longUrl,
+			initialLength,
+			maxLength,
+			maxAttempts,
+		)
 
-			resultUrl = validateUrl(objectUrl)
-
-			if (!resultUrl.success) {
-				return res.status(400).json({ error: resultUrl.error.message })
-			}
-
-			await UrlModel.create(resultUrl.data)
-
-			const fullShortUrl = `${req.protocol}://${req.get('host')}/${resultUrl.data.shorturl}`
-			return res.status(201).json({ fullShortUrl })
-		} catch (error) {
-			console.log('Error al crear una nueva url: ', error.message)
-			if (lengthShortUrl <= SHORTURL_VALUES.maxLength) lengthShortUrl++
+		// Usuario anónimo.
+		// TODO: Incorporar usuario registrado
+		const objectUrl = {
+			longurl: addHttpScheme(longUrl),
+			id_url_hash: crypto.randomUUID(),
+			shorturl,
+			ip_address: ip,
+			country: geo.country,
+			region: geo.region,
+			timezone: geo.timezone,
+			city: geo.city,
+			latitude: geo.ll[0],
+			longitude: geo.ll[1],
 		}
-	}
 
-	return res.status(400).json({
-		message:
-			"We couldn't generate your Short URL at this time. Please try again later.",
-	})
+		resultUrl = validateUrl(objectUrl)
+
+		if (!resultUrl.success) {
+			throw new Error(resultUrl.error.message)
+		}
+		await UrlModel.create(resultUrl.data)
+		return `${req.protocol}://${req.get('host')}/${resultUrl.data.shorturl}`
+	} catch (error) {
+		console.log('Error al crear una nueva url: ', error.message)
+		throw new Error('Error creating Short URL. Please try again later.')
+	}
 }
 
-export async function getShortUrl(req, res) {
+export const getShortUrl = async (req, res) => {
 	const shorturl = req.params.id
 
 	// Capturamos la ip del usuario

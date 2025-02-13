@@ -1,9 +1,9 @@
 export const SHORTURL_VALUES = {
-	initialLength: 3,
+	initialLength: 6,
 	maxAttempts: 20,
 	maxLength: 10,
 }
 
 export const LIMITS_VALUES = {
-	limitShortUrlPerDay: 3,
+	limitShortUrlPerDay: 10,
 }
