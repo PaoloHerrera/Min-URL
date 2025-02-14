@@ -6,7 +6,7 @@ export const SHORTURL_VALUES = {
 
 export const LIMITS_VALUES = {
 	limitShortUrlPerDay: 10,
-	limitQRCodePerDay: 5,
+	limitQrCodePerDay: 5,
 }
 
 export const CLOUDINARY_VALUES = {

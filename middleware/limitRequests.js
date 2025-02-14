@@ -19,8 +19,10 @@ const createRateLimitMiddleware = (purpose, limitType) => {
 
 			const urlCount = await UrlModel.count({
 				where: {
+					// biome-ignore lint/style/useNamingConvention: UrlModel need use snake case
 					ip_address: ip,
 					purpose,
+					// biome-ignore lint/style/useNamingConvention: UrlModel need use snake case
 					created_at: {
 						[Op.gte]: startOfDay, // Mayor o igual a la medianoche de hoy
 					},
@@ -50,7 +52,7 @@ export const limitShortUrlPerDay = createRateLimitMiddleware(
 	'limitShortUrlPerDay',
 )
 
-export const limitQRCodePerDay = createRateLimitMiddleware(
+export const limitQrCodePerDay = createRateLimitMiddleware(
 	'qr',
-	'limitQRCodePerDay',
+	'limitQrCodePerDay',
 )
