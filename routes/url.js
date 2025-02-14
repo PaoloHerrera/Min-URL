@@ -37,4 +37,4 @@ routesUrl.post(
 
 routesUrl.use(handleUrlErrors)
 
-export default routesUrl
+export { routesUrl }

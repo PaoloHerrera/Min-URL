@@ -2,7 +2,7 @@ import { Router } from 'express'
 import { createQrCode } from '../controllers/QrCodeController.js'
 import { verifyGeoIp } from '../middleware/verifyIp.js'
 import { validateUrl } from '../middleware/validateUrl.js'
-import { limitQRCodePerDay } from '../middleware/limitRequests.js'
+import { limitQrCodePerDay } from '../middleware/limitRequests.js'
 import { insertQrPurpose } from '../middleware/insertPurpose.js'
 import { verifyRecaptcha } from '../middleware/verifyRecaptcha.js'
 import { checkForbiddenExtension } from '../middleware/checkForbiddenExtension.js'
@@ -15,7 +15,7 @@ const routesQrCode = Router()
 routesQrCode.post(
 	'/',
 	verifyRecaptcha,
-	limitQRCodePerDay,
+	limitQrCodePerDay,
 	validateUrl,
 	checkForbiddenExtension,
 	verifyGeoIp,
@@ -27,4 +27,4 @@ routesQrCode.post(
 routesQrCode.use(handleQrCodeErrors)
 // routesQrCode.get('/:id', getQrCode)
 
-export default routesQrCode
+export { routesQrCode }

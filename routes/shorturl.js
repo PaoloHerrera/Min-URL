@@ -10,4 +10,4 @@ routesShortUrl.get('/:slug', verifyGeoIp, handleAsyncError(getShortUrl))
 
 routesShortUrl.use(handleUrlErrors)
 
-export default routesShortUrl
+export { routesShortUrl }

@@ -3,9 +3,9 @@ import dotenv from 'dotenv'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { corsMiddleware } from './middleware/cors.js'
-import routesUrl from './routes/url.js'
-import routesShortUrl from './routes/shorturl.js'
-import routesQrCode from './routes/qrcode.js'
+import { routesUrl } from './routes/url.js'
+import { routesShortUrl } from './routes/shorturl.js'
+import { routesQrCode } from './routes/qrcode.js'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
@@ -35,7 +35,7 @@ app.get('/', (req, res) => {
 })
 
 // favicon
-app.get('/favicon.ico', (req, res) => {
+app.get('/favicon.ico', (_req, res) => {
 	return res.status(204).end()
 })
 
