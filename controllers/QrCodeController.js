@@ -1,3 +1,4 @@
+// biome-ignore lint/style/useNamingConvention: Import of qr code
 import QRCode from 'qrcode'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
@@ -12,10 +13,7 @@ const __dirname = path.dirname(__filename)
 export const createQrCode = async (req, res) => {
 	const { shorturl, slug } = req
 
-	const outputPath = path.join(
-		__dirname,
-		`../assets/qrcodes/${new Date().getTime()}.png`,
-	)
+	const outputPath = path.join(__dirname, `../assets/qrcodes/${Date.now()}.png`)
 
 	await QRCode.toFile(outputPath, `${shorturl}`)
 
@@ -23,6 +21,7 @@ export const createQrCode = async (req, res) => {
 
 	// Se actualiza la url con el nuevo código QR
 	await UrlModel.update(
+		// biome-ignore lint/style/useNamingConvention: UrlModel need use snake case
 		{ qr_url: result.secure_url },
 		{
 			where: {
