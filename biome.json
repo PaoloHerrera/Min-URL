@@ -17,9 +17,25 @@
 		"enabled": true
 	},
 	"linter": {
+		"ignore": [
+			"services/cloudinary.js",
+			"models",
+			"schema",
+			"controllers/UrlObjects.js"
+		],
 		"enabled": true,
 		"rules": {
-			"recommended": true
+			"all": true,
+			"correctness": {
+				"noNodejsModules": "off",
+				"noUndeclaredVariables": "error",
+				"noUnusedVariables": "error",
+				"noUnusedImports": "error"
+			},
+			"suspicious": {
+				"noConsole": "off",
+				"noConsoleLog": "off"
+			}
 		}
 	},
 	"javascript": {
