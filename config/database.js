@@ -19,4 +19,4 @@ sequelize
 	.then(() => console.log('Database connected...'))
 	.catch((err) => console.log(`Error: ${err}`))
 
-export default sequelize
+export { sequelize }
