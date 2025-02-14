@@ -8,3 +8,10 @@ export const LIMITS_VALUES = {
 	limitShortUrlPerDay: 10,
 	limitQRCodePerDay: 5,
 }
+
+export const CLOUDINARY_VALUES = {
+	cloudName: process.env.CLOUDINARY_CLOUD_NAME,
+	apiKey: process.env.CLOUDINARY_API_KEY,
+	apiSecret: process.env.CLOUDINARY_API_SECRET,
+	uploadPreset: 'min-url',
+}

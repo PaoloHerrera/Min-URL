@@ -1,12 +1,16 @@
 import { v2 as cloudinary } from 'cloudinary'
+import { CLOUDINARY_VALUES } from '../constants.js'
 
 cloudinary.config({
-	cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-	api_key: process.env.CLOUDINARY_API_KEY,
-	api_secret: process.env.CLOUDINARY_API_SECRET,
+	cloud_name: CLOUDINARY_VALUES.cloudName,
+	api_key: CLOUDINARY_VALUES.apiKey,
+	api_secret: CLOUDINARY_VALUES.apiSecret,
 })
 
 export const uploadImage = async (file) => {
-	const result = await cloudinary.uploader.unsigned_upload(file, 'min-url')
+	const result = await cloudinary.uploader.unsigned_upload(
+		file,
+		CLOUDINARY_VALUES.uploadPreset,
+	)
 	return result
 }
