@@ -1,0 +1,44 @@
+
+@import "tailwindcss";
+
+@plugin "tailwindcss-animate";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme {
+  --color-primary: #1971ce;
+  --color-mariner-50: #f1f6fe;
+  --color-mariner-100: #e2edfc;
+  --color-mariner-200: #bed9f9;
+  --color-mariner-300: #84b9f5;
+  --color-mariner-400: #4396ed;
+  --color-mariner-500: #1971ce;
+  --color-mariner-600: #0d5cbc;
+  --color-mariner-700: #0c4a98;
+  --color-mariner-800: #0e407e;
+  --color-mariner-900: #123768;
+  --color-mariner-950: #0c2245;
+
+  --color-success: #17c964;
+  --color-error: #ff4d4d;
+  --color-warning: #ffc107;
+
+  --color-background: #fff;
+
+  --color-text: #000;
+  --color-text-inverted: #fff;
+  --color-decoration: #e0e0e0;
+
+  --animate-spin-slow: spin 1.5s linear infinite;
+}
+
+:root {
+  --radius: 0.6rem;
+}
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+}
