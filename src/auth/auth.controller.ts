@@ -4,10 +4,16 @@ import type {
 	Request as ExpressRequest,
 } from 'express'
 import { AuthGuard } from '@nestjs/passport'
-import type { User } from './user.model'
+import type { User } from '../user/user.model'
+import type { AuthService } from './auth.service'
 
 @Controller('auth')
 export class AuthController {
+	private authService: AuthService
+	constructor(authService: AuthService) {
+		this.authService = authService
+	}
+
 	@Get('google')
 	@UseGuards(AuthGuard('google'))
 	googleLogin() {
@@ -16,7 +22,7 @@ export class AuthController {
 
 	@Get('google/callback')
 	@UseGuards(AuthGuard('google'))
-	googleCallback(
+	async googleCallback(
 		@Request() req: ExpressRequest & { user?: User },
 		@Response() res: ExpressResponse,
 	) {
@@ -24,6 +30,14 @@ export class AuthController {
 			return res.status(401).json({ message: 'Authentication failed' })
 		}
 
-		return res.redirect(process.env.DASHBOARD_URL || '/')
+		const { accessToken, refreshToken, user } = await this.authService.login(
+			req.user,
+		)
+
+		return {
+			accessToken,
+			refreshToken,
+			user,
+		}
 	}
 }

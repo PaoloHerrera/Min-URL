@@ -18,7 +18,7 @@
 	},
 	"linter": {
 		"enabled": true,
-		"ignore": ["src/auth/google.strategy.ts"],
+		"ignore": ["src/auth/strategies/google.strategy.ts", "node_modules"],
 		"rules": {
 			"all": true
 		}
