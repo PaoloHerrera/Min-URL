@@ -1,9 +1,8 @@
 import z from 'zod'
 
 const urlSchema = z.object({
-	user_id_user: z.number().positive().optional(),
-	id_url_hash: z.string(64),
-	longurl: z.string().url({ message: 'Invalid url' }),
+	user_id: z.number().positive().optional(),
+	long_url: z.string().url({ message: 'Invalid url' }),
 	slug: z.string(),
 	clicks: z.number().int().default(0),
 	purpose: z.enum(['direct', 'qr', 'api']),

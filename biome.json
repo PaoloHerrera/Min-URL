@@ -21,7 +21,8 @@
 			"services/cloudinary.js",
 			"models",
 			"schema",
-			"controllers/UrlObjects.js"
+			"controllers/UrlObjects.js",
+			"routes/passport.js"
 		],
 		"enabled": true,
 		"rules": {

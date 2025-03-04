@@ -1,8 +1,7 @@
 import z from 'zod'
 
-const urlSchema = z.object({
-	url_id_url: z.number().positive(),
-	id_logurl_hash: z.string(64),
+const logurlSchema = z.object({
+	url_id: z.number().positive(),
 	ip_address: z.string().ip({ version: 'v4' | 'v6' }),
 	country: z.string().optional(),
 	region: z.string().optional(),
@@ -23,5 +22,5 @@ const urlSchema = z.object({
 })
 
 export function validateLogUrl(input) {
-	return urlSchema.safeParse(input)
+	return logurlSchema.safeParse(input)
 }

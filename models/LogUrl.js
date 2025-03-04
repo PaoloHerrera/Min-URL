@@ -2,14 +2,14 @@ import { DataTypes } from 'sequelize'
 import { sequelize } from '../config/database.js'
 
 export const LogUrlModel = sequelize.define(
-	'logurl',
+	'logurls',
 	{
-		id_logurl: {
+		id_logurls: {
 			type: DataTypes.INTEGER,
 			autoIncrement: true,
 			primaryKey: true,
 		},
-		url_id_url: {
+		url_id: {
 			type: DataTypes.INTEGER,
 			allowNull: true,
 			references: {
@@ -18,11 +18,6 @@ export const LogUrlModel = sequelize.define(
 			},
 			onUpdate: 'CASCADE',
 			onDelete: 'CASCADE',
-		},
-		id_logurl_hash: {
-			type: DataTypes.STRING(16),
-			allowNull: true,
-			unique: true,
 		},
 		ip_address: {
 			type: DataTypes.STRING(50),
@@ -72,5 +67,5 @@ export const LogUrlModel = sequelize.define(
 			allowNull: true,
 		},
 	},
-	{ timestamps: false },
+	{ tableName: 'logurls', schema: 'Min-URL', timestamps: false },
 )

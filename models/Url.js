@@ -2,14 +2,14 @@ import { DataTypes } from 'sequelize'
 import { sequelize } from '../config/database.js'
 
 export const UrlModel = sequelize.define(
-	'url',
+	'urls',
 	{
-		id_url: {
+		id_urls: {
 			type: DataTypes.INTEGER,
 			autoIncrement: true,
 			primaryKey: true,
 		},
-		user_id_user: {
+		user_id: {
 			type: DataTypes.INTEGER,
 			allowNull: true,
 			references: {
@@ -19,32 +19,23 @@ export const UrlModel = sequelize.define(
 			onUpdate: 'CASCADE',
 			onDelete: 'CASCADE',
 		},
-		id_url_hash: {
-			type: DataTypes.STRING(16),
-			allowNull: true,
-			unique: true,
-		},
-		longurl: {
+		long_url: {
 			type: DataTypes.TEXT,
 			allowNull: false,
 		},
 		slug: {
-			type: DataTypes.STRING,
+			type: DataTypes.STRING(16),
 			allowNull: false,
 			unique: true,
 		},
 		clicks: {
-			type: DataTypes.INTEGER.UNSIGNED,
+			type: DataTypes.INTEGER,
 			allowNull: false,
 			defaultValue: 0,
 		},
 		purpose: {
 			type: DataTypes.ENUM('direct', 'qr', 'api'),
 			allowNull: false,
-		},
-		qr_url: {
-			type: DataTypes.TEXT,
-			allowNull: true,
 		},
 		password: {
 			type: DataTypes.BOOLEAN,
@@ -112,5 +103,5 @@ export const UrlModel = sequelize.define(
 			allowNull: true,
 		},
 	},
-	{ timestamps: false },
+	{ tableName: 'urls', schema: 'Min-URL', timestamps: false },
 )

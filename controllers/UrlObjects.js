@@ -1,6 +1,5 @@
 export const createUrlObject = (req, slug) => ({
-	longurl: req.body.originalUrl,
-	id_url_hash: crypto.randomUUID(),
+	long_url: req.body.originalUrl,
 	slug,
 	purpose: req.purpose,
 	ip_address: req.originalIp,
@@ -8,8 +7,7 @@ export const createUrlObject = (req, slug) => ({
 })
 
 export const createLogUrlObject = (req, url) => ({
-	url_id_url: url.dataValues.id_url,
-	id_logurl_hash: crypto.randomUUID(),
+	url_id: url.dataValues.id_urls,
 	ip_address: req.originalIp,
 	...extractGeoData(req.geo),
 })

@@ -24,14 +24,22 @@ export const createShortUrl = async (req, _res, next) => {
 	const slug = await generator.generateUniqueSlug(req.body.originalUrl)
 	const urlData = createUrlObject(req, slug)
 
-	await saveUrl(urlData)
+	const {
+		dataValues: { created_at },
+	} = await saveUrl(urlData)
 
 	req.shorturl = `${req.protocol}://${req.get('host')}/${slug}`
+	req.created_at = created_at
 	req.slug = slug
 	next()
 }
 
-export const sendShortUrl = (req, res) => res.send(req.shorturl)
+export const sendShortUrl = (req, res) =>
+	res.send({
+		shortUrl: req.shorturl,
+		purpose: req.purpose,
+		createdAt: req.created_at,
+	})
 
 export const getShortUrl = async (req, res) => {
 	const { slug } = req.params
@@ -44,5 +52,5 @@ export const getShortUrl = async (req, res) => {
 	await url.increment({ clicks: 1 })
 	await LogUrlModel.create(validateLogUrl(createLogUrlObject(req, url)).data)
 
-	res.redirect(url.longurl)
+	res.redirect(url.long_url)
 }
