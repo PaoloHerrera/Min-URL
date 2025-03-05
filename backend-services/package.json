@@ -1,6 +1,6 @@
 {
-	"name": "min-url",
-	"version": "1.0.0",
+	"name": "backend-services",
+	"version": "0.0.1",
 	"description": "",
 	"main": "index.js",
 	"type": "module",
@@ -8,6 +8,8 @@
 		"start": "node index.js",
 		"prod": "node index.js",
 		"dev": "node --watch index.js",
+		"biome": "biome check",
+		"lint": "biome lint .",
 		"test": "echo \"Error: no test specified\" && exit 1"
 	},
 	"keywords": [],
@@ -30,8 +32,5 @@
 		"uuid": "^11.0.5",
 		"validator": "13.12.0",
 		"zod": "3.23.8"
-	},
-	"devDependencies": {
-		"@biomejs/biome": "1.9.4"
 	}
 }

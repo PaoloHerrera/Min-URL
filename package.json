@@ -1,0 +1,19 @@
+{
+	"name": "min-url",
+	"version": "0.0.1",
+	"packageManager": "pnpm@10.5.2",
+	"workspaces": [
+		"frontend-landing",
+		"backend-services",
+		"backend-users"
+	],
+	"scripts": {
+		"build": "turbo run build",
+		"dev": "turbo run dev",
+		"start": "turbo run start"
+	},
+	"devDependencies": {
+		"@biomejs/biome": "1.9.4",
+		"turbo": "2.4.4"
+	}
+}
