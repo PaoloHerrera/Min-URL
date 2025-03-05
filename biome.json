@@ -17,12 +17,16 @@
 		"enabled": true
 	},
 	"linter": {
+		"ignore": ["google.strategy.ts"],
 		"enabled": true,
 		"rules": {
 			"all": true
 		}
 	},
 	"javascript": {
+		"parser": {
+			"unsafeParameterDecoratorsEnabled": true
+		},
 		"formatter": {
 			"quoteStyle": "single",
 			"semicolons": "asNeeded"
@@ -31,6 +35,21 @@
 	"overrides": [
 		{
 			"include": ["backend-services/**"],
+			"linter": {
+				"rules": {
+					"correctness": {
+						"noUndeclaredDependencies": "off",
+						"noNodejsModules": "off"
+					},
+					"suspicious": {
+						"noConsole": "off",
+						"noConsoleLog": "off"
+					}
+				}
+			}
+		},
+		{
+			"include": ["backend-users/**"],
 			"linter": {
 				"rules": {
 					"correctness": {
