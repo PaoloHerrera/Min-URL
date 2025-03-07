@@ -9,6 +9,9 @@ import {
 @Table({ tableName: 'users', schema: 'Min-URL', underscored: true })
 export class User extends Model<User> {
 	@PrimaryKey
+	@Column({ type: DataType.INTEGER, autoIncrement: true })
+	declare idUsers: number
+
 	@Column({
 		type: DataType.STRING,
 		unique: true,
