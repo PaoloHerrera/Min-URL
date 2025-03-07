@@ -4,6 +4,7 @@
 	"packageManager": "pnpm@10.5.2",
 	"workspaces": [
 		"frontend-landing",
+		"frontend-dashboard",
 		"backend-services",
 		"backend-users"
 	],

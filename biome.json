@@ -34,6 +34,32 @@
 	},
 	"overrides": [
 		{
+			"include": ["frontend-landing/**"],
+			"linter": {
+				"rules": {
+					"correctness": {
+						"noUndeclaredDependencies": "off"
+					},
+					"suspicious": {
+						"noReactSpecificProps": "off"
+					}
+				}
+			}
+		},
+		{
+			"include": ["frontend-dashboard/**"],
+			"linter": {
+				"rules": {
+					"correctness": {
+						"noUndeclaredDependencies": "off"
+					},
+					"suspicious": {
+						"noReactSpecificProps": "off"
+					}
+				}
+			}
+		},
+		{
 			"include": ["backend-services/**"],
 			"linter": {
 				"rules": {

@@ -1,4 +1,5 @@
 packages:
   - frontend-landing
+  - frontend-dashboard
   - backend-services
   - backend-users
