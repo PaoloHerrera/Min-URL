@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common'
 import { AuthService } from './auth.service'
 import { PassportModule } from '@nestjs/passport'
 import { User } from '../user/model/user.model'
+import { RefreshToken } from '../refreshToken/model/refreshToken.model'
 import { SequelizeModule } from '@nestjs/sequelize'
 import { GoogleStrategy } from './strategies/google.strategy'
 import { AuthController } from './auth.controller'
@@ -11,11 +12,10 @@ import { ConfigService } from '@nestjs/config'
 @Module({
 	imports: [
 		PassportModule,
-		SequelizeModule.forFeature([User]),
+		SequelizeModule.forFeature([User, RefreshToken]),
 		JwtModule.registerAsync({
 			useFactory: async (configService: ConfigService) => ({
 				secret: configService.get('JWT_SECRET'),
-				signOptions: { expiresIn: '1d' },
 			}),
 			inject: [ConfigService],
 		}),

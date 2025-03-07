@@ -29,7 +29,7 @@ export class AuthController {
 
 	@Get('google/callback')
 	@UseGuards(AuthGuard('google'))
-	googleCallback(
+	async googleCallback(
 		@Request() req: ExpressRequest & { user?: User },
 		@Response() res: ExpressResponse,
 	) {
@@ -37,15 +37,62 @@ export class AuthController {
 			return res.status(401).json({ message: 'Authentication failed' })
 		}
 
-		const { accessToken, user } = this.authService.login(req.user)
+		const { accessToken, refreshToken } = await this.authService.login(req.user)
 
 		return res
 			.cookie('min_url_access_token', accessToken, {
 				httpOnly: true,
 				secure: process.env.NODE_ENV === 'production',
 				sameSite: 'strict',
-				maxAge: 60 * 60 * 24 * 7,
+				maxAge: 1000 * 60 * 30, // Duracion de 30 minutos
 			})
-			.send({ user, accessToken })
+			.cookie('min_url_refresh_token', refreshToken, {
+				httpOnly: true,
+				secure: process.env.NODE_ENV === 'production',
+				sameSite: 'strict',
+				maxAge: 1000 * 60 * 60 * 24 * 7, // Duracion de 7 dias
+				path: '/auth/refresh',
+			})
+
+			.redirect(process.env.DASHBOARD_URL as string)
+	}
+
+	@Get('refresh')
+	async refreshToken(
+		@Request() req: ExpressRequest,
+		@Response() res: ExpressResponse,
+	) {
+		const cookieName = 'min_url_refresh_token'
+
+		const refreshToken = req.cookies[cookieName]
+
+		if (!refreshToken) {
+			return res.status(401).json({ message: 'Authentication failed' })
+		}
+
+		try {
+			const { userId, username } =
+				await this.authService.verifyRefreshToken(refreshToken)
+
+			//Si el refresh token es válido se genera un nuevo access token
+			const accessToken = await this.authService.generateNewAccessToken({
+				userId,
+				username,
+				refreshToken,
+			})
+
+			return res
+				.cookie('min_url_access_token', accessToken, {
+					httpOnly: true,
+					secure: process.env.NODE_ENV === 'production',
+					sameSite: 'strict',
+					maxAge: 1000 * 60 * 30, // Duracion de 30 minutos
+				})
+				.status(200)
+				.json({ username })
+		} catch (_error) {
+			console.log('Error refreshing token')
+			return res.status(401).json({ message: 'Authentication failed' })
+		}
 	}
 }
