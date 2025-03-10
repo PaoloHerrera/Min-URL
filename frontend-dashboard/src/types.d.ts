@@ -34,3 +34,26 @@ export interface LoginCardProps {
 export interface Translations {
 	login: LoginProps
 }
+
+type GeolocationType = {
+	ip: string
+	country: string
+	city: string
+	latitude: number
+	longitude: number
+}
+export type ShortUrlType = {
+	url: string
+	shortUrl: string
+	slug: string
+	clicks: number
+	createdAt: Date
+	updatedAt: Date
+	geoLocation: GeolocationType[]
+}
+
+export type StatsStoreType = {
+	shortUrls: ShortUrlType[] | null
+	isLoading: boolean
+	setStats: (shortUrls: ShortUrlType[] | null, isLoading: boolean) => void
+}
