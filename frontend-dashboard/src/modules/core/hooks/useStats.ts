@@ -23,7 +23,7 @@ export const useStats = () => {
 
 				if (mounted) {
 					setStats(response.data.shortUrls, true)
-					setAuthenticated(true)
+					setAuthenticated(true, response.data.user)
 					setIsLoading(false)
 				}
 			} catch {
