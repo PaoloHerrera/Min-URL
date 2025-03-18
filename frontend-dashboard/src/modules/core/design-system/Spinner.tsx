@@ -1,8 +1,9 @@
 import { motion } from 'motion/react'
 
-export const Spinner = () => {
+export const Spinner = ({ className }: { className?: string }) => {
 	return (
 		<motion.span
+			className={className}
 			animate={{ rotate: 360 }}
 			transition={{
 				repeat: Number.POSITIVE_INFINITY,
