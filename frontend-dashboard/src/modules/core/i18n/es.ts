@@ -27,4 +27,51 @@ export const ES_TRANSLATIONS: Translations = {
 		conect: 'y',
 		privacy: 'Política de privacidad',
 	},
+	dashboard: {
+		navbar: {
+			greetings: {
+				morning: 'Buenos días',
+				afternoon: 'Buenas tardes',
+				evening: 'Buenas noches',
+			},
+			createNew: {
+				new: 'Crear nuevo',
+				link: 'Enlace',
+				qrCode: 'Código QR',
+			},
+			search: 'Buscar enlaces',
+			notifications: {
+				title: 'Notificaciones',
+				empty: 'Aún no hay notificaciones',
+				seeAll: 'Ver todo',
+			},
+			profile: {
+				title: 'Perfil',
+				logout: 'Cerrar Sesión',
+			},
+			dialogNewLink: {
+				title: 'Crear nuevo enlace',
+				description: 'Acorta un URL largo y personaliza tu enlace.',
+				originalUrl: {
+					label: 'URL original',
+					placeholder: 'https://example.com/muy/largo/url/que/necesita/acortar',
+				},
+				questionSlug: {
+					label: '¿Personalizar tu slug?',
+				},
+				customSlug: {
+					label: 'Slug personalizado',
+					placeholder: 'mi-enlace-personalizado',
+					error: {
+						minLength: 'La longitud mínima es de 6',
+						maxLength: 'La longitud máxima es de 12',
+						invalid: 'Caracteres inválidos',
+						alreadyInUse: 'El enlace ya está en uso',
+					},
+				},
+				cancelText: 'Cancelar',
+				submitText: 'Crear enlace',
+			},
+		},
+	},
 }

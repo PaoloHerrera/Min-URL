@@ -27,4 +27,53 @@ export const EN_TRANSLATIONS: Translations = {
 		conect: 'and',
 		privacy: 'Privacy Policy',
 	},
+
+	dashboard: {
+		navbar: {
+			greetings: {
+				morning: 'Good morning',
+				afternoon: 'Good afternoon',
+				evening: 'Good evening',
+			},
+			createNew: {
+				new: 'Create new',
+				link: 'Link',
+				qrCode: 'QR code',
+			},
+			search: 'Search links',
+			notifications: {
+				title: 'Notifications',
+				empty: 'No notifications yet',
+				seeAll: 'See all',
+			},
+			profile: {
+				title: 'Profile',
+				logout: 'Log Out',
+			},
+			dialogNewLink: {
+				title: 'Create New Link',
+				description: 'Shorten a long URL and customize your link.',
+				originalUrl: {
+					label: 'Original URL',
+					placeholder:
+						'https://example.com/very/long/url/that/needs/shortening',
+				},
+				questionSlug: {
+					label: 'Customize your slug?',
+				},
+				customSlug: {
+					label: 'Custom Slug',
+					placeholder: 'my-custom-link',
+					error: {
+						minLength: 'Minimum length is 6',
+						maxLength: 'Maximum length is 12',
+						invalid: 'Invalid characters',
+						alreadyInUse: 'Short URL is already in use',
+					},
+				},
+				cancelText: 'Cancel',
+				submitText: 'Create Link',
+			},
+		},
+	},
 }
