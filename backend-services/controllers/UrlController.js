@@ -54,3 +54,24 @@ export const getShortUrl = async (req, res) => {
 
 	res.redirect(url.long_url)
 }
+
+export const checkSlug = async (req, res) => {
+	console.log(req.body)
+	const { slug } = req.body
+
+	if (!slug) {
+		return res
+			.status(400)
+			.json({ message: 'Slug not found', isAvailable: false })
+	}
+
+	const url = await UrlModel.findOne({ where: { slug } })
+
+	if (url) {
+		return res
+			.status(404)
+			.json({ message: 'ShortURL is already in use', isAvailable: false })
+	}
+
+	res.status(200).json({ isAvailable: true })
+}
