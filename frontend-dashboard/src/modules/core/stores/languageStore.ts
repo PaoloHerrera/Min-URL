@@ -7,6 +7,9 @@ type LanguageStore = {
 }
 
 export const useLanguageStore = create<LanguageStore>((set) => ({
-	language: 'en',
-	setLanguage: (language: Language) => set({ language }),
+	language: (localStorage.getItem('language') as Language) || 'en',
+	setLanguage: (language) => {
+		localStorage.setItem('language', language)
+		set({ language })
+	},
 }))
