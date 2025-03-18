@@ -31,8 +31,58 @@ export interface LoginCardProps {
 	information: LoginProps
 }
 
+export interface CreateNewProps {
+	new: string
+	link: string
+	qrCode: string
+}
+export interface DialogNewLinkProps {
+	title: string
+	description: string
+	originalUrl: {
+		label: string
+		placeholder: string
+	}
+	questionSlug: {
+		label: string
+	}
+	customSlug: {
+		label: string
+		placeholder: string
+		error: {
+			minLength: string
+			maxLength: string
+			invalid: string
+			alreadyInUse: string
+		}
+	}
+	cancelText: string
+	submitText: string
+}
+
 export interface Translations {
 	login: LoginProps
+	dashboard: {
+		navbar: {
+			greetings: {
+				morning: string
+				afternoon: string
+				evening: string
+			}
+			createNew: CreateNewProps
+			search: string
+			notifications: {
+				title: string
+				empty: string
+				seeAll: string
+			}
+			profile: {
+				title: string
+				logout: string
+			}
+			dialogNewLink: DialogNewLinkProps
+		}
+	}
 }
 
 type GeolocationType = {
@@ -52,8 +102,40 @@ export type ShortUrlType = {
 	geoLocation: GeolocationType[]
 }
 
+export type BasicStatsProps = {
+	totalClicks: {
+		total: number
+		percentage: number
+	}
+	todayClicks: {
+		total: number
+		percentage: number
+	}
+	activeLinks: {
+		total: number
+		percentage: number
+	}
+	activeQrCodes: {
+		total: number
+		percentage: number
+	}
+}
+
+export type ClickPerformanceProps = {
+	lastYear: Record<number>
+	lastSevenDays: Record<number>
+	today: Record<number>
+}
+
 export type StatsStoreType = {
+	basicStats: BasicStatsProps | null
+	clickPerformance: ClickPerformanceProps | null
 	shortUrls: ShortUrlType[] | null
 	isLoading: boolean
-	setStats: (shortUrls: ShortUrlType[] | null, isLoading: boolean) => void
+	setStats: (
+		basicStats: BasicStatsProps | null,
+		clickPerformance: ClickPerformanceProps | null,
+		shortUrls: ShortUrlType[] | null,
+		isLoading: boolean,
+	) => void
 }

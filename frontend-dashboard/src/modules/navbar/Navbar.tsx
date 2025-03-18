@@ -5,14 +5,18 @@ import { CreateNewDropdown } from './components/CreateNewDropdown.tsx'
 import { SearchInput } from './components/SearchInput.tsx'
 import { NotificationsDropdown } from './components/NotificationsDropdown.tsx'
 import { UserProfileDropdown } from './components/UserProfileDropdown.tsx'
-import {
-	CreateLinkDialog,
-	CreateQrCodeDialog,
-} from './components/CreateDialog.tsx'
+import { CreateQrCodeDialog } from './components/CreateDialog.tsx'
+import { CreateLinkDialog } from './components/createLink/CreateLinkDialog.tsx'
+import { LanguageSelector } from './components/LanguageSelector.tsx'
+import { useLanguageStore } from '../core/stores/languageStore.ts'
+import { translations } from '../core/i18n/index.ts'
 
 export const Navbar = () => {
 	const [openDialogLink, setOpenDialogLink] = useState(false)
 	const [openDialogQrCode, setOpenDialogQrCode] = useState(false)
+
+	const { language } = useLanguageStore()
+	const { navbar } = translations[language].dashboard
 
 	const handleShortUrlSubmit = (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault()
@@ -25,9 +29,9 @@ export const Navbar = () => {
 	}
 
 	return (
-		<header className="py-4 px-10 border-b-1 border-decoration">
+		<header className="py-4 px-10 border-b-1 border-decoration fixed bg-white w-[calc(100vw-24rem)] ml-96 h-20 z-10">
 			<nav className="flex flex-row items-center justify-between">
-				<Greeting />
+				<Greeting greetings={navbar.greetings} language={language} />
 
 				<div className="flex flex-row gap-20 items-center">
 					<div className="flex flex-row gap-10 items-center">
@@ -35,19 +39,23 @@ export const Navbar = () => {
 						<CreateNewDropdown
 							onLinkClick={() => setOpenDialogLink(true)}
 							onQrCodeClick={() => setOpenDialogQrCode(true)}
+							createNew={navbar.createNew}
 						/>
-						<SearchInput />
-						<NotificationsDropdown />
+						<SearchInput placeholder={navbar.search} />
+						{/* Selector de idioma */}
+						<LanguageSelector />
+						<NotificationsDropdown message={navbar.notifications.empty} />
 					</div>
 
 					{/* Botón para ver tu perfil */}
-					<UserProfileDropdown />
+					<UserProfileDropdown logout={navbar.profile.logout} />
 				</div>
 
 				<CreateLinkDialog
 					open={openDialogLink}
 					onOpenChange={setOpenDialogLink}
 					onSubmit={handleShortUrlSubmit}
+					dialogTexts={navbar.dialogNewLink}
 				/>
 
 				<CreateQrCodeDialog

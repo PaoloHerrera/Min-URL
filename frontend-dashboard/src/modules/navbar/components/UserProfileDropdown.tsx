@@ -10,7 +10,7 @@ import { LogOutIcon } from 'lucide-react'
 
 import { useAuthStore } from '@/modules/core/stores/authStore'
 
-export const UserProfileDropdown = () => {
+export const UserProfileDropdown = ({ logout }: { logout: string }) => {
 	const { user } = useAuthStore()
 	return (
 		<DropdownMenu>
@@ -45,7 +45,7 @@ export const UserProfileDropdown = () => {
 
 				<DropdownMenuItem className="cursor-pointer">
 					<LogOutIcon className="w-5 h-5 focus:text-mariner-50" />
-					<span className="text-sm font-semibold">Log out</span>
+					<span className="text-sm font-semibold">{logout}</span>
 				</DropdownMenuItem>
 			</DropdownMenuContent>
 		</DropdownMenu>

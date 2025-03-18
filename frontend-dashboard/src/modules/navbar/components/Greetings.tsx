@@ -1,7 +1,14 @@
 import { useAuthStore } from '@/modules/core/stores/authStore'
+import type { Language } from '@/types'
 
-export const Greeting = () => {
+interface GreetingProps {
+	greetings: { morning: string; afternoon: string; evening: string }
+	language: Language
+}
+
+export const Greeting = ({ greetings, language }: GreetingProps) => {
 	const { user } = useAuthStore()
+
 	const currentDate = new Date()
 	const options: Intl.DateTimeFormatOptions = {
 		weekday: 'short',
@@ -12,16 +19,16 @@ export const Greeting = () => {
 
 	const getGreeting = () => {
 		if (hour < 12) {
-			return { emoji: '☀️', text: 'Good morning' }
+			return { emoji: '☀️', text: greetings.morning }
 		}
 		if (hour < 18) {
-			return { emoji: '⛅', text: 'Good afternoon' }
+			return { emoji: '⛅', text: greetings.afternoon }
 		}
-		return { emoji: '🌙', text: 'Good evening' }
+		return { emoji: '🌙', text: greetings.evening }
 	}
 
 	const { emoji, text } = getGreeting()
-	const formattedDate = currentDate.toLocaleDateString('en', options)
+	const formattedDate = currentDate.toLocaleDateString(language, options)
 
 	return (
 		<div className="flex flex-row gap-2">
@@ -30,7 +37,7 @@ export const Greeting = () => {
 				<p className="font-bold text-mariner-950">
 					{text}, {user?.givenName}
 				</p>
-				<p className="text-sm text-mariner-950 font-semibold opacity-60">
+				<p className="text-sm text-mariner-950 font-semibold opacity-70">
 					{formattedDate}
 				</p>
 			</div>

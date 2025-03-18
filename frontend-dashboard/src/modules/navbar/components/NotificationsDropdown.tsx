@@ -6,7 +6,7 @@ import {
 } from '@/modules/core/ui/dropdown-menu.tsx'
 import { BellIcon } from 'lucide-react'
 
-export const NotificationsDropdown = () => {
+export const NotificationsDropdown = ({ message }: { message: string }) => {
 	return (
 		<DropdownMenu>
 			<DropdownMenuTrigger asChild={true}>
@@ -16,9 +16,7 @@ export const NotificationsDropdown = () => {
 			</DropdownMenuTrigger>
 			<DropdownMenuContent align="end" className="min-w-64">
 				<DropdownMenuLabel>
-					<p className="text-sm opacity-50 text-mariner-950">
-						You have no notifications
-					</p>
+					<p className="text-sm opacity-50 text-mariner-950">{message}</p>
 				</DropdownMenuLabel>
 			</DropdownMenuContent>
 		</DropdownMenu>

@@ -1,35 +1,104 @@
 import { useStatsStore } from '../core/stores/statsStore.ts'
-import { useAuthStore } from '../core/stores/authStore.ts'
 import { Navbar } from '../navbar/Navbar.tsx'
 import { Sidebar } from './components/Sidebar.tsx'
+import { Card, CardBody, CardHeader } from '../core/design-system/Card.tsx'
+import {
+	ActivityIcon,
+	LinkIcon,
+	MousePointerIcon,
+	QrCodeIcon,
+} from 'lucide-react'
+import { Chip } from '../core/design-system/Chip.tsx'
 
 export const Dashboard = () => {
-	const { user } = useAuthStore()
-	const { shortUrls } = useStatsStore()
+	const { basicStats, clickPerformance, shortUrls } = useStatsStore()
 
 	return (
 		<div className="flex">
-			<div className="w-96 h-screen border-r-1 border-decoration z-10 ">
+			<div className="w-96 h-screen border-r-1 border-decoration z-10 fixed bg-white">
 				<Sidebar />
 			</div>
 
-			<div className="flex-1 flex flex-col">
+			<div className="flex-1 flex flex-col min-h-screen">
 				<Navbar />
-				<main className="flex flex-col items-center justify-center bg-mariner-50 h-full">
-					<h1 className="text-3xl font-bold text-mariner-950">Dashboard</h1>
-					<p className="text-xl font-bold text-mariner-950">
-						{user?.displayName}
-					</p>
-					<p className="text-xl font-bold text-mariner-950">{user?.email}</p>
-					<ul className="flex flex-col items-center justify-center text-mariner-500">
-						{shortUrls?.map((shortUrl) => (
-							<li key={shortUrl.slug}>
-								<a href={shortUrl.shortUrl} target="_blank" rel="noreferrer">
-									{shortUrl.shortUrl}
-								</a>
-							</li>
-						))}
-					</ul>
+				<main className="bg-mariner-50 h-full ml-96 mt-20">
+					<div className="grid grid-cols-4 gap-10 m-10">
+						<Card>
+							<CardHeader>
+								<div className="flex flex-row justify-between items-center">
+									<span className="font-semibold text-mariner-950 opacity-70">
+										Total Clicks/Scans
+									</span>
+									<MousePointerIcon className="w-5 h-5 text-mariner-500" />
+								</div>
+							</CardHeader>
+							<CardBody>
+								<div className="flex flex-row justify-between">
+									<span className="text-mariner-950 font-extrabold text-2xl">
+										{basicStats?.totalClicks.total}
+									</span>
+									<Chip>↑ {basicStats?.totalClicks.percentage}%</Chip>
+								</div>
+							</CardBody>
+						</Card>
+
+						<Card>
+							<CardHeader>
+								<div className="flex flex-row justify-between items-center">
+									<span className="font-semibold text-mariner-950 opacity-70">
+										Today Clicks/Scans
+									</span>
+									<ActivityIcon className="w-5 h-5 text-mariner-500" />
+								</div>
+							</CardHeader>
+							<CardBody>
+								<div className="flex flex-row justify-between">
+									<span className="text-mariner-950 font-extrabold text-2xl">
+										{basicStats?.todayClicks.total}
+									</span>
+									<Chip>↓ {basicStats?.todayClicks.percentage}%</Chip>
+								</div>
+							</CardBody>
+						</Card>
+
+						<Card>
+							<CardHeader>
+								<div className="flex flex-row justify-between items-center">
+									<span className="font-semibold text-mariner-950 opacity-70">
+										Active Links
+									</span>
+									<LinkIcon className="w-5 h-5 text-mariner-500" />
+								</div>
+							</CardHeader>
+							<CardBody>
+								<div className="flex flex-row justify-between">
+									<span className="text-mariner-950 font-extrabold text-2xl">
+										{basicStats?.activeLinks.total}
+									</span>
+									<Chip>↑ {basicStats?.activeLinks.percentage}%</Chip>
+								</div>
+							</CardBody>
+						</Card>
+
+						<Card>
+							<CardHeader>
+								<div className="flex flex-row justify-between items-center">
+									<span className="font-semibold text-mariner-950 opacity-70">
+										Active QR Codes
+									</span>
+									<QrCodeIcon className="w-5 h-5 text-mariner-500" />
+								</div>
+							</CardHeader>
+							<CardBody>
+								<div className="flex flex-row justify-between">
+									<span className="text-mariner-950 font-extrabold text-2xl">
+										{basicStats?.activeQrCodes.total}
+									</span>
+									<Chip>↑ {basicStats?.activeQrCodes.percentage}%</Chip>
+								</div>
+							</CardBody>
+						</Card>
+					</div>
 				</main>
 			</div>
 		</div>
