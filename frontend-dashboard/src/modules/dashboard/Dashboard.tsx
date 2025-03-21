@@ -11,18 +11,18 @@ import {
 import { Chip } from '../core/design-system/Chip.tsx'
 
 export const Dashboard = () => {
-	const { basicStats, clickPerformance, shortUrls } = useStatsStore()
+	const { basicStats } = useStatsStore()
 
 	return (
 		<div className="flex">
-			<div className="w-96 h-screen border-r-1 border-decoration z-10 fixed bg-white">
+			<div className="w-80 h-screen border-r-1 border-decoration z-10 fixed bg-white hidden lg:block">
 				<Sidebar />
 			</div>
 
 			<div className="flex-1 flex flex-col min-h-screen">
 				<Navbar />
-				<main className="bg-mariner-50 h-full ml-96 mt-20">
-					<div className="grid grid-cols-4 gap-10 m-10">
+				<main className="bg-mariner-50 h-full lg:ml-80 mt-20">
+					<div className="grid xl:grid-cols-4 md:grid-cols-2 gap-10 sm:m-10 m-4 grid-cols-1">
 						<Card>
 							<CardHeader>
 								<div className="flex flex-row justify-between items-center">

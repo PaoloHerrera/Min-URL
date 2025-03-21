@@ -10,8 +10,11 @@ export const NotificationsDropdown = ({ message }: { message: string }) => {
 	return (
 		<DropdownMenu>
 			<DropdownMenuTrigger asChild={true}>
-				<button className="cursor-pointer" type="button">
-					<BellIcon className="w-5 h-5" />
+				<button
+					className="cursor-pointer rounded-full hover:bg-mariner-100 w-10 h-10 flex items-center justify-center"
+					type="button"
+				>
+					<BellIcon size={20} />
 				</button>
 			</DropdownMenuTrigger>
 			<DropdownMenuContent align="end" className="min-w-64">

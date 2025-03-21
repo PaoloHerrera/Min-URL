@@ -31,7 +31,7 @@ export const Greeting = ({ greetings, language }: GreetingProps) => {
 	const formattedDate = currentDate.toLocaleDateString(language, options)
 
 	return (
-		<div className="flex flex-row gap-2">
+		<div className="lg:flex flex-row gap-2 hidden">
 			<div className="flex flex-col">{emoji}</div>
 			<div className="flex flex-col">
 				<p className="font-bold text-mariner-950">
