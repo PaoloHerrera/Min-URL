@@ -15,6 +15,7 @@ import { LanguagesIcon, LogOutIcon } from 'lucide-react'
 
 import { useAuthStore } from '@/modules/core/stores/authStore'
 import { useLanguageStore } from '@/modules/core/stores/languageStore'
+import { VITE_LOGOUT_LINK } from '@/constants'
 
 interface UserProfileDropdownProps {
 	textProfile: {
@@ -22,12 +23,10 @@ interface UserProfileDropdownProps {
 		language: string
 		logout: string
 	}
-	onLogOut: () => void
 }
 
 export const UserProfileDropdown = ({
 	textProfile,
-	onLogOut,
 }: UserProfileDropdownProps) => {
 	const { user } = useAuthStore()
 	const { language, setLanguage } = useLanguageStore()
@@ -87,11 +86,16 @@ export const UserProfileDropdown = ({
 					</DropdownMenuSub>
 				</DropdownMenuGroup>
 				<DropdownMenuSeparator />
-				<DropdownMenuItem className="cursor-pointer" onClick={onLogOut}>
-					<LogOutIcon className="w-5 h-5 text-error" />
-					<span className="text-sm font-semibold text-error">
-						{textProfile.logout}
-					</span>
+				<DropdownMenuItem>
+					<a
+						className="cursor-pointer flex flex-row w-full"
+						href={VITE_LOGOUT_LINK}
+					>
+						<LogOutIcon size={16} className="text-error mr-5" />
+						<span className="text-sm font-semibold text-error">
+							{textProfile.logout}
+						</span>
+					</a>
 				</DropdownMenuItem>
 			</DropdownMenuContent>
 		</DropdownMenu>
