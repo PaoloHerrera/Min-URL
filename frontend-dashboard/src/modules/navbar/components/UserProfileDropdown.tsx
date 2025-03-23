@@ -13,8 +13,8 @@ import {
 } from '@/modules/core/ui/dropdown-menu.tsx'
 import { LanguagesIcon, LogOutIcon } from 'lucide-react'
 
-import { useAuthStore } from '@/modules/core/stores/authStore'
-import { useLanguageStore } from '@/modules/core/stores/languageStore'
+import { useAuthStore } from '@/stores/authStore'
+import { useLanguageStore } from '@/stores/languageStore'
 import { VITE_LOGOUT_LINK } from '@/constants'
 
 interface UserProfileDropdownProps {

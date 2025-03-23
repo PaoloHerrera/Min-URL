@@ -36,7 +36,7 @@ export const ES_TRANSLATIONS: Translations = {
 			},
 			createNew: {
 				new: 'Crear nuevo',
-				link: 'Enlace',
+				link: 'Enlace corto',
 				qrCode: 'Código QR',
 			},
 			search: 'Buscar enlaces',
@@ -47,14 +47,16 @@ export const ES_TRANSLATIONS: Translations = {
 			},
 			profile: {
 				title: 'Perfil',
+				language: 'Idioma',
 				logout: 'Cerrar Sesión',
 			},
 			dialogNewLink: {
-				title: 'Crear nuevo enlace',
+				title: 'Crear nuevo enlace corto',
 				description: 'Acorta un URL largo y personaliza tu enlace.',
 				originalUrl: {
 					label: 'URL original',
-					placeholder: 'https://example.com/muy/largo/url/que/necesita/acortar',
+					placeholder: 'https://ejemplo.com/muy/largo/url/que/necesita/acortar',
+					errorMessage: 'URL inválida',
 				},
 				questionSlug: {
 					label: '¿Personalizar tu slug?',
@@ -65,12 +67,30 @@ export const ES_TRANSLATIONS: Translations = {
 					error: {
 						minLength: 'La longitud mínima es de 6',
 						maxLength: 'La longitud máxima es de 12',
-						invalid: 'Caracteres inválidos',
+						invalid: 'Caracteres inválidos. Sólo se permiten letras y números',
 						alreadyInUse: 'El enlace ya está en uso',
+						generic:
+							'Error al verificar el slug. Por favor, inténtalo de nuevo.',
 					},
 				},
 				cancelText: 'Cancelar',
-				submitText: 'Crear enlace',
+				submitText: 'Crear enlace corto',
+				loadingSubmitText: 'Creando enlace corto...',
+			},
+			successLink: {
+				title: 'Enlace creado con éxito!',
+				description: 'Tu enlace acortado está listo para usar y compartir.',
+				linkStatistics: {
+					title: 'Estadísticas del enlace',
+					status: 'Estado:',
+					active: 'Activo',
+					clicks: 'Clics:',
+					created: 'Creado:',
+					expires: 'Expira:',
+					never: 'Nunca',
+				},
+				copyLink: 'Copiar enlace',
+				done: 'Hecho',
 			},
 		},
 	},

@@ -42,6 +42,7 @@ export interface DialogNewLinkProps {
 	originalUrl: {
 		label: string
 		placeholder: string
+		errorMessage: string
 	}
 	questionSlug: {
 		label: string
@@ -54,10 +55,28 @@ export interface DialogNewLinkProps {
 			maxLength: string
 			invalid: string
 			alreadyInUse: string
+			generic: string
 		}
 	}
 	cancelText: string
 	submitText: string
+	loadingSubmitText: string
+}
+
+export type SuccessLinkProps = {
+	title: string
+	description: string
+	linkStatistics: {
+		title: string
+		status: string
+		active: string
+		clicks: string
+		created: string
+		expires: string
+		never: string
+	}
+	copyLink: string
+	done: string
 }
 
 export interface Translations {
@@ -78,9 +97,11 @@ export interface Translations {
 			}
 			profile: {
 				title: string
+				language: string
 				logout: string
 			}
 			dialogNewLink: DialogNewLinkProps
+			successLink: SuccessLinkProps
 		}
 	}
 }
@@ -96,10 +117,10 @@ export type ShortUrlType = {
 	url: string
 	shortUrl: string
 	slug: string
-	clicks: number
-	createdAt: Date
-	updatedAt: Date
-	geoLocation: GeolocationType[]
+	clicks?: number
+	createdAt?: string
+	updatedAt?: Date
+	geoLocation?: GeolocationType[]
 }
 
 export type BasicStatsProps = {

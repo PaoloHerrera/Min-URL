@@ -5,22 +5,23 @@ import {
 	DropdownMenuItem,
 } from '@/modules/core/ui/dropdown-menu.tsx'
 import { PlusIcon, LinkIcon, QrCodeIcon } from 'lucide-react'
-import type { CreateNewProps } from '@/types'
+import { useTranslations } from '@/modules/core/hooks/useTranslations.ts'
 
 export const CreateNewDropdown = ({
 	onLinkClick,
 	onQrCodeClick,
-	createNew,
 }: {
 	onLinkClick: () => void
 	onQrCodeClick: () => void
-	createNew: CreateNewProps
 }) => {
+	const { dashboard } = useTranslations()
+	const { createNew } = dashboard.navbar
+
 	return (
 		<DropdownMenu>
 			<DropdownMenuTrigger asChild={true}>
 				<button
-					className="bg-mariner-700 text-white rounded-md px-3 py-3 flex items-center gap-2 cursor-pointer hover:opacity-90"
+					className="bg-mariner-700 text-white xl:rounded-md xl:p-3 w-10 h-10 xl:w-auto flex items-center justify-center gap-2 cursor-pointer hover:opacity-90 rounded-full"
 					type="button"
 				>
 					<PlusIcon className="w-5 h-5" />

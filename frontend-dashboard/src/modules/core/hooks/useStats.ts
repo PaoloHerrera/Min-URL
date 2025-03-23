@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
-import { useStatsStore } from '../stores/statsStore.ts'
+import { useStatsStore } from '@/stores/statsStore.ts'
 import { axiosInstance } from '../lib/axios.ts'
-import { useAuthStore } from '../stores/authStore.ts'
+import { useAuthStore } from '@/stores/authStore.ts'
 import { useState } from 'react'
 
 export const useStats = () => {

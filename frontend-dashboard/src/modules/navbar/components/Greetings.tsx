@@ -1,34 +1,10 @@
-import { useAuthStore } from '@/modules/core/stores/authStore'
-import type { Language } from '@/types'
-
+import { useGreetings } from '@/modules/navbar/hooks/useGreetings'
 interface GreetingProps {
 	greetings: { morning: string; afternoon: string; evening: string }
-	language: Language
 }
 
-export const Greeting = ({ greetings, language }: GreetingProps) => {
-	const { user } = useAuthStore()
-
-	const currentDate = new Date()
-	const options: Intl.DateTimeFormatOptions = {
-		weekday: 'short',
-		month: 'short',
-		day: 'numeric',
-	}
-	const hour = currentDate.getHours()
-
-	const getGreeting = () => {
-		if (hour < 12) {
-			return { emoji: '☀️', text: greetings.morning }
-		}
-		if (hour < 18) {
-			return { emoji: '⛅', text: greetings.afternoon }
-		}
-		return { emoji: '🌙', text: greetings.evening }
-	}
-
-	const { emoji, text } = getGreeting()
-	const formattedDate = currentDate.toLocaleDateString(language, options)
+export const Greeting = ({ greetings }: GreetingProps) => {
+	const { emoji, text, formattedDate, user } = useGreetings(greetings)
 
 	return (
 		<div className="lg:flex flex-row gap-2 hidden">
