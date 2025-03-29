@@ -17,7 +17,7 @@
 		"enabled": true
 	},
 	"linter": {
-		"ignore": ["google.strategy.ts"],
+		"ignore": ["google.strategy.ts", "models", "schema"],
 		"enabled": true,
 		"rules": {
 			"all": true
@@ -85,6 +85,22 @@
 					"suspicious": {
 						"noConsole": "off",
 						"noConsoleLog": "off"
+					}
+				}
+			}
+		},
+		{
+			"include": ["backend-redirector/**"],
+			"linter": {
+				"rules": {
+					"correctness": {
+						"noUndeclaredDependencies": "off",
+						"noNodejsModules": "off"
+					},
+					"suspicious": {
+						"noConsole": "off",
+						"noConsoleLog": "off",
+						"noReactSpecificProps": "off"
 					}
 				}
 			}

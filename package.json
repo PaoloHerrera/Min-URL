@@ -6,7 +6,8 @@
 		"frontend-landing",
 		"frontend-dashboard",
 		"backend-services",
-		"backend-users"
+		"backend-users",
+		"backend-redirector"
 	],
 	"scripts": {
 		"build": "turbo run build",

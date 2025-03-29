@@ -3,3 +3,4 @@ packages:
   - frontend-dashboard
   - backend-services
   - backend-users
+  - backend-redirector
