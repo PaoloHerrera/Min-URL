@@ -4,10 +4,9 @@ import path from 'node:path'
 import session from 'express-session'
 import { fileURLToPath } from 'node:url'
 import { corsMiddleware } from './middleware/cors.js'
-import { routesUrl } from './routes/url.js'
 import { routesShortUrl } from './routes/shorturl.js'
-import { routesQrCode } from './routes/qrcode.js'
-import { checkRouter } from './routes/check.js'
+import { protectedRouter } from './routes/protected.js'
+import { setupRedis } from './config/redis.js'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
@@ -33,11 +32,13 @@ app.use(
 	}),
 )
 
+//Redis
+setupRedis()
+
 // Routes
-app.use('/direct/shorten', routesUrl)
-app.use('/qr/qrcode', routesQrCode)
+
 app.use('/', routesShortUrl)
-app.use('/check/', checkRouter)
+app.use('/protected/', protectedRouter)
 
 app.get('/', (req, res) => {
 	console.log(`IP del cliente: ${req.ip}`)
@@ -48,6 +49,14 @@ app.get('/', (req, res) => {
 // favicon
 app.get('/favicon.ico', (_req, res) => {
 	return res.status(204).end()
+})
+
+// Errores
+app.use((error, _req, res, _next) => {
+	console.error(error)
+	res
+		.status(500)
+		.json({ error: 'Internal Server Error', message: error.message })
 })
 
 const PORT = process.env.PORT || 3000

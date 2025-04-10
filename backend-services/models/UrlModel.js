@@ -5,12 +5,12 @@ export const UrlModel = sequelize.define(
 	'urls',
 	{
 		id_urls: {
-			type: DataTypes.INTEGER,
-			autoIncrement: true,
+			type: DataTypes.UUID,
 			primaryKey: true,
+			defaultValue: DataTypes.UUIDV4,
 		},
 		user_id: {
-			type: DataTypes.INTEGER,
+			type: DataTypes.UUID,
 			allowNull: true,
 			references: {
 				model: 'user',
@@ -19,30 +19,36 @@ export const UrlModel = sequelize.define(
 			onUpdate: 'CASCADE',
 			onDelete: 'CASCADE',
 		},
+		geolocations_id: {
+			type: DataTypes.UUID,
+			allowNull: true,
+			unique: true,
+			references: {
+				model: 'geolocations',
+				key: 'id_geolocations',
+			},
+			onUpdate: 'CASCADE',
+			onDelete: 'CASCADE',
+		},
+		title: {
+			type: DataTypes.STRING(255),
+			allowNull: false,
+		},
 		long_url: {
 			type: DataTypes.TEXT,
 			allowNull: false,
 		},
-		slug: {
-			type: DataTypes.STRING(16),
-			allowNull: false,
-			unique: true,
-		},
-		clicks: {
-			type: DataTypes.INTEGER,
-			allowNull: false,
-			defaultValue: 0,
-		},
 		purpose: {
 			type: DataTypes.ENUM('direct', 'qr', 'api'),
 			allowNull: false,
+			defaultValue: 'direct',
 		},
 		password: {
 			type: DataTypes.BOOLEAN,
 			allowNull: false,
 			defaultValue: false,
 		},
-		password_text: {
+		password_hash: {
 			type: DataTypes.STRING(128),
 			allowNull: true,
 		},
@@ -55,32 +61,13 @@ export const UrlModel = sequelize.define(
 			type: DataTypes.DATE,
 			allowNull: true,
 		},
-		ip_address: {
-			type: DataTypes.STRING(50),
+		expired: {
+			type: DataTypes.BOOLEAN,
 			allowNull: false,
+			defaultValue: false,
 		},
-		country: {
-			type: DataTypes.STRING(10),
-			allowNull: true,
-		},
-		region: {
-			type: DataTypes.STRING(10),
-			allowNull: true,
-		},
-		timezone: {
-			type: DataTypes.STRING(255),
-			allowNull: true,
-		},
-		city: {
-			type: DataTypes.STRING(255),
-			allowNull: true,
-		},
-		latitude: {
-			type: DataTypes.STRING(255),
-			allowNull: true,
-		},
-		longitude: {
-			type: DataTypes.STRING(255),
+		expired_at: {
+			type: DataTypes.DATE,
 			allowNull: true,
 		},
 		deleted: {
@@ -105,3 +92,13 @@ export const UrlModel = sequelize.define(
 	},
 	{ tableName: 'urls', schema: 'Min-URL', timestamps: false },
 )
+
+export const createUrl = async (data) => {
+	const url = await UrlModel.create(data)
+	return url
+}
+
+export const getUrl = async (id) => {
+	const url = await UrlModel.findByPk(id)
+	return url
+}

@@ -1,5 +1,5 @@
 import { Op } from 'sequelize'
-import { UrlModel } from '../models/Url.js'
+import { UrlModel } from '../models/UrlModel.js'
 import { LIMITS_VALUES } from '../constants.js'
 
 const getStartOfDay = (date) => {
@@ -11,16 +11,13 @@ const getStartOfDay = (date) => {
 // Este middleware se encarga de limitar el número de solicitudes de un usuario por día
 // Si se supera el límite, se devuelve un error 429
 const createRateLimitMiddleware = (purpose, limitType) => {
-	return async (req, res, next) => {
+	return async (_req, res, next) => {
 		try {
-			const ip = req.ip
 			const startOfDay = getStartOfDay(new Date())
 			const limit = LIMITS_VALUES[limitType]
 
 			const urlCount = await UrlModel.count({
 				where: {
-					// biome-ignore lint/style/useNamingConvention: UrlModel need use snake case
-					ip_address: ip,
 					purpose,
 					// biome-ignore lint/style/useNamingConvention: UrlModel need use snake case
 					created_at: {

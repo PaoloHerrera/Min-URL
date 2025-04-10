@@ -1,6 +1,6 @@
 import crypto from 'node:crypto'
 import { base64ToBase62 } from '../utils/utils.js'
-import { UrlModel } from '../models/Url.js'
+import { ShortUrlModel } from '../models/ShortUrlModel.js'
 import { generateHash } from '../utils/utils.js'
 
 const ERROR_MESSAGE = 'Error creating Short URL. Please try again later.'
@@ -48,7 +48,7 @@ export class SlugGenerator {
 	//Verifica si el slug ya existe
 	async isSlugAvailable(slug) {
 		try {
-			const exists = await UrlModel.findOne({ where: { slug } })
+			const exists = await ShortUrlModel.findOne({ where: { slug } })
 			return !exists
 		} catch (error) {
 			throw new Error(error.message)

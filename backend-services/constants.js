@@ -1,3 +1,5 @@
+export const REDIRECTOR_URL = process.env.REDIRECTOR_URL
+
 export const SHORTURL_VALUES = {
 	initialLength: 6,
 	maxAttempts: 20,
@@ -5,7 +7,7 @@ export const SHORTURL_VALUES = {
 }
 
 export const LIMITS_VALUES = {
-	limitShortUrlPerDay: 10,
+	limitShortUrlPerDay: 100,
 	limitQrCodePerDay: 5,
 }
 
