@@ -41,7 +41,7 @@ export const KpiCard = ({
 					</span>
 					{percentage != null ? (
 						<Chip color={color}>
-							{arrow} {percentage}%
+							{arrow} {Math.round(percentage)}%
 						</Chip>
 					) : null}
 				</div>
