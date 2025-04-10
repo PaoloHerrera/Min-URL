@@ -86,7 +86,7 @@ export class ProtectedService {
 				SELECT total_scans, title, long_url, slug, foreground_color, background_color, created_at
 				FROM "Min-URL".dashboard_top_qr_codes_view
 				WHERE user_id = :userId
-				ORDER BY created_at DESC
+				ORDER BY total_scans DESC
 				LIMIT 3
 			`,
 			{ replacements: { userId }, type: QueryTypes.SELECT },
