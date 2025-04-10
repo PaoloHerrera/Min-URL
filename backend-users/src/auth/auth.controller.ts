@@ -1,6 +1,7 @@
 import {
 	Controller,
 	Get,
+	Post,
 	UseGuards,
 	Request,
 	Response,
@@ -13,6 +14,10 @@ import type {
 import { AuthGuard } from '@nestjs/passport'
 import type { User } from '../user/model/user.model'
 import { AuthService } from './auth.service'
+import {
+	ACCESS_TOKEN_COOKIE_NAME,
+	REFRESH_TOKEN_COOKIE_NAME,
+} from '@/constants'
 
 @Controller('auth')
 export class AuthController {
@@ -40,33 +45,31 @@ export class AuthController {
 		const { accessToken, refreshToken } = await this.authService.login(req.user)
 
 		return res
-			.cookie('min_url_access_token', accessToken, {
+			.cookie(ACCESS_TOKEN_COOKIE_NAME, accessToken, {
 				httpOnly: true,
 				secure: process.env.NODE_ENV === 'production',
 				sameSite: 'strict',
-				maxAge: 1000 * 60 * 30, // Duracion de 30 minutos
+				maxAge: 1000 * 60 * 60 * 24, // Duracion de 30 minutos //Por ahora es 24 horas
 			})
-			.cookie('min_url_refresh_token', refreshToken, {
+			.cookie(REFRESH_TOKEN_COOKIE_NAME, refreshToken, {
 				httpOnly: true,
 				secure: process.env.NODE_ENV === 'production',
 				sameSite: 'strict',
 				maxAge: 1000 * 60 * 60 * 24 * 7, // Duracion de 7 dias
-				path: '/auth/refresh',
 			})
 
 			.redirect(process.env.DASHBOARD_URL as string)
 	}
 
-	@Get('refresh')
+	@Post('refresh')
 	async refreshToken(
 		@Request() req: ExpressRequest,
 		@Response() res: ExpressResponse,
 	) {
-		const cookieName = 'min_url_refresh_token'
-
-		const refreshToken = req.cookies[cookieName]
+		const refreshToken = req.cookies[REFRESH_TOKEN_COOKIE_NAME]
 
 		if (!refreshToken) {
+			console.log('No se encontro el refresh token')
 			return res.status(401).json({ message: 'Authentication failed' })
 		}
 
@@ -82,17 +85,23 @@ export class AuthController {
 			})
 
 			return res
-				.cookie('min_url_access_token', accessToken, {
+				.cookie(ACCESS_TOKEN_COOKIE_NAME, accessToken, {
 					httpOnly: true,
 					secure: process.env.NODE_ENV === 'production',
 					sameSite: 'strict',
-					maxAge: 1000 * 60 * 30, // Duracion de 30 minutos
+					maxAge: 1000 * 60 * 60 * 24, // Duracion de 30 minutos
 				})
-				.status(200)
-				.json({ username })
+				.redirect(process.env.DASHBOARD_URL as string)
 		} catch (_error) {
 			console.log('Error refreshing token')
 			return res.status(401).json({ message: 'Authentication failed' })
 		}
+	}
+
+	@Get('logout')
+	logout(@Request() _req: ExpressRequest, @Response() res: ExpressResponse) {
+		res.clearCookie(ACCESS_TOKEN_COOKIE_NAME)
+		res.clearCookie(REFRESH_TOKEN_COOKIE_NAME)
+		return res.redirect(process.env.LOGIN_URL as string)
 	}
 }

@@ -7,7 +7,9 @@ import type { User } from '../../user/model/user.model'
 interface OauthProfile {
 	id: string
 	displayName: string
+	name: { familyName: string; givenName: string }
 	emails: Array<{ value: string }>
+	photos: Array<{ value: string }>
 }
 
 @Injectable()

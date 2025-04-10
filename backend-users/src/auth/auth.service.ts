@@ -7,7 +7,9 @@ import { RefreshToken } from '../refreshToken/model/refreshToken.model'
 interface OauthProfile {
 	id: string
 	displayName: string
+	name: { familyName: string; givenName: string }
 	emails: Array<{ value: string }>
+	photos: Array<{ value: string }>
 }
 
 type Strategy = 'google' | 'github'
@@ -34,13 +36,18 @@ export class AuthService {
 		})
 
 		if (!user) {
-			const { id, displayName, emails } = profile
+			const { id, displayName, name, emails, photos } = profile
 			const email = emails?.[0]?.value
+			const avatar = photos?.[0]?.value
+			const { familyName, givenName } = name
 
 			const newUser = this.userModel.build()
 			newUser[strategyId] = id
-			newUser.name = displayName
+			newUser.displayName = displayName
+			newUser.givenName = givenName
+			newUser.familyName = familyName
 			newUser.email = email
+			newUser.avatar = avatar
 
 			await newUser.validate()
 			await newUser.save()
@@ -51,10 +58,10 @@ export class AuthService {
 	}
 
 	async login(user: User) {
-		const payload = { sub: user.idUsers, username: user.name }
+		const payload = { sub: user.idUsers, username: user.displayName }
 
 		const accessToken = await this.jwtService.signAsync(payload, {
-			expiresIn: '30m',
+			expiresIn: '1d',
 		})
 
 		const refreshToken = await this.jwtService.signAsync(payload, {
@@ -107,17 +114,19 @@ export class AuthService {
 		})
 
 		if (!refresh) {
+			console.log('Refresh token no encontrado')
 			throw new Error('Refresh token not found')
 		}
 
 		if (refresh.expired) {
+			console.log('Refresh token expirado')
 			throw new Error('Refresh token expired')
 		}
 
 		const payload = { sub: userId, username }
 
 		const accessToken = await this.jwtService.signAsync(payload, {
-			expiresIn: '30m',
+			expiresIn: '1d',
 		})
 
 		return accessToken

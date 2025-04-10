@@ -27,10 +27,31 @@ export class User extends Model<User> {
 	declare githubId?: string
 
 	@Column({ type: DataType.STRING, allowNull: false })
-	declare name: string
+	declare displayName?: string
+
+	@Column({ type: DataType.STRING, allowNull: false })
+	declare givenName?: string
+
+	@Column({ type: DataType.STRING, allowNull: false })
+	declare familyName?: string
 
 	@Column({ type: DataType.STRING, allowNull: false })
 	declare email: string
+
+	@Column({ type: DataType.STRING, allowNull: true })
+	declare avatar?: string
+
+	@Column({ type: DataType.INTEGER, defaultValue: 0 })
+	declare shortUrlUsage: number
+
+	@Column({ type: DataType.INTEGER, defaultValue: 50 })
+	declare shortUrlAvailable: number
+
+	@Column({ type: DataType.INTEGER, defaultValue: 0 })
+	declare qrCodeUsage: number
+
+	@Column({ type: DataType.INTEGER, defaultValue: 25 })
+	declare qrCodeAvailable: number
 
 	@Column({ type: DataType.BOOLEAN, defaultValue: false })
 	declare deleted: boolean

@@ -6,6 +6,8 @@ import { ConfigModule } from '@nestjs/config'
 import { AppController } from './app.controller'
 import { AppService } from './app.service'
 import { AuthModule } from './auth/auth.module'
+import { ProtectedModule } from './protected/protected.module'
+import { HttpExceptionFilter } from './http-exception/http-exception.filter'
 
 @Module({
 	imports: [
@@ -22,8 +24,9 @@ import { AuthModule } from './auth/auth.module'
 			models: [User, RefreshToken],
 		}),
 		AuthModule,
+		ProtectedModule,
 	],
 	controllers: [AppController],
-	providers: [AppService],
+	providers: [AppService, HttpExceptionFilter],
 })
 export class AppModule {}
