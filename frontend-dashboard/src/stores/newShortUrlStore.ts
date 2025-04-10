@@ -3,10 +3,14 @@ import type { ShortUrlType } from '@/types'
 
 interface NewShortUrlStore {
 	newShortUrl: ShortUrlType | null
-	setNewShortUrl: (lastShortUrl: ShortUrlType | null) => void
+	serverError: string | null
+	setNewShortUrl: (newShortUrl: ShortUrlType | null) => void
+	setServerError: (serverError: string | null) => void
 }
 
 export const useNewShortUrlStore = create<NewShortUrlStore>((set) => ({
 	newShortUrl: null,
+	serverError: null,
+	setServerError: (serverError: string | null) => set({ serverError }),
 	setNewShortUrl: (newShortUrl: ShortUrlType | null) => set({ newShortUrl }),
 }))

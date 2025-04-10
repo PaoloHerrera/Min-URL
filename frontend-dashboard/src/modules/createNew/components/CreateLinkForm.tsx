@@ -1,28 +1,30 @@
 import { useForm } from 'react-hook-form'
 import { CustomSlugInput } from './CustomSlugInput.tsx'
 import { Checkbox } from '@/modules/core/ui/checkbox'
-import { LongUrl } from './LongUrl.tsx'
+import { InputForm } from './InputForm.tsx'
 import { Spinner } from '@/modules/core/design-system/Spinner'
 import { useTranslations } from '@/modules/core/hooks/useTranslations.ts'
 import { useCreateShortUrl } from '@/modules/createNew/hooks/useCreateShortUrl'
+import { XCircleIcon } from 'lucide-react'
 
 const URL_REGEX = /^https?:\/\/.+/
 const SLUG_REGEX = /^[a-zA-Z0-9-_]+$/
 
 interface FormData {
+	title: string
 	url: string
 	customSlug: boolean
 	slug?: string
 }
 
 interface CreateLinkFormProps {
-	onCancel: () => Promise<void>
+	onClose: () => Promise<void>
 }
 
-export const CreateLinkForm = ({ onCancel }: CreateLinkFormProps) => {
+export const CreateLinkForm = ({ onClose }: CreateLinkFormProps) => {
 	const { dashboard } = useTranslations()
 	const { dialogNewLink } = dashboard.navbar
-	const { handleSubmit: submitShortUrl } = useCreateShortUrl()
+	const { handleSubmit: submitShortUrl, serverError } = useCreateShortUrl()
 	const {
 		register,
 		handleSubmit,
@@ -31,6 +33,7 @@ export const CreateLinkForm = ({ onCancel }: CreateLinkFormProps) => {
 		formState: { errors, isSubmitting },
 	} = useForm<FormData>({
 		defaultValues: {
+			title: '',
 			url: '',
 			customSlug: false,
 			slug: '',
@@ -42,21 +45,37 @@ export const CreateLinkForm = ({ onCancel }: CreateLinkFormProps) => {
 	const slug = watch('slug')
 
 	const onSubmit = async (data: FormData) => {
-		await submitShortUrl(data, onCancel)
+		await submitShortUrl(data, onClose)
 	}
 
 	return (
 		<form onSubmit={handleSubmit(onSubmit)} className="grid gap-5">
 			<div className="grid gap-10 py-4">
-				<LongUrl
-					textUrl={dialogNewLink.originalUrl}
+				<InputForm
+					inputText={dialogNewLink.urlTitle}
+					error={errors.title?.message}
+					disabled={isSubmitting}
+					{...register('title', {
+						required: dialogNewLink.urlTitle.error.minLength,
+						minLength: {
+							value: 1,
+							message: dialogNewLink.urlTitle.error.minLength,
+						},
+						maxLength: {
+							value: 100,
+							message: dialogNewLink.urlTitle.error.maxLength,
+						},
+					})}
+				/>
+				<InputForm
+					inputText={dialogNewLink.originalUrl}
 					error={errors.url?.message}
 					disabled={isSubmitting}
 					{...register('url', {
-						required: dialogNewLink.originalUrl.errorMessage,
+						required: dialogNewLink.originalUrl.error.minLength,
 						pattern: {
 							value: URL_REGEX,
-							message: dialogNewLink.originalUrl.errorMessage,
+							message: dialogNewLink.originalUrl.error.invalid,
 						},
 					})}
 				/>
@@ -97,12 +116,19 @@ export const CreateLinkForm = ({ onCancel }: CreateLinkFormProps) => {
 					/>
 				)}
 			</div>
-
+			{serverError && (
+				<div className="flex items-center gap-2 mb-5 rounded-md p-4 shadow-sm">
+					<XCircleIcon className="text-error text-sm" />
+					<span className="text-error text-sm font-semibold">
+						{serverError}
+					</span>
+				</div>
+			)}
 			<div className="flex flex-row justify-end gap-5">
 				<button
 					type="button"
 					className="text-mariner-950 bg-transparent rounded-lg flex items-center cursor-pointer hover:bg-mariner-50 text-sm py-2 px-3 border border-mariner-200"
-					onClick={async () => await onCancel()}
+					onClick={async () => await onClose()}
 					disabled={isSubmitting}
 				>
 					{dialogNewLink.cancelText}

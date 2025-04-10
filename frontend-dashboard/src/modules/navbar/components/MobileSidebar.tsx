@@ -7,8 +7,8 @@ import {
 	SheetHeader,
 } from '@/modules/core/ui/sheet.tsx'
 import { MenuIcon } from 'lucide-react'
-import { SidebarTitle } from '@/modules/dashboard/components/SidebarTitle.tsx'
-import { SidebarContent } from '@/modules/dashboard/components/SidebarContent'
+import { SidebarTitle } from '@/modules/sidebar/components/SidebarTitle.tsx'
+import { SidebarContent } from '@/modules/sidebar/components/SidebarContent'
 
 export const MobileSidebar = () => {
 	return (

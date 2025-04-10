@@ -15,7 +15,7 @@ export const SearchInput = ({ placeholder }: { placeholder: string }) => {
 				{mobileSearchOpen ? <XIcon size={20} /> : <SearchIcon size={20} />}
 			</button>
 
-			<div className="w-80 relative items-center bg-mariner-50 gap-2 hidden xl:flex">
+			<div className="relative items-center bg-mariner-50 gap-2 hidden xl:flex">
 				<span className="px-4 absolute top-0 left-0 h-full opacity-60 flex items-center">
 					<SearchIcon className="w-5 h-5" />
 				</span>

@@ -1,6 +1,6 @@
 import { LoginCard } from './components/LoginCard.tsx'
 import { translations } from '@/modules/core/i18n/index'
-import { useLanguageStore } from '@/modules/core/stores/languageStore.ts'
+import { useLanguageStore } from '@/stores/languageStore.ts'
 
 export const Login = () => {
 	const { language } = useLanguageStore()

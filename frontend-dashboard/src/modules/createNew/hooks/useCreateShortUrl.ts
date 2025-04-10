@@ -1,11 +1,15 @@
 import { useNewShortUrlStore } from '@/stores/newShortUrlStore'
 import { createShortUrl } from '@/modules/core/services/api'
+import { useTranslations } from '@/modules/core/hooks/useTranslations'
 
 export const useCreateShortUrl = () => {
-	const { setNewShortUrl } = useNewShortUrlStore()
+	const { setNewShortUrl, serverError, setServerError } = useNewShortUrlStore()
+
+	const { dashboard } = useTranslations()
+	const { submitError } = dashboard.navbar.dialogNewLink
 
 	const handleSubmit = async (
-		data: { url: string; customSlug: boolean; slug?: string },
+		data: { title: string; url: string; customSlug: boolean; slug?: string },
 		onSuccess: () => Promise<void>,
 	) => {
 		try {
@@ -18,12 +22,13 @@ export const useCreateShortUrl = () => {
 				slug: response.slug,
 				createdAt: response.createdAt,
 			})
-		} catch (err) {
-			console.log('Error al crear un nuevo enlace corto', err)
+		} catch (_err) {
+			setServerError(submitError)
 		}
 	}
 
 	return {
 		handleSubmit,
+		serverError,
 	}
 }

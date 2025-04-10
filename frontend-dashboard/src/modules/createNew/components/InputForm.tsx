@@ -1,11 +1,15 @@
 import { Input } from '@/modules/core/design-system/Input'
 import type React from 'react'
 
-interface LongUrlProps {
-	textUrl: {
+interface InputFormProps {
+	inputText: {
 		label: string
 		placeholder: string
-		errorMessage: string
+		error: {
+			minLength: string
+			maxLength?: string
+			generic: string
+		}
 	}
 	error?: string
 	disabled?: boolean
@@ -15,26 +19,26 @@ interface LongUrlProps {
 	ref: React.Ref<HTMLInputElement>
 }
 
-export const LongUrl = ({
-	textUrl,
+export const InputForm = ({
+	inputText,
 	error,
 	disabled,
 	...registerProps
-}: LongUrlProps) => {
+}: InputFormProps) => {
 	return (
 		<div className="grid gap-2">
 			<label
-				htmlFor="longUrl"
+				htmlFor={inputText.label}
 				className="text-mariner-600 font-semibold text-sm"
 			>
-				{textUrl.label}
+				{inputText.label}
 			</label>
 			<div className="flex items-center gap-2">
 				<div className="flex items-center gap-2 w-full">
 					<Input
-						id="longUrl"
+						id={inputText.label}
 						type="text"
-						placeholder={textUrl.placeholder}
+						placeholder={inputText.placeholder}
 						error={!!error}
 						disabled={disabled}
 						{...registerProps}

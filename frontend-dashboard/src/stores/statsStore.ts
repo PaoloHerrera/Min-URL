@@ -1,20 +1,33 @@
 import { create } from 'zustand'
 import type {
 	BasicStatsProps,
-	ClickPerformanceProps,
-	ShortUrlType,
+	PieChartProps,
+	TopLinkProps,
+	TopQrCodeProps,
 	StatsStoreType,
 } from '@/types'
 
 export const useStatsStore = create<StatsStoreType>((set) => ({
 	basicStats: null,
-	clickPerformance: null,
-	shortUrls: null,
+	countryStats: null,
+	deviceStats: null,
+	topLinks: null,
+	topQrCodes: null,
 	isLoading: true,
 	setStats: (
 		basicStats: BasicStatsProps | null,
-		clickPerformance: ClickPerformanceProps | null,
-		shortUrls: ShortUrlType[] | null,
+		countryStats: PieChartProps[] | null,
+		deviceStats: PieChartProps[] | null,
+		topLinks: TopLinkProps[] | null,
+		topQrCodes: TopQrCodeProps[] | null,
 		isLoading: boolean,
-	) => set({ basicStats, clickPerformance, shortUrls, isLoading }),
+	) =>
+		set({
+			basicStats,
+			countryStats,
+			deviceStats,
+			topLinks,
+			topQrCodes,
+			isLoading,
+		}),
 }))

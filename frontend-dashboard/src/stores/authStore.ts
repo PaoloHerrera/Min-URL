@@ -6,6 +6,11 @@ interface User {
 	familyName?: string
 	email: string
 	avatar?: string
+	accessToken: string
+	shortUrlUsage: number
+	shortUrlAvailable: number
+	qrCodeUsage: number
+	qrCodeAvailable: number
 }
 
 interface AuthStore {

@@ -53,10 +53,25 @@ export const ES_TRANSLATIONS: Translations = {
 			dialogNewLink: {
 				title: 'Crear nuevo enlace corto',
 				description: 'Acorta un URL largo y personaliza tu enlace.',
+				urlTitle: {
+					label: 'Título',
+					placeholder: 'Título del enlace',
+					error: {
+						minLength: 'La longitud mínima es de 1',
+						maxLength: 'La longitud máxima es de 100',
+						generic:
+							'Error al verificar el título. Por favor, inténtalo de nuevo.',
+					},
+				},
 				originalUrl: {
-					label: 'URL original',
+					label: 'URL del sitio web',
 					placeholder: 'https://ejemplo.com/muy/largo/url/que/necesita/acortar',
-					errorMessage: 'URL inválida',
+					error: {
+						minLength: 'La longitud mínima es de 1',
+						invalid: 'URL inválida',
+						generic:
+							'Error al verificar la URL. Por favor, inténtalo de nuevo.',
+					},
 				},
 				questionSlug: {
 					label: '¿Personalizar tu slug?',
@@ -76,6 +91,8 @@ export const ES_TRANSLATIONS: Translations = {
 				cancelText: 'Cancelar',
 				submitText: 'Crear enlace corto',
 				loadingSubmitText: 'Creando enlace corto...',
+				submitError:
+					'Error al crear el enlace corto. Por favor, inténtalo de nuevo más tarde.',
 			},
 			successLink: {
 				title: 'Enlace creado con éxito!',
@@ -92,6 +109,78 @@ export const ES_TRANSLATIONS: Translations = {
 				copyLink: 'Copiar enlace',
 				done: 'Hecho',
 			},
+			dialogNewQr: {
+				title: 'Crear nuevo código QR',
+				description: 'Genera un código QR para un sitio web.',
+				qrCodeTitle: {
+					label: 'Título',
+					placeholder: 'Mi código QR genial',
+					error: {
+						minLength: 'La longitud mínima es de 1',
+						maxLength: 'La longitud máxima es de 100',
+						generic:
+							'Error al verificar el título. Por favor, inténtalo de nuevo.',
+					},
+				},
+				originalUrl: {
+					label: 'URL del sitio web',
+					placeholder:
+						'https://ejemplo.com/muy/largo/url/que/necesita/generar/un/código/qr',
+					error: {
+						minLength: 'La longitud mínima es de 1',
+						invalid: 'URL inválida',
+						generic:
+							'Error al verificar la URL. Por favor, inténtalo de nuevo.',
+					},
+				},
+				preview: 'Vista previa del código QR',
+				previewDescription: 'Vista previa usando datos de muestra',
+				foregroundColor: 'Color de primer plano',
+				backgroundColor: 'Color de fondo',
+				cancelText: 'Cancelar',
+				submitText: 'Generar código QR',
+				loadingSubmitText: 'Creando código QR...',
+				submitError:
+					'Error al generar el código QR. Por favor, inténtalo de nuevo más tarde.',
+			},
 		},
+		sidebar: {
+			usage: {
+				link: 'Uso de enlaces',
+				qrcode: 'Uso de códigos QR',
+				used: 'Usados',
+				remaining: 'Restantes',
+			},
+			footer: {
+				support: 'Soporte',
+			},
+		},
+		content: {
+			kpis: {
+				totalClicks: 'Clicks totales',
+				todayClicks: 'Clicks hoy',
+				activeLinks: 'Enlaces activos',
+				percentageUniqueClicks: 'Porcentaje de clicks únicos',
+			},
+			last7DaysClicksTitle: 'Clicks de los últimos 7 días',
+			deviceTitle: 'Tipos de dispositivos',
+			geographicTitle: 'Distribución geográfica',
+			noData: 'No hay datos disponibles',
+		},
+	},
+	timeAgo: {
+		now: 'Justo ahora',
+		minute: 'hace 1 minuto',
+		minutes: 'minutos atrás',
+		hour: 'hace 1 hora',
+		hours: 'horas atrás',
+		day: 'hace 1 día',
+		days: 'días atrás',
+		week: 'hace 1 semana',
+		weeks: 'semanas atrás',
+		month: 'hace 1 mes',
+		months: 'meses atrás',
+		year: 'hace 1 año',
+		years: 'años atrás',
 	},
 }

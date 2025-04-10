@@ -3,11 +3,13 @@ import { useStatsStore } from '@/stores/statsStore.ts'
 import { axiosInstance } from '../lib/axios.ts'
 import { useAuthStore } from '@/stores/authStore.ts'
 import { useState } from 'react'
+import type { Socket } from 'socket.io-client'
 
 export const useStats = () => {
-	const { shortUrls, setStats } = useStatsStore()
+	const { basicStats, setStats } = useStatsStore()
 	const { isAuthenticated, setAuthenticated } = useAuthStore()
 	const [isLoading, setIsLoading] = useState(true)
+	const [socket, setSocket] = useState<Socket>()
 
 	useEffect(() => {
 		let mounted = true
@@ -24,10 +26,15 @@ export const useStats = () => {
 				if (mounted) {
 					setStats(
 						response.data.basicStats,
-						response.data.clickPerformance,
-						response.data.shortUrls,
+						response.data.countryStats,
+						response.data.deviceStats,
+						response.data.topLinks,
+						response.data.topQrCodes,
 						false,
 					)
+					//Conectamos al socket con el token que nos devuelve el servidor
+					const token = response.data.user.accessToken
+
 					setAuthenticated(true, response.data.user)
 					setIsLoading(false)
 				}
@@ -37,7 +44,7 @@ export const useStats = () => {
 		}
 
 		//Si ya hay datos, no llamamos a la API
-		if (shortUrls) {
+		if (basicStats) {
 			setIsLoading(false)
 			return
 		}
@@ -49,7 +56,7 @@ export const useStats = () => {
 			controller.abort()
 			setIsLoading(false)
 		}
-	}, [setStats, setAuthenticated, shortUrls])
+	}, [setStats, setAuthenticated, basicStats])
 
-	return { shortUrls, isAuthenticated, isLoading }
+	return { isAuthenticated, isLoading }
 }

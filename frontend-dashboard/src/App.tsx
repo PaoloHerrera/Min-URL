@@ -1,5 +1,5 @@
 import { Route, Routes, BrowserRouter as Router, Navigate } from 'react-router'
-import { Dashboard } from './modules/dashboard/Dashboard.tsx'
+import { Dashboard } from './modules/dashboard/index.tsx'
 import { Login } from './modules/login/Login.tsx'
 import { useStats } from './modules/core/hooks/useStats.ts'
 import type { JSX } from 'react'

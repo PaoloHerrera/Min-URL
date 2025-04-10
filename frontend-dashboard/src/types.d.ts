@@ -39,10 +39,23 @@ export interface CreateNewProps {
 export interface DialogNewLinkProps {
 	title: string
 	description: string
+	urlTitle: {
+		label: string
+		placeholder: string
+		error: {
+			minLength: string
+			maxLength: string
+			generic: string
+		}
+	}
 	originalUrl: {
 		label: string
 		placeholder: string
-		errorMessage: string
+		error: {
+			minLength: string
+			invalid: string
+			generic: string
+		}
 	}
 	questionSlug: {
 		label: string
@@ -61,6 +74,7 @@ export interface DialogNewLinkProps {
 	cancelText: string
 	submitText: string
 	loadingSubmitText: string
+	submitError: string
 }
 
 export type SuccessLinkProps = {
@@ -77,6 +91,37 @@ export type SuccessLinkProps = {
 	}
 	copyLink: string
 	done: string
+}
+
+export type DialogNewQrProps = {
+	title: string
+	description: string
+	qrCodeTitle: {
+		label: string
+		placeholder: string
+		error: {
+			minLength: string
+			maxLength: string
+			generic: string
+		}
+	}
+	originalUrl: {
+		label: string
+		placeholder: string
+		error: {
+			minLength: string
+			invalid: string
+			generic: string
+		}
+	}
+	preview: string
+	previewDescription: string
+	foregroundColor: string
+	backgroundColor: string
+	cancelText: string
+	submitText: string
+	loadingSubmitText: string
+	submitError: string
 }
 
 export interface Translations {
@@ -102,31 +147,74 @@ export interface Translations {
 			}
 			dialogNewLink: DialogNewLinkProps
 			successLink: SuccessLinkProps
+			dialogNewQr: DialogNewQrProps
+		}
+		sidebar: {
+			usage: {
+				link: string
+				qrcode: string
+				used: string
+				remaining: string
+			}
+			footer: {
+				support: string
+			}
+		}
+		content: {
+			kpis: {
+				totalClicks: string
+				todayClicks: string
+				activeLinks: string
+				percentageUniqueClicks: string
+			}
+			last7DaysClicksTitle: string
+			geographicTitle: string
+			deviceTitle: string
+			noData: string
 		}
 	}
+	timeAgo: TimeAgoTextProps
 }
 
-type GeolocationType = {
-	ip: string
-	country: string
-	city: string
-	latitude: number
-	longitude: number
+export type TimeAgoTextProps = {
+	now: string
+	minute: string
+	minutes: string
+	hour: string
+	hours: string
+	day: string
+	days: string
+	week: string
+	weeks: string
+	month: string
+	months: string
+	year: string
+	years: string
 }
-export type ShortUrlType = {
+
+export type TopLinkProps = {
+	title: string
+	clicks: number
+	shortUrl: string
+	slug: string
+	longUrl: string
+	createdAt: string
+}
+
+export type TopQrCodeProps = {
+	scans: number
+	title: string
 	url: string
 	shortUrl: string
 	slug: string
-	clicks?: number
-	createdAt?: string
-	updatedAt?: Date
-	geoLocation?: GeolocationType[]
+	foregroundColor: string
+	backgroundColor: string
+	createdAt: string
 }
 
 export type BasicStatsProps = {
 	totalClicks: {
 		total: number
-		percentage: number
 	}
 	todayClicks: {
 		total: number
@@ -134,29 +222,50 @@ export type BasicStatsProps = {
 	}
 	activeLinks: {
 		total: number
-		percentage: number
 	}
-	activeQrCodes: {
+	percentageUniqueClicks: {
 		total: number
 		percentage: number
 	}
 }
 
-export type ClickPerformanceProps = {
-	lastYear: Record<number>
-	lastSevenDays: Record<number>
-	today: Record<number>
+export interface PieChartProps {
+	name: string
+	clicks: number
+	color?: string
+	percent: number
 }
 
 export type StatsStoreType = {
 	basicStats: BasicStatsProps | null
-	clickPerformance: ClickPerformanceProps | null
-	shortUrls: ShortUrlType[] | null
+	countryStats: PieChartProps[] | null
+	deviceStats: PieChartProps[] | null
+	topLinks: TopLinkProps[] | null
+	topQrCodes: TopQrCodeProps[] | null
 	isLoading: boolean
 	setStats: (
 		basicStats: BasicStatsProps | null,
-		clickPerformance: ClickPerformanceProps | null,
-		shortUrls: ShortUrlType[] | null,
+		countryStats: PieChartProps[] | null,
+		deviceStats: PieChartProps[] | null,
+		topLinks: TopLinkProps[] | null,
+		topQrCodes: TopQrCodeProps[] | null,
 		isLoading: boolean,
 	) => void
+}
+
+export type ShortUrlType = {
+	url: string
+	shortUrl: string
+	slug: string
+	createdAt: string
+}
+
+export interface QrCodeType {
+	title: string
+	url: string
+	shortUrl: string
+	slug: string
+	createdAt: string
+	foregroundColor: string
+	backgroundColor: string
 }

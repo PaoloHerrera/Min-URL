@@ -113,7 +113,7 @@ function DialogDescription({
   return (
     <DialogPrimitive.Description
       data-slot="dialog-description"
-      className={cn("text-mariner-950 opacity-50 text-sm", className)}
+      className={cn("text-mariner-950 opacity-70 text-sm", className)}
       {...props}
     />
   )

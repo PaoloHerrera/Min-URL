@@ -54,11 +54,24 @@ export const EN_TRANSLATIONS: Translations = {
 			dialogNewLink: {
 				title: 'Create New Short URL',
 				description: 'Shorten a long URL and customize your link.',
+				urlTitle: {
+					label: 'Title',
+					placeholder: 'My awesome link',
+					error: {
+						minLength: 'Minimum length is 1',
+						maxLength: 'Maximum length is 100',
+						generic: 'Error checking title. Please try again',
+					},
+				},
 				originalUrl: {
-					label: 'Original URL',
+					label: 'Website URL',
 					placeholder:
 						'https://example.com/very/long/url/that/needs/shortening',
-					errorMessage: 'Invalid URL',
+					error: {
+						minLength: 'Minimum length is 1',
+						invalid: 'Invalid URL',
+						generic: 'Error checking URL. Please try again',
+					},
 				},
 				questionSlug: {
 					label: 'Customize your slug?',
@@ -77,6 +90,7 @@ export const EN_TRANSLATIONS: Translations = {
 				cancelText: 'Cancel',
 				submitText: 'Create Short URL',
 				loadingSubmitText: 'Creating Short URL...',
+				submitError: 'Error to create short URL. Please try again later.',
 			},
 			successLink: {
 				title: 'Link Created Successfully!',
@@ -93,6 +107,76 @@ export const EN_TRANSLATIONS: Translations = {
 				copyLink: 'Copy Link',
 				done: 'Done',
 			},
+			dialogNewQr: {
+				title: 'Create New QR Code',
+				description: 'Generate a QR code for a website.',
+				qrCodeTitle: {
+					label: 'Title',
+					placeholder: 'My awesome QR code',
+					error: {
+						minLength: 'Minimum length is 1',
+						maxLength: 'Maximum length is 100',
+						generic: 'Error checking title. Please try again',
+					},
+				},
+				originalUrl: {
+					label: 'Website URL',
+					placeholder:
+						'https://example.com/very/long/url/that/needs/generating/a/qr/code',
+					error: {
+						minLength: 'Minimum length is 1',
+						invalid: 'Invalid URL',
+						generic: 'Error checking URL. Please try again',
+					},
+				},
+				preview: 'QR Code Preview',
+				previewDescription: 'Preview using sample data',
+				foregroundColor: 'Foreground Color',
+				backgroundColor: 'Background Color',
+				cancelText: 'Cancel',
+				submitText: 'Generate QR Code',
+				loadingSubmitText: 'Creating QR Code...',
+				submitError: 'Error to create QR Code. Please try again later.',
+			},
 		},
+		sidebar: {
+			usage: {
+				link: 'Link Usage',
+				qrcode: 'QR Codes Usage',
+				used: 'Used',
+				remaining: 'Remaining',
+			},
+			footer: {
+				support: 'Support',
+			},
+		},
+		content: {
+			kpis: {
+				totalClicks: 'Total Clicks',
+				todayClicks: 'Today Clicks',
+				activeLinks: 'Active Links',
+				percentageUniqueClicks: 'Unique Click Rate',
+			},
+			last7DaysClicksTitle: 'Last 7 Days Clicks',
+			geographicTitle: 'Geographic Distribution',
+			deviceTitle: 'Device Breakdown',
+			noData: 'No data available',
+		},
+	},
+
+	timeAgo: {
+		now: 'Just now',
+		minute: '1 minute ago',
+		minutes: 'minutes ago',
+		hour: '1 hour ago',
+		hours: 'hours ago',
+		day: '1 day ago',
+		days: 'days ago',
+		week: '1 week ago',
+		weeks: 'weeks ago',
+		month: '1 month ago',
+		months: 'months ago',
+		year: '1 year ago',
+		years: 'years ago',
 	},
 }
