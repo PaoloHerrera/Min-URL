@@ -12,8 +12,6 @@
 	"devDependencies": {
 		"@biomejs/biome": "1.9.4",
 		"@types/node": "22.13.1",
-		"@types/react": "^19.0.8",
-		"@types/react-dom": "^19.0.3",
 		"@types/validator": "^13.12.2",
 		"autoprefixer": "10.4.20",
 		"typescript": "^5.7.3",
@@ -34,8 +32,6 @@
 		"just-debounce-it": "3.2.0",
 		"lucide-react": "^0.475.0",
 		"motion": "12.0.0",
-		"react": "19.0.0",
-		"react-dom": "19.0.0",
 		"react-qr-code": "2.0.15",
 		"tailwind-merge": "^3.0.1",
 		"tailwindcss": "^4.0.3",
