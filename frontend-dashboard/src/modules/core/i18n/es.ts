@@ -168,6 +168,23 @@ export const ES_TRANSLATIONS: Translations = {
 			noData: 'No hay datos disponibles',
 		},
 	},
+
+	link: {
+		linkCard: {
+			details: 'Ver detalles',
+			copy: 'Copiar enlace',
+			externalLink: 'Abrir enlace original',
+		},
+	},
+
+	qrcode: {
+		qrcodeCard: {
+			details: 'Ver detalles',
+			download: 'Descargar código QR',
+			externalLink: 'Abrir enlace original',
+		},
+	},
+
 	timeAgo: {
 		now: 'Justo ahora',
 		minute: 'hace 1 minuto',

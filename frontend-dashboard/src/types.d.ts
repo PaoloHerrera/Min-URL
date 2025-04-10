@@ -173,6 +173,21 @@ export interface Translations {
 			noData: string
 		}
 	}
+	link: {
+		linkCard: {
+			details: string
+			copy: string
+			externalLink: string
+		}
+	}
+
+	qrcode: {
+		qrcodeCard: {
+			details: string
+			download: string
+			externalLink: string
+		}
+	}
 	timeAgo: TimeAgoTextProps
 }
 

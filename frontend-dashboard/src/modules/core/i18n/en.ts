@@ -164,6 +164,22 @@ export const EN_TRANSLATIONS: Translations = {
 		},
 	},
 
+	link: {
+		linkCard: {
+			details: 'View Details',
+			copy: 'Copy Link',
+			externalLink: 'Open original link',
+		},
+	},
+
+	qrcode: {
+		qrcodeCard: {
+			details: 'View Details',
+			download: 'Download QR Code',
+			externalLink: 'Open original link',
+		},
+	},
+
 	timeAgo: {
 		now: 'Just now',
 		minute: '1 minute ago',

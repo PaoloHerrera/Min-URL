@@ -13,6 +13,13 @@ import {
 	ClockIcon,
 	DownloadIcon,
 } from 'lucide-react'
+import {
+	Tooltip,
+	TooltipProvider,
+	TooltipTrigger,
+	TooltipContent,
+} from '@/modules/core/ui/tooltip.tsx'
+import { useTranslations } from '@/modules/core/hooks/useTranslations.ts'
 
 interface QrCardProps {
 	title: string
@@ -35,6 +42,9 @@ export const QrCodeCard = ({
 	backgroundColor,
 	createdAt,
 }: QrCardProps) => {
+	const { qrcode } = useTranslations()
+	const { qrcodeCard } = qrcode
+
 	return (
 		<Card>
 			<CardHeader>
@@ -43,7 +53,7 @@ export const QrCodeCard = ({
 						{title}
 					</span>
 					<div className="font-semibold text-mariner-950 text-sm opacity-70 gap-1 items-center w-full flex justify-end">
-						<QrCodeIcon className="text-mariner-500" size={20} />
+						<QrCodeIcon className="text-mariner-600" size={20} />
 						<span>{scans} scans</span>
 					</div>
 				</div>
@@ -68,29 +78,62 @@ export const QrCodeCard = ({
 						<ClockIcon size={12} /> {createdAt}
 					</span>
 					<div className="flex flex-row gap-2">
-						<a
-							href={`/qrcodes/${slug}`}
-							target="_blank"
-							rel="noreferrer"
-							className="p-1 border-1 border-mariner-500 rounded-md"
-						>
-							<BarChart2Icon className="text-mariner-500" size={20} />
-						</a>
-						<button
-							onClick={() => downloadQrCode(title, slug)}
-							type="button"
-							className="p-1 border-1 border-mariner-500 rounded-md cursor-pointer"
-						>
-							<DownloadIcon className="text-mariner-500" size={20} />
-						</button>
-						<a
-							href={longUrl}
-							target="_blank"
-							rel="noreferrer"
-							className="p-1 border-1 border-mariner-500 rounded-md"
-						>
-							<ExternalLinkIcon className="text-mariner-500" size={20} />
-						</a>
+						<TooltipProvider>
+							<Tooltip>
+								<TooltipTrigger asChild={true}>
+									<a
+										href={`/qrcodes/${slug}`}
+										target="_blank"
+										rel="noreferrer"
+										className="p-1 border-1 border-mariner-500 rounded-md"
+									>
+										<BarChart2Icon className="text-mariner-600" size={20} />
+									</a>
+								</TooltipTrigger>
+								<TooltipContent>
+									<span className="text-mariner-950 font-medium text-sm">
+										{qrcodeCard.details}
+									</span>
+								</TooltipContent>
+							</Tooltip>
+						</TooltipProvider>
+						<TooltipProvider>
+							<Tooltip>
+								<TooltipTrigger asChild={true}>
+									<button
+										onClick={() => downloadQrCode(title, slug)}
+										type="button"
+										className="p-1 border-1 border-mariner-500 rounded-md cursor-pointer"
+									>
+										<DownloadIcon className="text-mariner-600" size={20} />
+									</button>
+								</TooltipTrigger>
+								<TooltipContent>
+									<span className="text-mariner-950 font-medium text-sm">
+										{qrcodeCard.download}
+									</span>
+								</TooltipContent>
+							</Tooltip>
+						</TooltipProvider>
+						<TooltipProvider>
+							<Tooltip>
+								<TooltipTrigger asChild={true}>
+									<a
+										href={longUrl}
+										target="_blank"
+										rel="noreferrer"
+										className="p-1 border-1 border-mariner-500 rounded-md"
+									>
+										<ExternalLinkIcon className="text-mariner-600" size={20} />
+									</a>
+								</TooltipTrigger>
+								<TooltipContent>
+									<span className="text-mariner-950 font-medium text-sm">
+										{qrcodeCard.externalLink}
+									</span>
+								</TooltipContent>
+							</Tooltip>
+						</TooltipProvider>
 					</div>
 				</div>
 			</CardFooter>
