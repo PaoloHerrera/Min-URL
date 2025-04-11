@@ -244,6 +244,11 @@ export type BasicStatsProps = {
 	}
 }
 
+export type Last7DaysClicksProps = {
+	clicks: number
+	createdAt: string
+}
+
 export interface PieChartProps {
 	name: string
 	clicks: number
@@ -253,6 +258,7 @@ export interface PieChartProps {
 
 export type StatsStoreType = {
 	basicStats: BasicStatsProps | null
+	last7DaysClicks: Last7DaysClicksProps[] | null
 	countryStats: PieChartProps[] | null
 	deviceStats: PieChartProps[] | null
 	topLinks: TopLinkProps[] | null
@@ -260,6 +266,7 @@ export type StatsStoreType = {
 	isLoading: boolean
 	setStats: (
 		basicStats: BasicStatsProps | null,
+		last7DaysClicks: Last7DaysClicksProps[] | null,
 		countryStats: PieChartProps[] | null,
 		deviceStats: PieChartProps[] | null,
 		topLinks: TopLinkProps[] | null,

@@ -1,22 +1,28 @@
 import {
-	BarChart,
-	Bar,
+	LineChart,
+	Line,
 	XAxis,
 	YAxis,
 	Tooltip,
 	ResponsiveContainer,
 } from 'recharts'
 import { Card, CardHeader, CardBody } from '@/modules/core/design-system/Card'
-import type { ChartDataProps } from '@/types.d'
+import type { Last7DaysClicksProps } from '@/types.d'
 import { NoData } from './NoData.tsx'
 import { useTranslations } from '@/modules/core/hooks/useTranslations.ts'
+import { useStatsStore } from '@/stores/statsStore.ts'
 
-const data: ChartDataProps[] = []
+const data: Last7DaysClicksProps[] = []
 const FILL_COLOR = '#1971ce'
 
 export const ClicksActivity = () => {
 	const { dashboard } = useTranslations()
 	const { last7DaysClicksTitle } = dashboard.content
+	const { last7DaysClicks } = useStatsStore()
+
+	if (last7DaysClicks) {
+		data.push(...last7DaysClicks)
+	}
 
 	return (
 		<Card>
@@ -30,7 +36,7 @@ export const ClicksActivity = () => {
 			<CardBody>
 				{data.length > 0 ? (
 					<ResponsiveContainer width="100%" height={300}>
-						<BarChart
+						<LineChart
 							data={data}
 							margin={{
 								top: 5,
@@ -39,11 +45,19 @@ export const ClicksActivity = () => {
 								bottom: 5,
 							}}
 						>
-							<XAxis dataKey="name" />
-							<YAxis />
+							<XAxis
+								dataKey="createdAt"
+								tickFormatter={(value) => value.split(' ')[0]}
+							/>
+							<YAxis type="number" />
 							<Tooltip />
-							<Bar dataKey="clicks" fill={FILL_COLOR} />
-						</BarChart>
+							<Line
+								type="monotone"
+								dataKey="clicks"
+								stroke={FILL_COLOR}
+								dot={false}
+							/>
+						</LineChart>
 					</ResponsiveContainer>
 				) : (
 					<NoData />

@@ -32,6 +32,18 @@ export class ProtectedService {
 			{ replacements: { userId }, type: QueryTypes.SELECT },
 		)
 
+		const last7DaysClicks = await this.userModel.sequelize?.query<{
+			total_clicks: number
+			day_created_at: string
+		}>(
+			`
+				SELECT total_clicks, day_created_at
+				FROM "Min-URL".dashboard_last_7_days_clicks_view
+				WHERE user_id = :userId
+			`,
+			{ replacements: { userId }, type: QueryTypes.SELECT },
+		)
+
 		const countryStats = await this.userModel.sequelize?.query<{
 			total_clicks: number
 			country: string
@@ -124,6 +136,19 @@ export class ProtectedService {
 			},
 		}
 
+		//Stats Clicks de los últimos 7 días
+		const last7DaysClicksData = last7DaysClicks?.map((last7DaysClick) => ({
+			clicks: last7DaysClick.total_clicks ?? 0,
+			createdAt: new Date(last7DaysClick.day_created_at).toLocaleDateString(
+				'es-ES',
+				{
+					year: 'numeric',
+					month: 'numeric',
+					day: 'numeric',
+				},
+			),
+		}))
+
 		//Stats Países
 		const countryStatsData = countryStats?.map((country) => ({
 			name: country.country,
@@ -167,6 +192,7 @@ export class ProtectedService {
 		const data = {
 			user: userData,
 			basicStats: basicStatsData,
+			last7DaysClicks: last7DaysClicksData,
 			countryStats: countryStatsData,
 			deviceStats: deviceStatsData,
 			topLinks: topLinksData,

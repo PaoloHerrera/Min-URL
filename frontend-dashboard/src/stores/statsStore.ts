@@ -1,6 +1,7 @@
 import { create } from 'zustand'
 import type {
 	BasicStatsProps,
+	Last7DaysClicksProps,
 	PieChartProps,
 	TopLinkProps,
 	TopQrCodeProps,
@@ -9,6 +10,7 @@ import type {
 
 export const useStatsStore = create<StatsStoreType>((set) => ({
 	basicStats: null,
+	last7DaysClicks: null,
 	countryStats: null,
 	deviceStats: null,
 	topLinks: null,
@@ -16,6 +18,7 @@ export const useStatsStore = create<StatsStoreType>((set) => ({
 	isLoading: true,
 	setStats: (
 		basicStats: BasicStatsProps | null,
+		last7DaysClicks: Last7DaysClicksProps[] | null,
 		countryStats: PieChartProps[] | null,
 		deviceStats: PieChartProps[] | null,
 		topLinks: TopLinkProps[] | null,
@@ -24,6 +27,7 @@ export const useStatsStore = create<StatsStoreType>((set) => ({
 	) =>
 		set({
 			basicStats,
+			last7DaysClicks,
 			countryStats,
 			deviceStats,
 			topLinks,

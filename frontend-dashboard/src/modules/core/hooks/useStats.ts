@@ -23,9 +23,12 @@ export const useStats = () => {
 					signal: controller.signal,
 				})
 
+				console.log(response.data)
+
 				if (mounted) {
 					setStats(
 						response.data.basicStats,
+						response.data.last7DaysClicks,
 						response.data.countryStats,
 						response.data.deviceStats,
 						response.data.topLinks,
