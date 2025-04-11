@@ -57,7 +57,7 @@ export const LinkCard = ({
 					<span className="font-semibold text-mariner-950 opacity-70 w-full">
 						{title}
 					</span>
-					<div className="font-semibold text-mariner-950 text-sm opacity-70 gap-1 items-center w-full flex justify-end">
+					<div className="font-semibold text-mariner-950 text-sm opacity-70 gap-2 items-center w-full flex justify-end">
 						<BarChart className="text-mariner-600" size={20} />
 						<span>{clicks} clicks</span>
 					</div>
