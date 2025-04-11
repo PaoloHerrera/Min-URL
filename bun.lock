@@ -27,8 +27,6 @@
         "ioredis": "5.6.0",
         "is-ip": "5.0.1",
         "isbot": "^4.1.0",
-        "react": "^18.2.0",
-        "react-dom": "^18.2.0",
         "remix-utils": "8.5.0",
         "ua-parser-js": "2.0.3",
       },
@@ -2742,10 +2740,6 @@
 
     "backend-redirector/@types/react-dom": ["@types/react-dom@18.3.6", "", { "peerDependencies": { "@types/react": "^18.0.0" } }, ""],
 
-    "backend-redirector/react": ["react@18.3.1", "", { "dependencies": { "loose-envify": "^1.1.0" } }, ""],
-
-    "backend-redirector/react-dom": ["react-dom@18.3.1", "", { "dependencies": { "loose-envify": "^1.1.0", "scheduler": "^0.23.2" }, "peerDependencies": { "react": "^18.3.1" } }, ""],
-
     "backend-users/axios": ["axios@1.8.3", "", { "dependencies": { "follow-redirects": "^1.15.6", "form-data": "^4.0.0", "proxy-from-env": "^1.1.0" } }, ""],
 
     "basic-auth/safe-buffer": ["safe-buffer@5.1.2", "", {}, ""],
@@ -3021,8 +3015,6 @@
     "ajv-formats/ajv/json-schema-traverse": ["json-schema-traverse@1.0.0", "", {}, ""],
 
     "babel-plugin-istanbul/istanbul-lib-instrument/semver": ["semver@6.3.1", "", { "bin": "bin/semver.js" }, ""],
-
-    "backend-redirector/react-dom/scheduler": ["scheduler@0.23.2", "", { "dependencies": { "loose-envify": "^1.1.0" } }, ""],
 
     "body-parser/debug/ms": ["ms@2.0.0", "", {}, ""],
 

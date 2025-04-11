@@ -43,8 +43,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 			return redirect(data.long_url)
 		}
 		return { data }
-	} catch (error) {
-		console.log(error)
+	} catch {
 		return { data: false }
 	}
 }
