@@ -17,6 +17,7 @@ import {
 	createShortUrl,
 	createShortUrlWithCustomSlug,
 	createQrCode,
+	deleteUserUrl,
 } from '../controllers/UserController.js'
 import { addGeolocation } from '../middleware/geolocationMiddleware.js'
 
@@ -63,6 +64,12 @@ protectedRouter.post(
 	checkForbiddenExtension,
 	handleAsyncError(addGeolocation),
 	handleAsyncError(createQrCode),
+)
+
+protectedRouter.delete(
+	'/delete-url/:id',
+	checkApiKey,
+	handleAsyncError(deleteUserUrl),
 )
 
 export { protectedRouter }

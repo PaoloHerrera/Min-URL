@@ -23,8 +23,6 @@ export const useStats = () => {
 					signal: controller.signal,
 				})
 
-				console.log(response.data)
-
 				if (mounted) {
 					setStats(
 						response.data.basicStats,

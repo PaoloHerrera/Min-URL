@@ -8,11 +8,12 @@ import {
 	AlertDialogHeader,
 	AlertDialogTitle,
 } from '@/modules/core/ui/alert-dialog.tsx'
-import { CopyIcon, CheckCheck, LinkIcon } from 'lucide-react'
+import { LinkIcon } from 'lucide-react'
 import { useNewShortUrlStore } from '@/stores/newShortUrlStore.ts'
 import { useTranslations } from '@/modules/core/hooks/useTranslations.ts'
-import { useClipboard } from '@/modules/createNew/hooks/useClipboard'
+import { useClipboard } from '@/modules/core/hooks/useClipboard'
 import { useFormattedDate } from '@/modules/createNew/hooks/useFormattedDate'
+import { SuccessCopyIcon } from '@/modules/shared/components/SuccessCopyIcon'
 
 export const SuccessLink = () => {
 	const { newShortUrl, setNewShortUrl } = useNewShortUrlStore()
@@ -20,14 +21,6 @@ export const SuccessLink = () => {
 	const { successLink } = dashboard.navbar
 	const { isSuccessCopy, copyToClipboard } = useClipboard()
 	const formattedDate = useFormattedDate(newShortUrl?.createdAt)
-
-	const SuccessCopyIcon = ({ isSuccess }: { isSuccess: boolean }) => {
-		return isSuccess ? (
-			<CheckCheck className="text-success" size={20} />
-		) : (
-			<CopyIcon className="text-mariner-600" size={20} />
-		)
-	}
 
 	return (
 		<AlertDialog open={!!newShortUrl} onOpenChange={() => setNewShortUrl(null)}>

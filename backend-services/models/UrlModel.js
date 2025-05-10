@@ -102,3 +102,13 @@ export const getUrl = async (id) => {
 	const url = await UrlModel.findByPk(id)
 	return url
 }
+
+export const deleteUserUrl = async (userId, id) => {
+	const url = await UrlModel.findOne({
+		where: { id_urls: id, user_id: userId },
+	})
+	if (!url) {
+		throw new Error('Url no encontrada')
+	}
+	await url.update({ deleted: true, deleted_at: new Date() })
+}

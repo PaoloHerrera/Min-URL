@@ -27,6 +27,7 @@
 		"@nestjs/passport": "11.0.5",
 		"@nestjs/platform-express": "^11.0.1",
 		"@nestjs/sequelize": "11.0.0",
+		"@nestjs/throttler": "6.4.0",
 		"@nestjs/websockets": "^11.0.12",
 		"@types/passport-google-oauth20": "^2.0.16",
 		"axios": "1.8.3",

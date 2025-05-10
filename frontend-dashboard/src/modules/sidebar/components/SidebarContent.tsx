@@ -16,8 +16,8 @@ export const SidebarContent = () => {
 	const currentPath = location.pathname
 
 	const isDashboard = currentPath === '/'
-	const isLink = currentPath === '/link'
-	const isQrCode = currentPath === '/qrcode'
+	const isLink = currentPath === '/links'
+	const isQrCode = currentPath === '/qrcodes'
 
 	return (
 		<div className="flex flex-col w-full h-full justify-between gap-5">
@@ -39,7 +39,7 @@ export const SidebarContent = () => {
 							Links
 						</li>
 					</a>
-					<a href="/qrcode" className="w-full">
+					<a href="/qrcodes" className="w-full">
 						<li
 							className={`${isQrCode ? 'bg-mariner-100' : 'text-mariner-950'} rounded-md w-full flex items-center px-2 h-10 font-bold text-sm gap-2 hover:bg-mariner-50 hover:text-mariner-400`}
 						>

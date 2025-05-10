@@ -1,9 +1,9 @@
 import { DashboardLayout } from '../layouts/DashboardLayout.tsx'
 
-export const QrCodes = () => {
+export const Link = () => {
 	return (
 		<DashboardLayout>
-			<div>QrCodes</div>
+			<div>Link</div>
 		</DashboardLayout>
 	)
 }

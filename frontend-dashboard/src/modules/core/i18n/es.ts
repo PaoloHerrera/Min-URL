@@ -83,6 +83,8 @@ export const ES_TRANSLATIONS: Translations = {
 						minLength: 'La longitud mínima es de 6',
 						maxLength: 'La longitud máxima es de 12',
 						invalid: 'Caracteres inválidos. Sólo se permiten letras y números',
+						tooManyRequests:
+							'Demasiadas solicitudes. Por favor, espera un minuto e inténtalo de nuevo',
 						alreadyInUse: 'El enlace ya está en uso',
 						generic:
 							'Error al verificar el slug. Por favor, inténtalo de nuevo.',
@@ -171,9 +173,55 @@ export const ES_TRANSLATIONS: Translations = {
 
 	link: {
 		linkCard: {
-			details: 'Ver detalles',
 			copy: 'Copiar enlace',
 			externalLink: 'Abrir enlace original',
+			statistics: 'Ver estadísticas',
+			edit: 'Editar enlace',
+			delete: 'Eliminar enlace',
+
+			deleteDialog: {
+				title: '¿Estás seguro de que quieres eliminar este enlace?',
+				description:
+					'Esta acción no se puede deshacer. Eliminará permanentemente tu enlace y todas las estadísticas asociadas.',
+				cancelLabel: 'Cancelar',
+				deleteLabel: 'Eliminar',
+				loadingDelete: 'Eliminando...',
+				success: 'Enlace eliminado exitosamente',
+				errorLabel:
+					'Error al eliminar enlace. Por favor, inténtalo de nuevo más tarde.',
+			},
+		},
+		editDialog: {
+			title: 'Editar enlace',
+			description: 'Actualiza la configuración de tu enlace.',
+			urlTitle: {
+				label: 'Título',
+				placeholder: 'Mi enlace genial',
+				error: {
+					minLength: 'La longitud mínima es de 1',
+					maxLength: 'La longitud máxima es de 100',
+					generic:
+						'Error al verificar el título. Por favor, inténtalo de nuevo.',
+				},
+			},
+			originalUrl: {
+				label: 'URL del sitio web',
+				placeholder: 'https://ejemplo.com/muy/largo/url/que/necesita/acortar',
+				error: {
+					minLength: 'La longitud mínima es de 1',
+					invalid: 'URL inválida',
+					generic: 'Error al verificar la URL. Por favor, inténtalo de nuevo.',
+				},
+				cannotBeChanged: {
+					prefix: 'Este enlace ha sido clicado ',
+					suffix: ' veces y la URL del sitio web no se puede cambiar.',
+				},
+			},
+			cancelLabel: 'Cancelar',
+			submitLabel: 'Actualizar enlace',
+			loadingSubmit: 'Actualizando...',
+			submitError:
+				'Error al actualizar el enlace. Por favor, inténtalo de nuevo más tarde.',
 		},
 	},
 
@@ -182,6 +230,18 @@ export const ES_TRANSLATIONS: Translations = {
 			details: 'Ver detalles',
 			download: 'Descargar código QR',
 			externalLink: 'Abrir enlace original',
+
+			deleteDialog: {
+				title: '¿Estás seguro de que quieres eliminar este código QR?',
+				description:
+					'Esta acción no se puede deshacer. Eliminará permanentemente tu código QR y todas las estadísticas asociadas.',
+				cancelLabel: 'Cancelar',
+				deleteLabel: 'Eliminar',
+				loadingDelete: 'Eliminando...',
+				success: 'Código QR eliminado exitosamente',
+				errorLabel:
+					'Error al eliminar código QR. Por favor, inténtalo de nuevo más tarde.',
+			},
 		},
 	},
 

@@ -25,7 +25,7 @@ export const CustomSlugInput = ({
 }: CustomSlugImputProps) => {
 	const { dashboard } = useTranslations()
 	const { customSlug } = dashboard.navbar.dialogNewLink
-	const { isAvailable, loading } = useSlugValidation(value)
+	const { checkSlugStatus, loading } = useSlugValidation(value)
 
 	const shouldCheckAvailability =
 		!error &&
@@ -52,7 +52,8 @@ export const CustomSlugInput = ({
 						placeholder={customSlug.placeholder}
 						error={
 							!!error ||
-							(!isAvailable.isAvailable && isAvailable.message.length > 0)
+							(!checkSlugStatus.isAvailable &&
+								typeof checkSlugStatus.error === 'string')
 						}
 						{...rest}
 					/>
@@ -61,21 +62,21 @@ export const CustomSlugInput = ({
 					)}
 					{shouldCheckAvailability &&
 						!loading &&
-						isAvailable.isAvailable &&
+						checkSlugStatus.isAvailable &&
 						value &&
 						typeof value === 'string' &&
 						value.length >= MIN_LENGTH && (
 							<CheckIcon size={20} className="w-5 h-5 text-success" />
 						)}
 					{shouldCheckAvailability &&
-						!(loading || isAvailable.isAvailable) &&
-						isAvailable.message.length > 0 && (
+						!(loading || checkSlugStatus.isAvailable) &&
+						typeof checkSlugStatus.error === 'string' && (
 							<XIcon size={20} className="text-error" />
 						)}
 				</div>
 			</div>
 			<span className="text-xs text-error font-semibold text-center">
-				{error || isAvailable.message || ''}
+				{error || checkSlugStatus.error || ''}
 			</span>
 		</div>
 	)

@@ -1,26 +1,7 @@
 import { useStatsStore } from '@/stores/statsStore.ts'
 import { useTranslations } from '@/modules/core/hooks/useTranslations.ts'
 import { getTimeAgo } from '@/lib/getTimeAgo.ts'
-
-export interface TopLinkData {
-	title: string
-	clicks: number
-	shortUrl: string
-	slug: string
-	longUrl: string
-	createdAt: string
-}
-
-export interface TopQrCodeData {
-	scans: number
-	title: string
-	url: string
-	shortUrl: string
-	slug: string
-	foregroundColor: string
-	backgroundColor: string
-	createdAt: string
-}
+import type { TopLinkProps, TopQrCodeProps } from '@/types'
 
 export const useDashboardData = () => {
 	const { basicStats, topLinks, topQrCodes } = useStatsStore()
@@ -53,8 +34,9 @@ export const useDashboardData = () => {
 	)
 
 	// Top Links
-	const topLinksData: TopLinkData[] =
+	const topLinksData: TopLinkProps[] =
 		topLinks?.map((link) => ({
+			id: link.id,
 			title: link.title,
 			clicks: link.clicks,
 			shortUrl: link.shortUrl,
@@ -64,8 +46,9 @@ export const useDashboardData = () => {
 		})) || []
 
 	// Top QR Codes
-	const topQrCodesData: TopQrCodeData[] =
+	const topQrCodesData: TopQrCodeProps[] =
 		topQrCodes?.map((qrCode) => ({
+			id: qrCode.id,
 			scans: qrCode.scans,
 			title: qrCode.title,
 			url: qrCode.url,

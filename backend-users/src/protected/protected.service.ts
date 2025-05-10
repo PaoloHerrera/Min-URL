@@ -34,10 +34,10 @@ export class ProtectedService {
 
 		const last7DaysClicks = await this.userModel.sequelize?.query<{
 			total_clicks: number
-			day_created_at: string
+			click_day: string
 		}>(
 			`
-				SELECT total_clicks, day_created_at
+				SELECT total_clicks, click_day
 				FROM "Min-URL".dashboard_last_7_days_clicks_view
 				WHERE user_id = :userId
 			`,
@@ -69,6 +69,7 @@ export class ProtectedService {
 		)
 
 		const topLinks = await this.userModel.sequelize?.query<{
+			id_urls: string
 			total_clicks: number
 			title: string
 			long_url: string
@@ -76,7 +77,7 @@ export class ProtectedService {
 			created_at: string
 		}>(
 			`
-				SELECT total_clicks, title, long_url, slug, created_at
+				SELECT id_urls, total_clicks, title, long_url, slug, created_at
 				FROM "Min-URL".dashboard_top_links_view
 				WHERE user_id = :userId
 				ORDER BY total_clicks DESC
@@ -86,6 +87,7 @@ export class ProtectedService {
 		)
 
 		const topQrCodes = await this.userModel.sequelize?.query<{
+			id_urls: string
 			total_scans: number
 			title: string
 			long_url: string
@@ -95,7 +97,7 @@ export class ProtectedService {
 			created_at: string
 		}>(
 			`
-				SELECT total_scans, title, long_url, slug, foreground_color, background_color, created_at
+				SELECT id_urls, total_scans, title, long_url, slug, foreground_color, background_color, created_at
 				FROM "Min-URL".dashboard_top_qr_codes_view
 				WHERE user_id = :userId
 				ORDER BY total_scans DESC
@@ -139,14 +141,7 @@ export class ProtectedService {
 		//Stats Clicks de los últimos 7 días
 		const last7DaysClicksData = last7DaysClicks?.map((last7DaysClick) => ({
 			clicks: last7DaysClick.total_clicks ?? 0,
-			createdAt: new Date(last7DaysClick.day_created_at).toLocaleDateString(
-				'es-ES',
-				{
-					year: 'numeric',
-					month: 'numeric',
-					day: 'numeric',
-				},
-			),
+			createdAt: last7DaysClick.click_day,
 		}))
 
 		//Stats Países
@@ -169,6 +164,7 @@ export class ProtectedService {
 
 		//Stats Links cortos
 		const topLinksData = topLinks?.map((link) => ({
+			id: link.id_urls,
 			title: link.title,
 			clicks: Number(link.total_clicks),
 			shortUrl: `${process.env.REDIRECTOR_URL}/${link.slug}`,
@@ -179,6 +175,7 @@ export class ProtectedService {
 
 		//Stats QR Codes
 		const topQrCodesData = topQrCodes?.map((qrCode) => ({
+			id: qrCode.id_urls,
 			scans: Number(qrCode.total_scans),
 			title: qrCode.title,
 			url: qrCode.long_url,
@@ -228,14 +225,21 @@ export class ProtectedService {
 		}
 	}
 
-	async createShortUrl(
-		ip: string,
-		title: string,
-		userId: string,
-		url: string,
-		customSlug: boolean,
-		slug: string,
-	) {
+	async createShortUrl({
+		ip,
+		title,
+		userId,
+		originalUrl,
+		customSlug,
+		slug,
+	}: {
+		ip: string
+		title: string
+		userId: string
+		originalUrl: string
+		customSlug: boolean
+		slug: string
+	}) {
 		try {
 			const endpoint = customSlug
 				? '/protected/create-short-url-with-custom-slug'
@@ -246,7 +250,7 @@ export class ProtectedService {
 				{
 					userId,
 					title,
-					originalUrl: url,
+					originalUrl,
 					customSlug,
 					slug,
 				},
@@ -269,7 +273,14 @@ export class ProtectedService {
 		}
 	}
 
-	async createQrCode(data: {
+	async createQrCode({
+		ip,
+		title,
+		userId,
+		originalUrl,
+		foregroundColor,
+		backgroundColor,
+	}: {
 		ip: string
 		title: string
 		userId: string
@@ -280,9 +291,16 @@ export class ProtectedService {
 		try {
 			const response = await axios.post(
 				`${process.env.API_URL}/protected/create-qr-code`,
-				data,
+				{
+					userId,
+					title,
+					originalUrl,
+					foregroundColor,
+					backgroundColor,
+				},
 				{
 					headers: {
+						'X-Forwarded-For': ip,
 						'Content-Type': 'application/json',
 						'X-API-Key': `${process.env.API_KEY}`,
 					},
@@ -296,6 +314,31 @@ export class ProtectedService {
 			}
 			//Error de conexión
 			throw new HttpException('Error al crear QR Code', 500)
+		}
+	}
+
+	async deleteUrl(userId: string, id: string) {
+		try {
+			const response = await axios.delete(
+				`${process.env.API_URL}/protected/delete-url/${id}`,
+				{
+					headers: {
+						'Content-Type': 'application/json',
+						'X-API-Key': `${process.env.API_KEY}`,
+					},
+					data: {
+						userId,
+					},
+				},
+			)
+			return response.data
+		} catch (err) {
+			if (err.response) {
+				//Error HTTP desde el backend de servicios
+				throw new HttpException(err.response.data.message, err.response.status)
+			}
+			//Error de conexión
+			throw new HttpException('Error al eliminar link', 500)
 		}
 	}
 }

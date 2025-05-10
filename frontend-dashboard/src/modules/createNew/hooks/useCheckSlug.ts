@@ -2,11 +2,23 @@ import { useState, useEffect } from 'react'
 import { axiosInstance } from '../../core/lib/axios.ts'
 import { translations } from '../../core/i18n/index.ts'
 import { useLanguageStore } from '@/stores/languageStore.ts'
+import { AxiosError } from 'axios'
+
+const ERRORS = {
+	429: 'tooManyRequests',
+	409: 'alreadyInUse',
+	generic: 'generic',
+}
+
+interface CheckSlugResponse {
+	isAvailable: boolean
+	error: string | null
+}
 
 export const useCheckSlug = ({ slug }: { slug: string }) => {
-	const [isAvailable, setIsAvailable] = useState({
-		message: '',
+	const [checkSlugStatus, setCheckSlugStatus] = useState<CheckSlugResponse>({
 		isAvailable: false,
+		error: null,
 	})
 	const [loading, setLoading] = useState(false)
 	const { language } = useLanguageStore()
@@ -20,39 +32,39 @@ export const useCheckSlug = ({ slug }: { slug: string }) => {
 				const result = await axiosInstance.post('/protected/check-slug', {
 					slug,
 				})
-				setIsAvailable({
-					message: result.data.message || '',
+				setCheckSlugStatus({
 					isAvailable: result.data.isAvailable,
+					error: null,
 				})
-			} catch (err: unknown) {
-				if (
-					err &&
-					typeof err === 'object' &&
-					'response' in err &&
-					err.response &&
-					typeof err.response === 'object' &&
-					'data' in err.response
-				) {
-					const errorCode = (err.response as { data: { message: string } }).data
-						.message
-					setIsAvailable({
-						message: error[errorCode as keyof typeof error],
+			} catch (err) {
+				//Status code
+				if (err instanceof AxiosError) {
+					const status = err.response?.status ?? 'generic'
+
+					const typeError = ERRORS[status as keyof typeof ERRORS]
+					setCheckSlugStatus({
 						isAvailable: false,
+						error: error[typeError as keyof typeof error],
 					})
+					return
 				}
+				//Default error
+				setCheckSlugStatus({
+					isAvailable: false,
+					error: error.generic,
+				})
 			} finally {
 				setLoading(false)
 			}
 		}
-
 		if (slug && slug.length >= 6 && slug.length <= 12) {
 			fetchSlugAvailability(slug)
 		}
 	}, [slug, error])
 
 	return {
-		isAvailable,
+		checkSlugStatus,
 		loading,
-		setIsAvailable,
+		setCheckSlugStatus,
 	}
 }

@@ -1,4 +1,7 @@
-import { createValidatedUrl } from '../services/UrlServices.js'
+import {
+	createValidatedUrl,
+	deleteUrlbyUserId,
+} from '../services/UrlServices.js'
 import {
 	createShortUrlForUrl,
 	createShortUrlForUrlWithSlug,
@@ -90,4 +93,11 @@ export const createQrCode = async (req, res) => {
 		backgroundColor: qrCode.background_color,
 		createdAt: url.created_at,
 	})
+}
+
+export const deleteUserUrl = async (req, res) => {
+	const urlId = req.params.id
+	const userId = req.body.userId
+	await deleteUrlbyUserId(userId, urlId)
+	res.json({})
 }

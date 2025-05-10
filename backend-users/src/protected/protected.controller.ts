@@ -6,11 +6,14 @@ import {
 	Response,
 	Inject,
 	UseGuards,
+	Delete,
+	Patch,
 } from '@nestjs/common'
 import type {
 	Response as ExpressResponse,
 	Request as ExpressRequest,
 } from 'express'
+import { Throttle } from '@nestjs/throttler'
 import { AuthGuard } from '@nestjs/passport'
 import { ProtectedService } from './protected.service'
 import { ACCESS_TOKEN_COOKIE_NAME } from '@/constants'
@@ -46,6 +49,7 @@ export class ProtectedController {
 		return res.status(200).json(data)
 	}
 
+	@Throttle({ default: { limit: 30, ttl: 60000 } })
 	@Post('check-slug')
 	@UseGuards(AuthGuard('jwt'))
 	async checkSlug(
@@ -82,14 +86,14 @@ export class ProtectedController {
 		const slug = req.body.slug as string
 
 		const { originalUrl, shortUrl, createdAt } =
-			await this.protectedService.createShortUrl(
-				req.ip as string,
+			await this.protectedService.createShortUrl({
+				ip: req.ip as string,
 				title,
-				user.userId,
-				url,
+				userId: user.userId,
+				originalUrl: url,
 				customSlug,
 				slug,
-			)
+			})
 		return res.status(200).json({ originalUrl, shortUrl, slug, createdAt })
 	}
 
@@ -120,5 +124,50 @@ export class ProtectedController {
 			backgroundColor,
 		})
 		return res.status(200).json({ ...qrCode, title })
+	}
+
+	@Delete('delete-url/:id')
+	@UseGuards(AuthGuard('jwt'))
+	async deleteUrl(
+		@Request() req: ExpressRequest,
+		@Response() res: ExpressResponse,
+	) {
+		const user = req.user as AuthenticatedUser
+
+		if (!user) {
+			return res.status(401).json({ message: 'No autorizado' })
+		}
+
+		const id = req.params.id as string
+
+		await this.protectedService.deleteUrl(user.userId, id)
+
+		return res.status(200).json({ message: 'Link eliminado' })
+	}
+
+	@Patch('update-url/:id')
+	@UseGuards(AuthGuard('jwt'))
+	updateUrl(@Request() req: ExpressRequest, @Response() res: ExpressResponse) {
+		const user = req.user as AuthenticatedUser
+
+		if (!user) {
+			return res.status(401).json({ message: 'No autorizado' })
+		}
+
+		const id = req.params.id as string
+		const title = req.body.title as string
+		const url = req.body.url as string
+
+		return res
+			.status(409)
+			.json({ message: 'Error updating link. Please try again later.' })
+		// return res.status(200).json({ id, title, url })
+
+		// const { originalUrl, shortUrl, createdAt } =
+		// 	await this.protectedService.updateUrl(user.userId, id, {
+		// 		title,
+		// 		originalUrl: url,
+		// 		clicks,
+		// 	})
 	}
 }

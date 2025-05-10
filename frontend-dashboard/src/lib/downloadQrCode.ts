@@ -6,8 +6,17 @@ export const downloadQrCode = (title: string, id: string) => {
 		return
 	}
 
+	// Create a copy of the SVG element
+	const copySvg = svg.cloneNode(true) as SVGSVGElement
+	copySvg.setAttribute('id', 'copySvg')
+	document.body.appendChild(copySvg)
+
+	//set height and width 250px
+	copySvg.setAttribute('height', '250px')
+	copySvg.setAttribute('width', '250px')
+
 	// Get the SVG data as a string
-	const svgString = new XMLSerializer().serializeToString(svg)
+	const svgString = new XMLSerializer().serializeToString(copySvg)
 
 	// Create a canvas element
 	const canvas = document.createElement('canvas')
@@ -18,7 +27,7 @@ export const downloadQrCode = (title: string, id: string) => {
 	}
 
 	// Set canvas dimensions based on the SVG dimensions
-	const bbox = svg.getBoundingClientRect()
+	const bbox = copySvg.getBoundingClientRect()
 	canvas.width = bbox.width
 	canvas.height = bbox.height
 
@@ -46,4 +55,5 @@ export const downloadQrCode = (title: string, id: string) => {
 
 	// Set the source of the image to the SVG blob URL
 	img.src = url
+	document.body.removeChild(copySvg)
 }

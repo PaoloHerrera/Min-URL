@@ -36,7 +36,8 @@ export interface CreateNewProps {
 	link: string
 	qrCode: string
 }
-export interface DialogNewLinkProps {
+
+export interface BasicUrlFormProps {
 	title: string
 	description: string
 	urlTitle: {
@@ -56,7 +57,14 @@ export interface DialogNewLinkProps {
 			invalid: string
 			generic: string
 		}
+		cannotBeChanged?: {
+			prefix: string
+			suffix: string
+		}
 	}
+}
+
+export interface DialogNewLinkProps extends BasicUrlFormProps {
 	questionSlug: {
 		label: string
 	}
@@ -67,6 +75,7 @@ export interface DialogNewLinkProps {
 			minLength: string
 			maxLength: string
 			invalid: string
+			tooManyRequests: string
 			alreadyInUse: string
 			generic: string
 		}
@@ -124,6 +133,13 @@ export type DialogNewQrProps = {
 	submitError: string
 }
 
+export interface EditDialogProps extends BasicUrlFormProps {
+	cancelLabel: string
+	submitLabel: string
+	loadingSubmit: string
+	submitError: string
+}
+
 export interface Translations {
 	login: LoginProps
 	dashboard: {
@@ -175,10 +191,23 @@ export interface Translations {
 	}
 	link: {
 		linkCard: {
-			details: string
 			copy: string
 			externalLink: string
+			statistics: string
+			edit: string
+			delete: string
+
+			deleteDialog: {
+				title: string
+				description: string
+				cancelLabel: string
+				deleteLabel: string
+				loadingDelete: string
+				success: string
+				errorLabel: string
+			}
 		}
+		editDialog: EditDialogProps
 	}
 
 	qrcode: {
@@ -186,6 +215,16 @@ export interface Translations {
 			details: string
 			download: string
 			externalLink: string
+
+			deleteDialog: {
+				title: string
+				description: string
+				cancelLabel: string
+				deleteLabel: string
+				loadingDelete: string
+				success: string
+				errorLabel: string
+			}
 		}
 	}
 	timeAgo: TimeAgoTextProps
@@ -208,6 +247,7 @@ export type TimeAgoTextProps = {
 }
 
 export type TopLinkProps = {
+	id: string
 	title: string
 	clicks: number
 	shortUrl: string
@@ -217,6 +257,7 @@ export type TopLinkProps = {
 }
 
 export type TopQrCodeProps = {
+	id: string
 	scans: number
 	title: string
 	url: string

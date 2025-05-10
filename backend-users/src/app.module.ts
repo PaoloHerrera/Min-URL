@@ -8,6 +8,7 @@ import { AppService } from './app.service'
 import { AuthModule } from './auth/auth.module'
 import { ProtectedModule } from './protected/protected.module'
 import { HttpExceptionFilter } from './http-exception/http-exception.filter'
+import { ThrottlerModule } from '@nestjs/throttler'
 
 @Module({
 	imports: [
@@ -25,6 +26,14 @@ import { HttpExceptionFilter } from './http-exception/http-exception.filter'
 		}),
 		AuthModule,
 		ProtectedModule,
+		ThrottlerModule.forRoot({
+			throttlers: [
+				{
+					ttl: 60000,
+					limit: 10,
+				},
+			],
+		}),
 	],
 	controllers: [AppController],
 	providers: [AppService, HttpExceptionFilter],

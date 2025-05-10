@@ -83,6 +83,8 @@ export const EN_TRANSLATIONS: Translations = {
 						minLength: 'Minimum length is 6',
 						maxLength: 'Maximum length is 12',
 						invalid: 'Invalid characters. Only letters and numbers are allowed',
+						tooManyRequests:
+							'Too many requests. Please wait a minute and try again',
 						alreadyInUse: 'Short URL is already in use',
 						generic: 'Error checking slug. Please try again',
 					},
@@ -166,9 +168,52 @@ export const EN_TRANSLATIONS: Translations = {
 
 	link: {
 		linkCard: {
-			details: 'View Details',
 			copy: 'Copy Link',
 			externalLink: 'Open original link',
+			statistics: 'View Statistics',
+			edit: 'Edit Link',
+			delete: 'Delete Link',
+
+			deleteDialog: {
+				title: 'Are you sure you want to delete this link?',
+				description:
+					'This action cannot be undone. This will permanently delete your link and all associated statistics.',
+				cancelLabel: 'Cancel',
+				deleteLabel: 'Delete',
+				loadingDelete: 'Deleting...',
+				success: 'Link deleted successfully',
+				errorLabel: 'Error deleting link. Please try again later.',
+			},
+		},
+		editDialog: {
+			title: 'Edit Link',
+			description: 'Update your link settings.',
+			urlTitle: {
+				label: 'Title',
+				placeholder: 'My awesome link',
+				error: {
+					minLength: 'Minimum length is 1',
+					maxLength: 'Maximum length is 100',
+					generic: 'Error checking title. Please try again',
+				},
+			},
+			originalUrl: {
+				label: 'Website URL',
+				placeholder: 'https://example.com/very/long/url/that/needs/shortening',
+				error: {
+					minLength: 'Minimum length is 1',
+					invalid: 'Invalid URL',
+					generic: 'Error checking URL. Please try again',
+				},
+				cannotBeChanged: {
+					prefix: 'This link has been clicked ',
+					suffix: ' times and the Website URL cannot be changed.',
+				},
+			},
+			cancelLabel: 'Cancel',
+			submitLabel: 'Update Link',
+			loadingSubmit: 'Updating...',
+			submitError: 'Error updating link. Please try again later.',
 		},
 	},
 
@@ -177,6 +222,17 @@ export const EN_TRANSLATIONS: Translations = {
 			details: 'View Details',
 			download: 'Download QR Code',
 			externalLink: 'Open original link',
+
+			deleteDialog: {
+				title: 'Are you sure you want to delete this QR code?',
+				description:
+					'This action cannot be undone. This will permanently delete your QR code and all associated statistics.',
+				cancelLabel: 'Cancel',
+				deleteLabel: 'Delete',
+				loadingDelete: 'Deleting...',
+				success: 'QR code deleted successfully',
+				errorLabel: 'Error deleting QR code. Please try again later.',
+			},
 		},
 	},
 
