@@ -1,5 +1,5 @@
-import type { GenericItemProps } from '@/modules/core/utils/types'
 import { useTranslation } from '@/modules/core/hooks/useTranslation.ts'
+import type { GenericItemProps } from '@/modules/core/utils/types'
 
 // Componente de feature reutilizable
 const FeatureItem = ({ icon: Icon, title, description }: GenericItemProps) => (

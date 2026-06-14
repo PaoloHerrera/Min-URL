@@ -1,11 +1,11 @@
-import { useReducer } from 'react'
 import {
+	ActionTypes,
 	appReducer,
 	initialState,
-	ActionTypes,
 } from '@/modules/core/reducers/AppReducer'
-import { useEffect } from 'react'
 import type { Language } from '@/modules/core/utils/types.d.ts'
+import { useReducer } from 'react'
+import { useEffect } from 'react'
 
 export const useAppReducer = () => {
 	const [state, dispatch] = useReducer(appReducer, initialState)

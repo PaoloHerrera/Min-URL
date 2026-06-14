@@ -1,18 +1,22 @@
-import { useForm } from 'react-hook-form'
-import { InputForm } from '@/modules/createNew/components/InputForm'
 import { useTranslations } from '@/modules/core/hooks/useTranslations'
-import { MessageCircleWarningIcon, XCircleIcon } from 'lucide-react'
+import { CustomSlugInput } from '@/modules/createNew/components/CustomSlugInput'
+import { InputForm } from '@/modules/createNew/components/InputForm'
 import { useUpdateUrl } from '@/modules/link/hooks/useUpdateUrl'
+import { MessageCircleWarningIcon, XCircleIcon } from 'lucide-react'
+import { useForm } from 'react-hook-form'
 
 const urlRegex = /^https?:\/\/.+/
+const SLUG_REGEX = /^[a-zA-Z0-9-_]+$/
 
 interface FormData {
 	title: string
 	url: string
+	slug?: string
 }
 
 interface EditLinkFormProps extends FormData {
 	id: string
+	originalSlug: string
 	clicks: number
 	onClose: () => void
 }
@@ -21,17 +25,20 @@ export const EditLinkForm = ({
 	id,
 	title,
 	url,
+	originalSlug,
 	clicks,
 	onClose,
 }: EditLinkFormProps) => {
 	const {
 		handleSubmit,
+		watch,
 		register,
 		formState: { errors, isSubmitting },
 	} = useForm<FormData>({
 		defaultValues: {
 			title,
 			url,
+			slug: originalSlug,
 		},
 		mode: 'onChange',
 	})
@@ -40,13 +47,22 @@ export const EditLinkForm = ({
 
 	const { updateUrlState, updateUrlMutation } = useUpdateUrl()
 
+	const slug = watch('slug')
+
 	const onSubmit = async (data: FormData) => {
-		await updateUrlMutation({ id, title: data.title, url: data.url })
+		const response = await updateUrlMutation({
+			id,
+			title: data.title,
+			url: data.url,
+			slug: data.slug,
+		})
+
+		console.log('Response from updateUrlMutation:', response.message)
 	}
 
 	return (
 		<form onSubmit={handleSubmit(onSubmit)}>
-			<div className="grid gap-5">
+			<div className="grid gap-8 py-4">
 				<InputForm
 					inputText={editDialog.urlTitle}
 					error={errors.title?.message}
@@ -76,17 +92,38 @@ export const EditLinkForm = ({
 							},
 						})}
 					/>
-					{clicks > 0 && (
-						<div className="bg-amber-100 p-2 rounded-md flex gap-2 border border-amber-400 shadow-sm">
-							<MessageCircleWarningIcon className="text-amber-400" size={20} />
-							<p className="text-mariner-950 text-xs font-medium">
-								{editDialog.originalUrl.cannotBeChanged?.prefix}
-								{clicks}
-								{editDialog.originalUrl.cannotBeChanged?.suffix}
-							</p>
-						</div>
-					)}
 				</div>
+				<div className="flex flex-col gap-2">
+					<CustomSlugInput
+						disabled={clicks > 0 || isSubmitting}
+						{...register('slug', {
+							pattern: {
+								value: SLUG_REGEX,
+								message: editDialog.customSlug.error.invalid,
+							},
+							required: editDialog.customSlug.error.minLength,
+							minLength: {
+								value: 6,
+								message: editDialog.customSlug.error.minLength,
+							},
+							maxLength: {
+								value: 12,
+								message: editDialog.customSlug.error.maxLength,
+							},
+						})}
+						error={errors.slug?.message}
+						value={slug || ''}
+						originalSlug={originalSlug}
+					/>
+				</div>
+				{clicks > 0 && (
+					<div className="bg-amber-100 p-2 rounded-md flex gap-2 border border-amber-400 shadow-sm">
+						<MessageCircleWarningIcon className="text-amber-400" size={20} />
+						<p className="text-mariner-950 text-xs font-medium">
+							{editDialog.cannotBeChanged}
+						</p>
+					</div>
+				)}
 			</div>
 			{updateUrlState.error && (
 				<div className="flex items-center gap-2 mb-5 rounded-md p-4 shadow-sm mt-5">

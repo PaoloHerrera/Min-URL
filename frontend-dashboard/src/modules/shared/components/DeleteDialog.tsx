@@ -1,15 +1,15 @@
+import { Spinner } from '@/modules/core/design-system/Spinner'
+import { useTranslations } from '@/modules/core/hooks/useTranslations'
 import {
 	AlertDialog,
-	AlertDialogHeader,
-	AlertDialogTitle,
+	AlertDialogAction,
+	AlertDialogCancel,
 	AlertDialogContent,
 	AlertDialogDescription,
 	AlertDialogFooter,
-	AlertDialogCancel,
-	AlertDialogAction,
+	AlertDialogHeader,
+	AlertDialogTitle,
 } from '@/modules/core/ui/alert-dialog'
-import { Spinner } from '@/modules/core/design-system/Spinner'
-import { useTranslations } from '@/modules/core/hooks/useTranslations'
 
 type EntityType = 'link' | 'qrcode'
 

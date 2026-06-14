@@ -1,8 +1,8 @@
-import { Strategy } from 'passport-google-oauth20'
-import { PassportStrategy } from '@nestjs/passport'
 import { Injectable } from '@nestjs/common'
-import type { AuthService } from '../auth.service'
+import { PassportStrategy } from '@nestjs/passport'
+import { Strategy } from 'passport-google-oauth20'
 import type { User } from '../../user/model/user.model'
+import type { AuthService } from '../auth.service'
 
 interface OauthProfile {
 	id: string

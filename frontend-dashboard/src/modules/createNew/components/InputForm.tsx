@@ -33,18 +33,18 @@ export const InputForm = ({
 			>
 				{inputText.label}
 			</label>
-			<div className="flex items-center gap-2">
-				<div className="flex items-center gap-2 w-full">
-					<Input
-						id={inputText.label}
-						type="text"
-						placeholder={inputText.placeholder}
-						error={!!error}
-						disabled={disabled}
-						{...registerProps}
-					/>
-				</div>
+
+			<div className="flex items-center gap-2 w-full">
+				<Input
+					id={inputText.label}
+					type="text"
+					placeholder={inputText.placeholder}
+					error={!!error}
+					disabled={disabled}
+					{...registerProps}
+				/>
 			</div>
+
 			<span className="text-xs text-error font-semibold text-center">
 				{error}
 			</span>

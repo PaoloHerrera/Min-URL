@@ -42,3 +42,10 @@ export const createShortUrl = async (data) => {
 	const shortUrl = await ShortUrlModel.create(data)
 	return shortUrl
 }
+
+export const updateShortUrl = async (data) => {
+	const shortUrl = await ShortUrlModel.update(data, {
+		where: { url_id: data.url_id },
+	})
+	return shortUrl
+}

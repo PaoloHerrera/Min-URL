@@ -1,5 +1,5 @@
-import { SidebarTitle } from './components/SidebarTitle.tsx'
 import { SidebarContent } from './components/SidebarContent.tsx'
+import { SidebarTitle } from './components/SidebarTitle.tsx'
 
 export const Sidebar = () => {
 	return (

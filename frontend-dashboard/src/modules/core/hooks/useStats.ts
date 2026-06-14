@@ -1,15 +1,13 @@
-import { useEffect } from 'react'
-import { useStatsStore } from '@/stores/statsStore.ts'
-import { axiosInstance } from '../lib/axios.ts'
 import { useAuthStore } from '@/stores/authStore.ts'
+import { useStatsStore } from '@/stores/statsStore.ts'
+import { useEffect } from 'react'
 import { useState } from 'react'
-import type { Socket } from 'socket.io-client'
+import { axiosInstance } from '../lib/axios.ts'
 
 export const useStats = () => {
 	const { basicStats, setStats } = useStatsStore()
 	const { isAuthenticated, setAuthenticated } = useAuthStore()
 	const [isLoading, setIsLoading] = useState(true)
-	const [socket, setSocket] = useState<Socket>()
 
 	useEffect(() => {
 		let mounted = true
@@ -34,7 +32,6 @@ export const useStats = () => {
 						false,
 					)
 					//Conectamos al socket con el token que nos devuelve el servidor
-					const token = response.data.user.accessToken
 
 					setAuthenticated(true, response.data.user)
 					setIsLoading(false)

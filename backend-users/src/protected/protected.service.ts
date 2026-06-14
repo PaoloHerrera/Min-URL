@@ -1,8 +1,8 @@
-import { Injectable, HttpException } from '@nestjs/common'
+import { HttpException, Injectable } from '@nestjs/common'
 import { InjectModel } from '@nestjs/sequelize'
-import { User } from '../user/model/user.model'
 import axios from 'axios'
 import { QueryTypes } from 'sequelize'
+import { User } from '../user/model/user.model'
 
 @Injectable()
 export class ProtectedService {
@@ -339,6 +339,42 @@ export class ProtectedService {
 			}
 			//Error de conexión
 			throw new HttpException('Error al eliminar link', 500)
+		}
+	}
+
+	async updateUrl(
+		userId: string,
+		id: string,
+		data: {
+			title: string
+			originalUrl: string
+			slug?: string
+		},
+	) {
+		try {
+			const response = await axios.patch(
+				`${process.env.API_URL}/protected/update-url/${id}`,
+				{
+					userId,
+					title: data.title,
+					originalUrl: data.originalUrl,
+					slug: data.slug,
+				},
+				{
+					headers: {
+						'Content-Type': 'application/json',
+						'X-API-Key': `${process.env.API_KEY}`,
+					},
+				},
+			)
+			return response.data
+		} catch (err) {
+			if (err.response) {
+				//Error HTTP desde el backend de servicios
+				throw new HttpException(err.response.data.message, err.response.status)
+			}
+			//Error de conexión
+			throw new HttpException('Error al actualizar link', 500)
 		}
 	}
 }

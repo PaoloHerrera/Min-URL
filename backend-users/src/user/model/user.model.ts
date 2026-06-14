@@ -1,9 +1,9 @@
 import {
-	Table,
 	Column,
-	Model,
 	DataType,
+	Model,
 	PrimaryKey,
+	Table,
 } from 'sequelize-typescript'
 
 @Table({ tableName: 'users', schema: 'Min-URL', underscored: true })

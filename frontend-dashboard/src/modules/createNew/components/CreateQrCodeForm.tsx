@@ -1,10 +1,10 @@
-import { InputForm } from './InputForm.tsx'
-import { useTranslations } from '@/modules/core/hooks/useTranslations.ts'
-import { useForm } from 'react-hook-form'
-import { QrPreview } from './QrPreview.tsx'
 import { Spinner } from '@/modules/core/design-system/Spinner.tsx'
+import { useTranslations } from '@/modules/core/hooks/useTranslations.ts'
 import { useCreateQrCode } from '@/modules/createNew/hooks/useCreateQrCode'
 import { XCircleIcon } from 'lucide-react'
+import { useForm } from 'react-hook-form'
+import { InputForm } from './InputForm.tsx'
+import { QrPreview } from './QrPreview.tsx'
 
 const URL_REGEX = /^https?:\/\/.+/
 const COLOR_REGEX = /^#([A-Fa-f0-9]{6})$/

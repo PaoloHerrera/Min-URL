@@ -1,10 +1,10 @@
-import { Card, CardHeader, CardBody } from '@/modules/core/design-system/Card'
-import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from 'recharts'
-import { NoData } from './NoData.tsx'
+import { Card, CardBody, CardHeader } from '@/modules/core/design-system/Card'
 import { useTranslations } from '@/modules/core/hooks/useTranslations.ts'
 import { useStatsStore } from '@/stores/statsStore.ts'
 import type { PieChartProps } from '@/types.d'
+import { Cell, Pie, PieChart, ResponsiveContainer, Tooltip } from 'recharts'
 import type { TooltipProps } from 'recharts/types/component/Tooltip'
+import { NoData } from './NoData.tsx'
 
 const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042']
 

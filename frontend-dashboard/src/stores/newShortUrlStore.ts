@@ -1,5 +1,5 @@
-import { create } from 'zustand'
 import type { ShortUrlType } from '@/types'
+import { create } from 'zustand'
 
 interface NewShortUrlStore {
 	newShortUrl: ShortUrlType | null

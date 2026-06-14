@@ -1,9 +1,9 @@
+import geoipCountry from 'geoip-country'
+import geoip from 'geoip-lite'
 import {
 	createGeolocation,
 	getGeolocationByIp,
 } from '../models/GeolocationModel.js'
-import geoip from 'geoip-lite'
-import geoipCountry from 'geoip-country'
 
 const createGeolocationService = async (ipAddress) => {
 	// Se busca la geolocalización del IP

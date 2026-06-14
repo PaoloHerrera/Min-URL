@@ -1,5 +1,5 @@
-import type React from 'react'
 import type { LucideProps } from 'lucide-react'
+import type React from 'react'
 
 export type Language = 'en' | 'es'
 
@@ -57,11 +57,15 @@ export interface BasicUrlFormProps {
 			invalid: string
 			generic: string
 		}
-		cannotBeChanged?: {
-			prefix: string
-			suffix: string
+	}
+	customSlug: {
+		error: {
+			minLength: string
+			maxLength: string
+			invalid: string
 		}
 	}
+	cannotBeChanged?: string
 }
 
 export interface DialogNewLinkProps extends BasicUrlFormProps {

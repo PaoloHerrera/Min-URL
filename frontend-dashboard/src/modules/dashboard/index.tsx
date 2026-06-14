@@ -4,14 +4,14 @@ import {
 	MousePointerIcon,
 	PercentSquare,
 } from 'lucide-react'
-import { ClicksActivity } from './components/ClicksActivity.tsx'
-import { GeographicDistribution } from './components/GeographicDistribution.tsx'
-import { KpiCard } from './components/KpiCard.tsx'
-import { DeviceBreakdown } from './components/DeviceBreakdown.tsx'
+import { DashboardLayout } from '../layouts/DashboardLayout.tsx'
 import { LinkCard } from '../link/components/LinkCard.tsx'
 import { QrCodeCard } from '../qrcodes/components/QrCodeCard.tsx'
+import { ClicksActivity } from './components/ClicksActivity.tsx'
+import { DeviceBreakdown } from './components/DeviceBreakdown.tsx'
+import { GeographicDistribution } from './components/GeographicDistribution.tsx'
+import { KpiCard } from './components/KpiCard.tsx'
 import { useDashboardData } from './hooks/useDashboardData.ts'
-import { DashboardLayout } from '../layouts/DashboardLayout.tsx'
 
 import clsx from 'clsx'
 

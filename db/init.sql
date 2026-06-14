@@ -203,6 +203,20 @@ LEFT JOIN "Min-URL".clicks_details cd ON c.id_clicks = cd.click_id
 WHERE u.deleted = false
 GROUP BY u.user_id;
 
+-- Vista para mostrar los clicks de los últimos 7 días
+CREATE VIEW "Min-URL".dashboard_last_7_days_clicks_view AS
+SELECT
+  u.user_id,
+	COUNT(DISTINCT c.id_clicks) AS total_clicks,
+  TO_CHAR(DATE_TRUNC('day', c.created_at AT TIME ZONE 'UTC'), 'YYYY-MM-DD') AS click_day
+FROM "Min-URL".urls u
+LEFT JOIN "Min-URL".clicks c ON u.id_urls = c.url_id
+WHERE u.deleted = false 
+	AND c.created_at >= DATE_TRUNC('day', NOW() AT TIME ZONE 'UTC') - INTERVAL '7 days'
+  AND c.created_at < DATE_TRUNC('day', NOW() AT TIME ZONE 'UTC') + INTERVAL '1 day'
+GROUP BY u.user_id, click_day
+ORDER BY total_clicks DESC;
+
 -- Vista para mostrar los países de uso
 CREATE VIEW "Min-URL".dashboard_countries_view AS
 SELECT
@@ -234,6 +248,7 @@ SELECT
 CREATE VIEW "Min-URL".dashboard_top_links_view AS
 SELECT
   u.user_id,
+	u.id_urls,
 	COUNT(DISTINCT c.id_clicks) AS total_clicks,
   u.title,
   u.long_url,
@@ -243,13 +258,14 @@ FROM "Min-URL".urls u
 LEFT JOIN "Min-URL".clicks c ON u.id_urls = c.url_id
 LEFT JOIN "Min-URL".short_urls s ON u.id_urls = s.url_id
 WHERE u.deleted = false AND u.purpose = 'direct'
-GROUP BY u.user_id, u.title, u.long_url, s.slug, u.created_at
+GROUP BY u.user_id, u.id_urls, u.title, u.long_url, s.slug, u.created_at
 ORDER BY total_clicks DESC;
 
 -- Vista para mostrar los QR Codes más se han escaneado
 CREATE VIEW "Min-URL".dashboard_top_qr_codes_view AS
 SELECT
   u.user_id,
+	u.id_urls,
 	COUNT(DISTINCT c.id_clicks) AS total_scans,
   u.title,
   u.long_url,
@@ -262,5 +278,5 @@ LEFT JOIN "Min-URL".clicks c ON u.id_urls = c.url_id
 LEFT JOIN "Min-URL".short_urls s ON u.id_urls = s.url_id
 LEFT JOIN "Min-URL".qr_codes q ON u.id_urls = q.url_id
 WHERE u.deleted = false AND u.purpose = 'qr'
-GROUP BY u.user_id, u.title, u.long_url, s.slug, q.foreground_color, q.background_color, u.created_at
+GROUP BY u.user_id, u.id_urls, u.title, u.long_url, s.slug, q.foreground_color, q.background_color, u.created_at
 ORDER BY total_scans DESC;

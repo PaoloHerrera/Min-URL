@@ -1,5 +1,5 @@
-import { FeatureCard } from '@/modules/home/components/SmartSolutions/FeatureCard.tsx'
 import { useTranslation } from '@/modules/core/hooks/useTranslation.ts'
+import { FeatureCard } from '@/modules/home/components/SmartSolutions/FeatureCard.tsx'
 
 const FreeSectionHeader = ({
 	header,

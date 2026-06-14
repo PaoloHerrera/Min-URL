@@ -1,8 +1,8 @@
-import { useState, useEffect } from 'react'
-import { axiosInstance } from '../../core/lib/axios.ts'
-import { translations } from '../../core/i18n/index.ts'
 import { useLanguageStore } from '@/stores/languageStore.ts'
 import { AxiosError } from 'axios'
+import { useEffect, useState } from 'react'
+import { translations } from '../../core/i18n/index.ts'
+import { axiosInstance } from '../../core/lib/axios.ts'
 
 const ERRORS = {
 	429: 'tooManyRequests',
@@ -15,7 +15,10 @@ interface CheckSlugResponse {
 	error: string | null
 }
 
-export const useCheckSlug = ({ slug }: { slug: string }) => {
+export const useCheckSlug = ({
+	slug,
+	originalSlug,
+}: { slug: string; originalSlug?: string }) => {
 	const [checkSlugStatus, setCheckSlugStatus] = useState<CheckSlugResponse>({
 		isAvailable: false,
 		error: null,
@@ -28,6 +31,14 @@ export const useCheckSlug = ({ slug }: { slug: string }) => {
 	useEffect(() => {
 		const fetchSlugAvailability = async (slug: string) => {
 			try {
+				if (slug === originalSlug) {
+					setCheckSlugStatus({
+						isAvailable: false,
+						error: null,
+					})
+					return
+				}
+
 				setLoading(true)
 				const result = await axiosInstance.post('/protected/check-slug', {
 					slug,
@@ -60,7 +71,7 @@ export const useCheckSlug = ({ slug }: { slug: string }) => {
 		if (slug && slug.length >= 6 && slug.length <= 12) {
 			fetchSlugAvailability(slug)
 		}
-	}, [slug, error])
+	}, [slug, originalSlug, error])
 
 	return {
 		checkSlugStatus,

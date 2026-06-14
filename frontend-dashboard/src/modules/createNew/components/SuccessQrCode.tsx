@@ -1,3 +1,4 @@
+import { downloadQrCode } from '@/lib/downloadQrCode.ts'
 import {
 	AlertDialog,
 	AlertDialogAction,
@@ -7,10 +8,9 @@ import {
 	AlertDialogHeader,
 	AlertDialogTitle,
 } from '@/modules/core/ui/alert-dialog.tsx'
-import { QrPreview } from './QrPreview.tsx'
 import { useNewQrCodeStore } from '@/stores/newQrCodeStore.ts'
 import { DownloadIcon } from 'lucide-react'
-import { downloadQrCode } from '@/lib/downloadQrCode.ts'
+import { QrPreview } from './QrPreview.tsx'
 
 export const SuccessQrCode = () => {
 	const { newQrCode, setNewQrCode } = useNewQrCodeStore()

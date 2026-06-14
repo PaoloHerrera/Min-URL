@@ -1,7 +1,7 @@
-import { useState } from 'react'
-import { toast } from 'sonner'
 import { useTranslations } from '@/modules/core/hooks/useTranslations.ts'
 import { deleteUrl } from '@/modules/core/services/api'
+import { useState } from 'react'
+import { toast } from 'sonner'
 
 type EntityType = 'link' | 'qrcode'
 

@@ -1,8 +1,8 @@
-import { Card, CardHeader, CardBody } from '@/modules/core/design-system/Card'
-import { MinusIcon, ArrowUpIcon, ArrowDownIcon } from 'lucide-react'
+import { Card, CardBody, CardHeader } from '@/modules/core/design-system/Card'
+import { Chip } from '@/modules/core/design-system/Chip'
+import { ArrowDownIcon, ArrowUpIcon, MinusIcon } from 'lucide-react'
 import type { LucideProps } from 'lucide-react'
 import type React from 'react'
-import { Chip } from '@/modules/core/design-system/Chip'
 import type { JSX } from 'react'
 
 interface KpiProps {

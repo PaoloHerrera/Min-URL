@@ -1,14 +1,14 @@
 import {
 	Sheet,
-	SheetTrigger,
 	SheetContent,
-	SheetTitle,
 	SheetDescription,
 	SheetHeader,
+	SheetTitle,
+	SheetTrigger,
 } from '@/modules/core/ui/sheet.tsx'
-import { MenuIcon } from 'lucide-react'
-import { SidebarTitle } from '@/modules/sidebar/components/SidebarTitle.tsx'
 import { SidebarContent } from '@/modules/sidebar/components/SidebarContent'
+import { SidebarTitle } from '@/modules/sidebar/components/SidebarTitle.tsx'
+import { MenuIcon } from 'lucide-react'
 
 export const MobileSidebar = () => {
 	return (

@@ -1,6 +1,6 @@
 import { updateUrl } from '@/modules/core/services/api.ts'
-import { useState } from 'react'
 import { AxiosError } from 'axios'
+import { useState } from 'react'
 
 interface UpdateUrlState {
 	isLoading: boolean
@@ -11,6 +11,7 @@ interface UpdateUrlMutationData {
 	id: string
 	title: string
 	url?: string
+	slug?: string
 }
 
 export const useUpdateUrl = () => {
@@ -23,13 +24,14 @@ export const useUpdateUrl = () => {
 		id,
 		title,
 		url,
+		slug,
 	}: UpdateUrlMutationData) => {
 		try {
 			setUpdateUrlState({
 				isLoading: true,
 				error: null,
 			})
-			const response = await updateUrl(id, { title, url })
+			const response = await updateUrl(id, { title, url, slug })
 			setUpdateUrlState({
 				isLoading: false,
 				error: null,

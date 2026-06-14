@@ -112,3 +112,12 @@ export const deleteUserUrl = async (userId, id) => {
 	}
 	await url.update({ deleted: true, deleted_at: new Date() })
 }
+
+export const updateUrl = async (id, data) => {
+	const url = await UrlModel.findByPk(id)
+	if (!url) {
+		throw new Error('Url no encontrada')
+	}
+	await url.update(data)
+	return url
+}

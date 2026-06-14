@@ -1,11 +1,11 @@
+import { useTranslations } from '@/modules/core/hooks/useTranslations.ts'
 import {
 	DropdownMenu,
-	DropdownMenuTrigger,
 	DropdownMenuContent,
 	DropdownMenuItem,
+	DropdownMenuTrigger,
 } from '@/modules/core/ui/dropdown-menu.tsx'
-import { PlusIcon, LinkIcon, QrCodeIcon } from 'lucide-react'
-import { useTranslations } from '@/modules/core/hooks/useTranslations.ts'
+import { LinkIcon, PlusIcon, QrCodeIcon } from 'lucide-react'
 
 export const CreateNewDropdown = ({
 	onLinkClick,

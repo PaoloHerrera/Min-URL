@@ -1,12 +1,12 @@
-import { useState } from 'react'
-import { Copy, ExternalLink, CheckCheck } from 'lucide-react'
+import { ActionTooltip } from '@/modules/core/design-system/ActionTooltip.tsx'
 import {
 	Card,
-	CardHeader,
 	CardFooter,
+	CardHeader,
 } from '@/modules/core/design-system/Card.tsx'
 import { useTranslation } from '@/modules/core/hooks/useTranslation'
-import { ActionTooltip } from '@/modules/core/design-system/ActionTooltip.tsx'
+import { CheckCheck, Copy, ExternalLink } from 'lucide-react'
+import { useState } from 'react'
 
 const SuccessCopyIcon = ({ isSuccess }: { isSuccess: boolean }) => {
 	return isSuccess ? (

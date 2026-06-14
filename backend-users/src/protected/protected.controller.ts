@@ -1,22 +1,22 @@
+import { ACCESS_TOKEN_COOKIE_NAME } from '@/constants'
 import {
 	Controller,
+	Delete,
 	Get,
+	Inject,
+	Patch,
 	Post,
 	Request,
 	Response,
-	Inject,
 	UseGuards,
-	Delete,
-	Patch,
 } from '@nestjs/common'
-import type {
-	Response as ExpressResponse,
-	Request as ExpressRequest,
-} from 'express'
-import { Throttle } from '@nestjs/throttler'
 import { AuthGuard } from '@nestjs/passport'
+import { Throttle } from '@nestjs/throttler'
+import type {
+	Request as ExpressRequest,
+	Response as ExpressResponse,
+} from 'express'
 import { ProtectedService } from './protected.service'
-import { ACCESS_TOKEN_COOKIE_NAME } from '@/constants'
 
 interface AuthenticatedUser {
 	userId: string
@@ -147,7 +147,10 @@ export class ProtectedController {
 
 	@Patch('update-url/:id')
 	@UseGuards(AuthGuard('jwt'))
-	updateUrl(@Request() req: ExpressRequest, @Response() res: ExpressResponse) {
+	async updateUrl(
+		@Request() req: ExpressRequest,
+		@Response() res: ExpressResponse,
+	) {
 		const user = req.user as AuthenticatedUser
 
 		if (!user) {
@@ -157,17 +160,14 @@ export class ProtectedController {
 		const id = req.params.id as string
 		const title = req.body.title as string
 		const url = req.body.url as string
+		const slug = req.body.slug as string
 
-		return res
-			.status(409)
-			.json({ message: 'Error updating link. Please try again later.' })
-		// return res.status(200).json({ id, title, url })
+		await this.protectedService.updateUrl(user.userId, id, {
+			title,
+			originalUrl: url,
+			slug,
+		})
 
-		// const { originalUrl, shortUrl, createdAt } =
-		// 	await this.protectedService.updateUrl(user.userId, id, {
-		// 		title,
-		// 		originalUrl: url,
-		// 		clicks,
-		// 	})
+		return res.status(200).json({ message: 'Link actualizado' })
 	}
 }

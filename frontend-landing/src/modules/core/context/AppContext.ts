@@ -1,5 +1,5 @@
-import { createContext } from 'react'
 import type { State } from '@/modules/core/reducers/AppReducer.ts'
+import { createContext } from 'react'
 
 type AppContextType = {
 	lang: State['lang']

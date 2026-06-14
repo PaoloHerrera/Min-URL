@@ -1,10 +1,10 @@
-import { Route, Routes, BrowserRouter as Router, Navigate } from 'react-router'
-import { Dashboard } from './modules/dashboard/index.tsx'
-import { Login } from './modules/login/Login.tsx'
-import { Link } from './modules/link/index.tsx'
-import { QrCodes } from './modules/qrcodes/index.tsx'
-import { useStats } from './modules/core/hooks/useStats.ts'
 import type { JSX } from 'react'
+import { Navigate, Route, BrowserRouter as Router, Routes } from 'react-router'
+import { useStats } from './modules/core/hooks/useStats.ts'
+import { Dashboard } from './modules/dashboard/index.tsx'
+import { Link } from './modules/link/index.tsx'
+import { Login } from './modules/login/Login.tsx'
+import { QrCodes } from './modules/qrcodes/index.tsx'
 
 const AuthRoute = ({ children }: { children: JSX.Element }) => {
 	const { isAuthenticated, isLoading } = useStats()

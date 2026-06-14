@@ -1,5 +1,5 @@
 import Redis from 'ioredis'
-import { VITE_REDIS_URL, VITE_REDIS_PORT } from '~/constants'
+import { VITE_REDIS_PORT, VITE_REDIS_URL } from '~/constants'
 
 interface ClickData {
 	idUrl: string

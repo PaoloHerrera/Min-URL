@@ -1,5 +1,5 @@
-import { create } from 'zustand'
 import type { Language } from '@/types'
+import { create } from 'zustand'
 
 type LanguageStore = {
 	language: Language

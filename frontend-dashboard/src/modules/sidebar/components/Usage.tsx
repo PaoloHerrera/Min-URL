@@ -1,7 +1,7 @@
-import type React from 'react'
-import type { LucideProps } from 'lucide-react'
-import { Progress } from '@/modules/core/ui/progress'
 import { useTranslations } from '@/modules/core/hooks/useTranslations'
+import { Progress } from '@/modules/core/ui/progress'
+import type { LucideProps } from 'lucide-react'
+import type React from 'react'
 
 interface UsageProps {
 	title: string

@@ -1,5 +1,5 @@
-import { createQrCode } from '@/modules/core/services/api'
 import { useTranslations } from '@/modules/core/hooks/useTranslations.ts'
+import { createQrCode } from '@/modules/core/services/api'
 import { useNewQrCodeStore } from '@/stores/newQrCodeStore'
 
 export const useCreateQrCode = () => {

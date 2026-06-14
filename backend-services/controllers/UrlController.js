@@ -1,6 +1,6 @@
-import { UrlModel } from '../models/UrlModel.js'
-import { ShortUrlModel } from '../models/ShortUrlModel.js'
 import { SHORTURL_VALUES } from '../constants.js'
+import { ShortUrlModel } from '../models/ShortUrlModel.js'
+import { UrlModel } from '../models/UrlModel.js'
 
 const SLUG_REGEX = /^[a-zA-Z0-9]+$/
 
@@ -17,7 +17,7 @@ export const getShortUrl = async (req, res) => {
 	res.redirect(url.long_url)
 }
 
-export const checkSlug = async (req, res, next) => {
+export const checkSlug = (req, res, next) => {
 	const { slug } = req.body
 
 	// Check if slug is not empty
@@ -36,15 +36,26 @@ export const checkSlug = async (req, res, next) => {
 	if (!SLUG_REGEX.test(slug)) {
 		return res.status(403).json({ message: 'invalid', isAvailable: false })
 	}
+	next()
+}
 
-	// Check if slug is already in use
-	const shorturl = await ShortUrlModel.findOne({ where: { slug } })
+export const checkSlugAvailability = async (req, res) => {
+	const { slug } = req.body
 
-	if (shorturl) {
-		return res.status(409).json({ message: 'alreadyInUse', isAvailable: false })
+	// Check if slug is not empty
+	if (!slug) {
+		return res.status(404).json({ message: 'generic', isAvailable: false })
 	}
 
-	next()
+	const shortUrl = await ShortUrlModel.findOne({
+		where: { slug },
+	})
+
+	if (shortUrl) {
+		return res.status(403).json({ message: 'notAvailable', isAvailable: false })
+	}
+
+	return res.status(200).json({ isAvailable: true })
 }
 
 export const returnSlugAvailability = (_req, res) => {

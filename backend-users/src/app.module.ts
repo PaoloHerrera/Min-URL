@@ -1,14 +1,14 @@
 import { Module } from '@nestjs/common'
-import { SequelizeModule } from '@nestjs/sequelize'
-import { User } from './user/model/user.model'
-import { RefreshToken } from './refreshToken/model/refreshToken.model'
 import { ConfigModule } from '@nestjs/config'
+import { SequelizeModule } from '@nestjs/sequelize'
+import { ThrottlerModule } from '@nestjs/throttler'
 import { AppController } from './app.controller'
 import { AppService } from './app.service'
 import { AuthModule } from './auth/auth.module'
-import { ProtectedModule } from './protected/protected.module'
 import { HttpExceptionFilter } from './http-exception/http-exception.filter'
-import { ThrottlerModule } from '@nestjs/throttler'
+import { ProtectedModule } from './protected/protected.module'
+import { RefreshToken } from './refreshToken/model/refreshToken.model'
+import { User } from './user/model/user.model'
 
 @Module({
 	imports: [

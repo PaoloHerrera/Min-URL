@@ -1,4 +1,4 @@
-import { createUrl, deleteUserUrl } from '../models/UrlModel.js'
+import { createUrl, deleteUserUrl, updateUrl } from '../models/UrlModel.js'
 import { validateUrl } from '../schema/url.js'
 
 export const createValidatedUrl = async (data) => {
@@ -14,4 +14,8 @@ export const createValidatedUrl = async (data) => {
 
 export const deleteUrlbyUserId = async (userId, urlId) => {
 	return await deleteUserUrl(userId, urlId)
+}
+
+export const updateUrlById = async (id, data) => {
+	return await updateUrl(id, data)
 }
