@@ -1,12 +1,12 @@
+import { Chip } from '@/modules/core/design-system/Chip.tsx'
+import { CodeCard } from '@/modules/core/design-system/CodeCard.tsx'
+import { useTranslation } from '@/modules/core/hooks/useTranslation.ts'
+import { useShortUrl } from '@/modules/home/hooks/useShortUrl.ts'
 import type React from 'react'
+import { ButtonContent } from './ButtonContent.tsx'
 import { FormComponent } from './FormComponent.tsx'
 import { HeroHeader } from './HeroHeader.tsx'
-import { useTranslation } from '@/modules/core/hooks/useTranslation.ts'
-import { CodeCard } from '@/modules/core/design-system/CodeCard.tsx'
-import { Chip } from '@/modules/core/design-system/Chip.tsx'
-import { useShortUrl } from '@/modules/home/hooks/useShortUrl.ts'
 import { ShortUrlCard } from './ShortUrlCard.tsx'
-import { ButtonContent } from './ButtonContent.tsx'
 
 export const Hero = () => {
 	const { t } = useTranslation()

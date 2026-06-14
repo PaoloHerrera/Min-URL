@@ -1,6 +1,6 @@
-import { SlugGenerator } from '../services/SlugGenerator.js'
 import { SHORTURL_VALUES } from '../constants.js'
-import { createShortUrl } from '../models/ShortUrlModel.js'
+import { createShortUrl, updateShortUrl } from '../models/ShortUrlModel.js'
+import { SlugGenerator } from '../services/SlugGenerator.js'
 
 export const createShortUrlForUrl = async ({ url, urlId }) => {
 	// Se crea un slug aleatorio
@@ -22,6 +22,14 @@ export const createShortUrlForUrl = async ({ url, urlId }) => {
 export const createShortUrlForUrlWithSlug = async ({ urlId, slug }) => {
 	// Se crea la ShortUrl
 	return await createShortUrl({
+		url_id: urlId,
+		slug,
+	})
+}
+
+export const updateSlugForUrl = async ({ urlId, slug }) => {
+	// Se actualiza el slug
+	return await updateShortUrl({
 		url_id: urlId,
 		slug,
 	})

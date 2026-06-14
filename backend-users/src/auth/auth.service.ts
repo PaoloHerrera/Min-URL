@@ -1,8 +1,8 @@
-import { Injectable, Inject } from '@nestjs/common'
-import { InjectModel } from '@nestjs/sequelize'
+import { Inject, Injectable } from '@nestjs/common'
 import { JwtService } from '@nestjs/jwt'
-import { User } from '../user/model/user.model'
+import { InjectModel } from '@nestjs/sequelize'
 import { RefreshToken } from '../refreshToken/model/refreshToken.model'
+import { User } from '../user/model/user.model'
 
 interface OauthProfile {
 	id: string

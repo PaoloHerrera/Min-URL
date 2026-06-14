@@ -1,16 +1,16 @@
-import {
-	LineChart,
-	Line,
-	XAxis,
-	YAxis,
-	Tooltip,
-	ResponsiveContainer,
-} from 'recharts'
-import { Card, CardHeader, CardBody } from '@/modules/core/design-system/Card'
-import type { Last7DaysClicksProps } from '@/types.d'
-import { NoData } from './NoData.tsx'
+import { Card, CardBody, CardHeader } from '@/modules/core/design-system/Card'
 import { useTranslations } from '@/modules/core/hooks/useTranslations.ts'
 import { useStatsStore } from '@/stores/statsStore.ts'
+import type { Last7DaysClicksProps } from '@/types.d'
+import {
+	Line,
+	LineChart,
+	ResponsiveContainer,
+	Tooltip,
+	XAxis,
+	YAxis,
+} from 'recharts'
+import { NoData } from './NoData.tsx'
 
 const data: Last7DaysClicksProps[] = []
 const FILL_COLOR = '#1971ce'

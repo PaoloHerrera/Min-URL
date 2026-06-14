@@ -1,8 +1,8 @@
-import { useLocation } from 'react-router'
-import { HomeIcon, LinkIcon, QrCodeIcon, HelpCircleIcon } from 'lucide-react'
-import { useAuthStore } from '@/stores/authStore.ts'
-import { Usage } from './Usage.tsx'
 import { useTranslations } from '@/modules/core/hooks/useTranslations.ts'
+import { useAuthStore } from '@/stores/authStore.ts'
+import { HelpCircleIcon, HomeIcon, LinkIcon, QrCodeIcon } from 'lucide-react'
+import { useLocation } from 'react-router'
+import { Usage } from './Usage.tsx'
 
 export const SidebarContent = () => {
 	// Get params from URL

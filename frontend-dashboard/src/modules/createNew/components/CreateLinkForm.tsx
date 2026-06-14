@@ -1,11 +1,11 @@
-import { useForm } from 'react-hook-form'
-import { CustomSlugInput } from './CustomSlugInput.tsx'
-import { Checkbox } from '@/modules/core/ui/checkbox'
-import { InputForm } from './InputForm.tsx'
 import { Spinner } from '@/modules/core/design-system/Spinner'
 import { useTranslations } from '@/modules/core/hooks/useTranslations.ts'
+import { Checkbox } from '@/modules/core/ui/checkbox'
 import { useCreateShortUrl } from '@/modules/createNew/hooks/useCreateShortUrl'
 import { XCircleIcon } from 'lucide-react'
+import { useForm } from 'react-hook-form'
+import { CustomSlugInput } from './CustomSlugInput.tsx'
+import { InputForm } from './InputForm.tsx'
 
 const URL_REGEX = /^https?:\/\/.+/
 const SLUG_REGEX = /^[a-zA-Z0-9-_]+$/
@@ -50,7 +50,7 @@ export const CreateLinkForm = ({ onClose }: CreateLinkFormProps) => {
 
 	return (
 		<form onSubmit={handleSubmit(onSubmit)} className="grid gap-5">
-			<div className="grid gap-10 py-4">
+			<div className="grid gap-8 py-4">
 				<InputForm
 					inputText={dialogNewLink.urlTitle}
 					error={errors.title?.message}

@@ -1,5 +1,5 @@
-import { create } from 'zustand'
 import type { QrCodeType } from '@/types'
+import { create } from 'zustand'
 
 interface NewQrCodeStore {
 	newQrCode: QrCodeType | null

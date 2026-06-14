@@ -1,6 +1,6 @@
 import crypto from 'node:crypto'
-import { base64ToBase62 } from '../utils/utils.js'
 import { ShortUrlModel } from '../models/ShortUrlModel.js'
+import { base64ToBase62 } from '../utils/utils.js'
 import { generateHash } from '../utils/utils.js'
 
 const ERROR_MESSAGE = 'Error creating Short URL. Please try again later.'

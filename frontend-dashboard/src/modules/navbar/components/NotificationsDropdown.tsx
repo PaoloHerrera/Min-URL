@@ -1,8 +1,8 @@
 import {
 	DropdownMenu,
-	DropdownMenuTrigger,
 	DropdownMenuContent,
 	DropdownMenuLabel,
+	DropdownMenuTrigger,
 } from '@/modules/core/ui/dropdown-menu.tsx'
 import { BellIcon } from 'lucide-react'
 

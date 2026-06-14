@@ -1,7 +1,5 @@
-import { MinUrlIcon, GithubIcon } from '@/modules/core/design-system/Icons.tsx'
-import { LanguagesIcon, LogInIcon } from 'lucide-react'
+import { GithubIcon, MinUrlIcon } from '@/modules/core/design-system/Icons.tsx'
 import { useTranslation } from '@/modules/core/hooks/useTranslation.ts'
-import type { Language } from '@/modules/core/utils/types.d.ts'
 import {
 	Select,
 	SelectContent,
@@ -9,6 +7,8 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from '@/modules/core/ui/select.tsx'
+import type { Language } from '@/modules/core/utils/types.d.ts'
+import { LanguagesIcon, LogInIcon } from 'lucide-react'
 
 const supportedLanguages = {
 	en: 'English',

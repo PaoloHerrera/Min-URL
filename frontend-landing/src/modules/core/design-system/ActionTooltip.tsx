@@ -1,10 +1,10 @@
-import type React from 'react'
 import {
 	Tooltip,
+	TooltipContent,
 	TooltipProvider,
 	TooltipTrigger,
-	TooltipContent,
 } from '@/modules/core/ui/tooltip.tsx'
+import type React from 'react'
 
 interface ActionTooltipProps {
 	tooltipText: string

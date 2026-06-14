@@ -1,6 +1,6 @@
-import { useStatsStore } from '@/stores/statsStore.ts'
-import { useTranslations } from '@/modules/core/hooks/useTranslations.ts'
 import { getTimeAgo } from '@/lib/getTimeAgo.ts'
+import { useTranslations } from '@/modules/core/hooks/useTranslations.ts'
+import { useStatsStore } from '@/stores/statsStore.ts'
 import type { TopLinkProps, TopQrCodeProps } from '@/types'
 
 export const useDashboardData = () => {

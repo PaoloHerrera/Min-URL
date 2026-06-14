@@ -1,6 +1,6 @@
-import type React from 'react'
 import { Button } from '@/modules/core/design-system/Button'
 import { Input } from '@/modules/core/design-system/Input.tsx'
+import type React from 'react'
 
 type FormComponentProps = {
 	onSubmit: (e: React.FormEvent<HTMLFormElement>) => void

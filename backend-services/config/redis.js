@@ -1,9 +1,9 @@
 import Redis from 'ioredis'
-import { lookupGeolocation } from '../utils/geo.js'
+import { createClickDetail } from '../models/ClickDetailModel.js'
+import { createClick } from '../models/ClickModel.js'
 import { getGeolocationByIp } from '../models/GeolocationModel.js'
 import { createGeolocation } from '../models/GeolocationModel.js'
-import { createClick } from '../models/ClickModel.js'
-import { createClickDetail } from '../models/ClickDetailModel.js'
+import { lookupGeolocation } from '../utils/geo.js'
 
 const redis = new Redis({
 	port: Number(process.env.REDIS_PORT),

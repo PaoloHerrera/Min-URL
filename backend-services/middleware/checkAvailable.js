@@ -1,6 +1,6 @@
 import {
-	getUserIfShortUrlAvailable,
 	getUserIfQrCodeAvailable,
+	getUserIfShortUrlAvailable,
 } from '../models/UserModel.js'
 
 export const checkShortUrlAvailable = async (req, res, next) => {

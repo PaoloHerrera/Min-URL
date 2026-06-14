@@ -1,9 +1,9 @@
 import {
 	Dialog,
 	DialogContent,
-	DialogTitle,
-	DialogHeader,
 	DialogDescription,
+	DialogHeader,
+	DialogTitle,
 } from '@/modules/core/ui/dialog.tsx'
 import React from 'react'
 

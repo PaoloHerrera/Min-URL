@@ -1,16 +1,16 @@
 import type { Translations } from '@/modules/core/utils/types.d.ts'
 import {
-	ShieldCheckIcon,
 	ActivityIcon,
-	UnplugIcon,
 	BadgeCheckIcon,
 	CalendarClockIcon,
-	LockIcon,
 	ChartBarIcon,
 	EarthIcon,
-	ZapIcon,
-	RocketIcon,
 	HeartIcon,
+	LockIcon,
+	RocketIcon,
+	ShieldCheckIcon,
+	UnplugIcon,
+	ZapIcon,
 } from 'lucide-react'
 
 export const EN_TRANSLATIONS: Translations = {

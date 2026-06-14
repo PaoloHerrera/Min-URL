@@ -1,41 +1,41 @@
 import {
 	Card,
-	CardHeader,
 	CardBody,
 	CardFooter,
+	CardHeader,
 } from '@/modules/core/design-system/Card.tsx'
+import {
+	DropdownMenu,
+	DropdownMenuContent,
+	DropdownMenuItem,
+	DropdownMenuTrigger,
+} from '@/modules/core/ui/dropdown-menu'
+import {
+	Tooltip,
+	TooltipContent,
+	TooltipProvider,
+	TooltipTrigger,
+} from '@/modules/core/ui/tooltip'
 import {
 	BarChart,
 	BarChart2Icon,
-	ExternalLinkIcon,
 	ClockIcon,
 	EllipsisVerticalIcon,
+	ExternalLinkIcon,
 	PencilIcon,
 	Trash2Icon,
 } from 'lucide-react'
-import {
-	Tooltip,
-	TooltipProvider,
-	TooltipTrigger,
-	TooltipContent,
-} from '@/modules/core/ui/tooltip'
-import {
-	DropdownMenu,
-	DropdownMenuTrigger,
-	DropdownMenuContent,
-	DropdownMenuItem,
-} from '@/modules/core/ui/dropdown-menu'
 
-import { useTranslations } from '@/modules/core/hooks/useTranslations.ts'
 import { useClipboard } from '@/modules/core/hooks/useClipboard.ts'
+import { useTranslations } from '@/modules/core/hooks/useTranslations.ts'
 import { DeleteDialog } from '@/modules/shared/components/DeleteDialog'
 import { SuccessCopyIcon } from '@/modules/shared/components/SuccessCopyIcon'
 
-import { useEntityDeletion } from '@/modules/core/hooks/useEntityDeletion'
 import { useEditLink } from '@/modules/core/hooks/useEditLink'
+import { useEntityDeletion } from '@/modules/core/hooks/useEntityDeletion'
 
-import { FormDialog } from '@/modules/shared/components/FormDialog'
 import { EditLinkForm } from '@/modules/link/components/EditLinkForm'
+import { FormDialog } from '@/modules/shared/components/FormDialog'
 
 interface LinkCardProps {
 	id: string
@@ -203,6 +203,8 @@ export const LinkCard = ({
 					title={title}
 					url={longUrl}
 					clicks={clicks}
+					slug={slug}
+					originalSlug={slug}
 					onClose={closeEditDialog}
 				/>
 			</FormDialog>

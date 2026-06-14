@@ -26,11 +26,12 @@ export const deleteUrl = async (id: string) => {
 
 export const updateUrl = async (
 	id: string,
-	{ title, url }: { title: string; url?: string },
+	{ title, url, slug }: { title: string; url?: string; slug?: string },
 ) => {
 	const response = await axiosInstance.patch(`/protected/update-url/${id}`, {
 		title,
 		url,
+		slug,
 	})
 	return response.data
 }

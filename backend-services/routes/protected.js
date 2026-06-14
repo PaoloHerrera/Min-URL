@@ -1,25 +1,27 @@
 import { Router } from 'express'
 import {
 	checkSlug,
+	checkSlugAvailability,
 	getSlugData,
 	returnSlugAvailability,
 } from '../controllers/UrlController.js'
+import {
+	createQrCode,
+	createShortUrl,
+	createShortUrlWithCustomSlug,
+	deleteUserUrl,
+	updateUserUrl,
+} from '../controllers/UserController.js'
 import { checkApiKey } from '../middleware/checkApiKey.js'
-import { saveIp } from '../middleware/saveIp.js'
 import {
 	checkQrCodeAvailable,
 	checkShortUrlAvailable,
 } from '../middleware/checkAvailable.js'
-import { validateUrl } from '../middleware/validateUrl.js'
 import { checkForbiddenExtension } from '../middleware/checkForbiddenExtension.js'
-import { handleAsyncError } from '../utils/utils.js'
-import {
-	createShortUrl,
-	createShortUrlWithCustomSlug,
-	createQrCode,
-	deleteUserUrl,
-} from '../controllers/UserController.js'
 import { addGeolocation } from '../middleware/geolocationMiddleware.js'
+import { saveIp } from '../middleware/saveIp.js'
+import { validateUrl } from '../middleware/validateUrl.js'
+import { handleAsyncError } from '../utils/utils.js'
 
 const protectedRouter = Router()
 
@@ -29,6 +31,7 @@ protectedRouter.post(
 	'/check-slug',
 	checkApiKey,
 	checkSlug,
+	checkSlugAvailability,
 	returnSlugAvailability,
 )
 
@@ -37,6 +40,7 @@ protectedRouter.post(
 	checkApiKey,
 	checkShortUrlAvailable,
 	checkSlug,
+	checkSlugAvailability,
 	saveIp,
 	validateUrl,
 	checkForbiddenExtension,
@@ -70,6 +74,15 @@ protectedRouter.delete(
 	'/delete-url/:id',
 	checkApiKey,
 	handleAsyncError(deleteUserUrl),
+)
+
+protectedRouter.patch(
+	'/update-url/:id',
+	checkApiKey,
+	validateUrl,
+	checkForbiddenExtension,
+	checkSlug,
+	handleAsyncError(updateUserUrl),
 )
 
 export { protectedRouter }

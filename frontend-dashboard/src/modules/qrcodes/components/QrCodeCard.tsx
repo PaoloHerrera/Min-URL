@@ -1,25 +1,25 @@
 import { downloadQrCode } from '@/lib/downloadQrCode'
 import {
 	Card,
-	CardHeader,
 	CardBody,
 	CardFooter,
+	CardHeader,
 } from '@/modules/core/design-system/Card.tsx'
-import { QrPreview } from '@/modules/createNew/components/QrPreview'
-import {
-	QrCodeIcon,
-	BarChart2Icon,
-	ExternalLinkIcon,
-	ClockIcon,
-	DownloadIcon,
-} from 'lucide-react'
+import { useTranslations } from '@/modules/core/hooks/useTranslations.ts'
 import {
 	Tooltip,
+	TooltipContent,
 	TooltipProvider,
 	TooltipTrigger,
-	TooltipContent,
 } from '@/modules/core/ui/tooltip.tsx'
-import { useTranslations } from '@/modules/core/hooks/useTranslations.ts'
+import { QrPreview } from '@/modules/createNew/components/QrPreview'
+import {
+	BarChart2Icon,
+	ClockIcon,
+	DownloadIcon,
+	ExternalLinkIcon,
+	QrCodeIcon,
+} from 'lucide-react'
 
 interface QrCardProps {
 	title: string

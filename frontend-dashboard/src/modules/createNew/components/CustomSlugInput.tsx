@@ -1,15 +1,16 @@
 import { Input } from '@/modules/core/design-system/Input'
 import { Spinner } from '@/modules/core/design-system/Spinner'
-import { XIcon, CheckIcon } from 'lucide-react'
-import type React from 'react'
 import { useTranslations } from '@/modules/core/hooks/useTranslations.ts'
 import { useSlugValidation } from '@/modules/createNew/hooks/useSlugValidation'
+import { CheckIcon, XIcon } from 'lucide-react'
+import type React from 'react'
 
 const MIN_LENGTH = 6
 const MAX_LENGTH = 12
 
 interface CustomSlugImputProps {
 	value: string
+	originalSlug?: string
 	error?: string
 	disabled?: boolean
 	name: string
@@ -20,12 +21,13 @@ interface CustomSlugImputProps {
 
 export const CustomSlugInput = ({
 	value,
+	originalSlug,
 	error,
 	...rest
 }: CustomSlugImputProps) => {
 	const { dashboard } = useTranslations()
 	const { customSlug } = dashboard.navbar.dialogNewLink
-	const { checkSlugStatus, loading } = useSlugValidation(value)
+	const { checkSlugStatus, loading } = useSlugValidation(value, originalSlug)
 
 	const shouldCheckAvailability =
 		!error &&

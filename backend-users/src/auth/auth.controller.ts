@@ -1,23 +1,23 @@
 import {
-	Controller,
-	Get,
-	Post,
-	UseGuards,
-	Request,
-	Response,
-	Inject,
-} from '@nestjs/common'
-import type {
-	Response as ExpressResponse,
-	Request as ExpressRequest,
-} from 'express'
-import { AuthGuard } from '@nestjs/passport'
-import type { User } from '../user/model/user.model'
-import { AuthService } from './auth.service'
-import {
 	ACCESS_TOKEN_COOKIE_NAME,
 	REFRESH_TOKEN_COOKIE_NAME,
 } from '@/constants'
+import {
+	Controller,
+	Get,
+	Inject,
+	Post,
+	Request,
+	Response,
+	UseGuards,
+} from '@nestjs/common'
+import { AuthGuard } from '@nestjs/passport'
+import type {
+	Request as ExpressRequest,
+	Response as ExpressResponse,
+} from 'express'
+import type { User } from '../user/model/user.model'
+import { AuthService } from './auth.service'
 
 @Controller('auth')
 export class AuthController {

@@ -2,9 +2,9 @@ import type { LoaderFunctionArgs } from '@remix-run/node'
 import { redirect } from '@remix-run/node'
 import { useLoaderData } from '@remix-run/react'
 import axios from 'axios'
-import { VITE_API_KEY, VITE_API_URL, VITE_LOCAL_IP } from '~/constants'
 import { getClientIPAddress } from 'remix-utils/get-client-ip-address'
 import { publishClick } from '~/config/redis'
+import { VITE_API_KEY, VITE_API_URL, VITE_LOCAL_IP } from '~/constants'
 import { getDiviceType } from '~/utils/getDiviceType'
 
 export async function loader({ request, params }: LoaderFunctionArgs) {

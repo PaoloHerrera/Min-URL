@@ -1,8 +1,8 @@
 import {
 	Card,
 	CardBody,
-	CardHeader,
 	CardFooter,
+	CardHeader,
 } from '@/modules/core/design-system/Card.tsx'
 import type { LoginCardProps } from '@/types'
 import { LoginButton } from './LoginButton.tsx'

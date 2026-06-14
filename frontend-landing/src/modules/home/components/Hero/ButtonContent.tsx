@@ -1,6 +1,6 @@
-import type { GenerationMode } from '@/modules/core/utils/types.d.ts'
 import { RightArrowIcon } from '@/modules/core/design-system/Icons.tsx'
 import { Spinner } from '@/modules/core/design-system/Spinner.tsx'
+import type { GenerationMode } from '@/modules/core/utils/types.d.ts'
 
 interface ButtonContentProps {
 	isLoading: boolean

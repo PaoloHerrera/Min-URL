@@ -1,7 +1,7 @@
-import { MinUrlIcon, GithubIcon } from '@/modules/core/design-system/Icons'
-import { MailIcon } from 'lucide-react'
+import { VITE_GITHUB_LOGIN_LINK, VITE_GOOGLE_LOGIN_LINK } from '@/constants'
+import { GithubIcon, MinUrlIcon } from '@/modules/core/design-system/Icons'
 import type { Translations } from '@/types'
-import { VITE_GOOGLE_LOGIN_LINK, VITE_GITHUB_LOGIN_LINK } from '@/constants'
+import { MailIcon } from 'lucide-react'
 
 export const EN_TRANSLATIONS: Translations = {
 	login: {
@@ -205,11 +205,16 @@ export const EN_TRANSLATIONS: Translations = {
 					invalid: 'Invalid URL',
 					generic: 'Error checking URL. Please try again',
 				},
-				cannotBeChanged: {
-					prefix: 'This link has been clicked ',
-					suffix: ' times and the Website URL cannot be changed.',
+			},
+			customSlug: {
+				error: {
+					minLength: 'Minimum length is 6',
+					maxLength: 'Maximum length is 12',
+					invalid: 'Invalid characters. Only letters and numbers are allowed',
 				},
 			},
+			cannotBeChanged:
+				'The Website URL and slug cannot be changed because the link has already been clicked.',
 			cancelLabel: 'Cancel',
 			submitLabel: 'Update Link',
 			loadingSubmit: 'Updating...',

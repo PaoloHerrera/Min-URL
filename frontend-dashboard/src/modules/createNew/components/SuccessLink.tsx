@@ -1,4 +1,6 @@
 import { Input } from '@/modules/core/design-system/Input.tsx'
+import { useClipboard } from '@/modules/core/hooks/useClipboard'
+import { useTranslations } from '@/modules/core/hooks/useTranslations.ts'
 import {
 	AlertDialog,
 	AlertDialogAction,
@@ -8,12 +10,10 @@ import {
 	AlertDialogHeader,
 	AlertDialogTitle,
 } from '@/modules/core/ui/alert-dialog.tsx'
-import { LinkIcon } from 'lucide-react'
-import { useNewShortUrlStore } from '@/stores/newShortUrlStore.ts'
-import { useTranslations } from '@/modules/core/hooks/useTranslations.ts'
-import { useClipboard } from '@/modules/core/hooks/useClipboard'
 import { useFormattedDate } from '@/modules/createNew/hooks/useFormattedDate'
 import { SuccessCopyIcon } from '@/modules/shared/components/SuccessCopyIcon'
+import { useNewShortUrlStore } from '@/stores/newShortUrlStore.ts'
+import { LinkIcon } from 'lucide-react'
 
 export const SuccessLink = () => {
 	const { newShortUrl, setNewShortUrl } = useNewShortUrlStore()

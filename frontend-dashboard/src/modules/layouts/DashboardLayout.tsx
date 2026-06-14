@@ -1,6 +1,6 @@
+import type { JSX } from 'react'
 import { Navbar } from '../navbar/Navbar.tsx'
 import { Sidebar } from '../sidebar/Sidebar.tsx'
-import type { JSX } from 'react'
 
 export const DashboardLayout = ({ children }: { children: JSX.Element }) => {
 	return (

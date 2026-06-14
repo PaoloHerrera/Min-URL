@@ -1,6 +1,6 @@
+import type { LucideProps } from 'lucide-react'
 import type React from 'react'
 import type { ColorsWebsite } from './constants.ts'
-import type { LucideProps } from 'lucide-react'
 
 declare global {
 	interface Window {

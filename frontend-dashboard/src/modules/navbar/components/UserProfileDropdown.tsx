@@ -1,21 +1,21 @@
 import {
 	DropdownMenu,
-	DropdownMenuTrigger,
-	DropdownMenuGroup,
-	DropdownMenuSub,
-	DropdownMenuSubTrigger,
-	DropdownMenuPortal,
 	DropdownMenuContent,
-	DropdownMenuLabel,
+	DropdownMenuGroup,
 	DropdownMenuItem,
+	DropdownMenuLabel,
+	DropdownMenuPortal,
 	DropdownMenuSeparator,
+	DropdownMenuSub,
 	DropdownMenuSubContent,
+	DropdownMenuSubTrigger,
+	DropdownMenuTrigger,
 } from '@/modules/core/ui/dropdown-menu.tsx'
 import { LanguagesIcon, LogOutIcon } from 'lucide-react'
 
+import { VITE_LOGOUT_LINK } from '@/constants'
 import { useAuthStore } from '@/stores/authStore'
 import { useLanguageStore } from '@/stores/languageStore'
-import { VITE_LOGOUT_LINK } from '@/constants'
 
 interface UserProfileDropdownProps {
 	textProfile: {

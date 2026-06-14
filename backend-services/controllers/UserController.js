@@ -1,14 +1,16 @@
-import {
-	createValidatedUrl,
-	deleteUrlbyUserId,
-} from '../services/UrlServices.js'
+import { REDIRECTOR_URL } from '../constants.js'
+import { addQrCodeUsage, addShortUrlUsage } from '../models/UserModel.js'
+import { createQrForUrl } from '../services/QrServices.js'
 import {
 	createShortUrlForUrl,
 	createShortUrlForUrlWithSlug,
+	updateSlugForUrl,
 } from '../services/ShorturlServices.js'
-import { createQrForUrl } from '../services/QrServices.js'
-import { REDIRECTOR_URL } from '../constants.js'
-import { addShortUrlUsage, addQrCodeUsage } from '../models/UserModel.js'
+import {
+	createValidatedUrl,
+	deleteUrlbyUserId,
+	updateUrlById,
+} from '../services/UrlServices.js'
 
 const createBaseUrl = async (req, purpose) => {
 	const urlData = {
@@ -99,5 +101,28 @@ export const deleteUserUrl = async (req, res) => {
 	const urlId = req.params.id
 	const userId = req.body.userId
 	await deleteUrlbyUserId(userId, urlId)
+	res.json({})
+}
+
+export const updateUserUrl = async (req, res) => {
+	const urlId = req.params.id
+	const userId = req.body.userId
+	const { title, originalUrl, slug } = req.body
+
+	const urlData = {
+		user_id: userId,
+		title,
+		long_url: originalUrl,
+	}
+
+	const url = await updateUrlById(urlId, urlData)
+
+	if (slug) {
+		await updateSlugForUrl({
+			urlId: url.id_urls,
+			slug,
+		})
+	}
+
 	res.json({})
 }

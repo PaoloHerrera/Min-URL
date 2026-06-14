@@ -1,5 +1,5 @@
-import type { Colors } from '@/modules/core/utils/types'
 import { ColorsWebsite } from '@/modules/core/utils/constants'
+import type { Colors } from '@/modules/core/utils/types'
 
 export const MinUrlIcon = () => {
 	return (

@@ -1,12 +1,12 @@
-import { create } from 'zustand'
 import type {
 	BasicStatsProps,
 	Last7DaysClicksProps,
 	PieChartProps,
+	StatsStoreType,
 	TopLinkProps,
 	TopQrCodeProps,
-	StatsStoreType,
 } from '@/types'
+import { create } from 'zustand'
 
 export const useStatsStore = create<StatsStoreType>((set) => ({
 	basicStats: null,

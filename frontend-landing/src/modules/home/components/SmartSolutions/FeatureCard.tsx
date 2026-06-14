@@ -1,6 +1,6 @@
-import type React from 'react'
-import { Card, CardHeader, CardBody } from '@/modules/core/design-system/Card'
+import { Card, CardBody, CardHeader } from '@/modules/core/design-system/Card'
 import type { LucideProps } from 'lucide-react'
+import type React from 'react'
 
 type FeatureCardProps = {
 	icon: React.ComponentType<LucideProps>

@@ -1,17 +1,17 @@
 body {
-  background-color: var(--color-background);
-  color: var(--color-text);
-  font-family: "Montserrat", system-ui, -apple-system, sans-serif;
+	background-color: var(--color-background);
+	color: var(--color-text);
+	font-family: "Montserrat", system-ui, -apple-system, sans-serif;
 }
 
 html {
-  scroll-behavior: smooth;
+	scroll-behavior: smooth;
 }
 
 nav {
-  height: 80px;
+	height: 80px;
 }
 
 section#hero {
-  min-height: calc(100vh - 80px);
+	min-height: calc(100vh - 80px);
 }

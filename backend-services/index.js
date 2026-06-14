@@ -1,12 +1,12 @@
-import express from 'express'
-import dotenv from 'dotenv'
 import path from 'node:path'
-import session from 'express-session'
 import { fileURLToPath } from 'node:url'
-import { corsMiddleware } from './middleware/cors.js'
-import { routesShortUrl } from './routes/shorturl.js'
-import { protectedRouter } from './routes/protected.js'
+import dotenv from 'dotenv'
+import express from 'express'
+import session from 'express-session'
 import { setupRedis } from './config/redis.js'
+import { corsMiddleware } from './middleware/cors.js'
+import { protectedRouter } from './routes/protected.js'
+import { routesShortUrl } from './routes/shorturl.js'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)

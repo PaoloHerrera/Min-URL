@@ -1,15 +1,15 @@
-import { validateUrl } from '@/modules/core/utils/utils.ts'
-import {
-	shortUrlReducer,
-	initialState,
-	ActionType,
-} from '@/modules/core/reducers/shortUrlReducer.ts'
 import { useTranslation } from '@/modules/core/hooks/useTranslation.ts'
-import { useReducer } from 'react'
+import {
+	ActionType,
+	initialState,
+	shortUrlReducer,
+} from '@/modules/core/reducers/shortUrlReducer.ts'
+import { SHORT_URL_DIRECT } from '@/modules/core/utils/constants.ts'
+import { validateUrl } from '@/modules/core/utils/utils.ts'
+import { addProtocolIfNeeded } from '@/modules/core/utils/utils.ts'
 import { useRecaptcha } from '@/modules/home/hooks/useRecaptcha.ts'
 import { anonFetchUrl } from '@/modules/home/services/anonFetchUrl.ts'
-import { SHORT_URL_DIRECT } from '@/modules/core/utils/constants.ts'
-import { addProtocolIfNeeded } from '@/modules/core/utils/utils.ts'
+import { useReducer } from 'react'
 
 export const useShortUrl = () => {
 	const { t } = useTranslation()

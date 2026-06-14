@@ -1,5 +1,5 @@
-import { FeatureCard } from './FeatureCard.tsx'
 import { useTranslation } from '@/modules/core/hooks/useTranslation.ts'
+import { FeatureCard } from './FeatureCard.tsx'
 
 const SmartSolutionsHeader = ({
 	header,
