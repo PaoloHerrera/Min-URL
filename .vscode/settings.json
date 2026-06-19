@@ -1,0 +1,15 @@
+{
+  "editor.defaultFormatter": "biome.biome",
+  "editor.formatOnSave": true,
+  "editor.codeActionsOnSave": {
+    "quickfix.biome": "explicit",
+    "source.organizeImports.biome": "explicit"
+  },
+  "prettier.singleQuote": true,
+  "prettier.semi": false,
+  "prettier.useTabs": true,
+  "[astro]": {
+    "editor.defaultFormatter": "astro-build.astro-vscode",
+    "editor.formatOnSave": true
+  }
+}

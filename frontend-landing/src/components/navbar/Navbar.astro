@@ -1,0 +1,295 @@
+---
+import { dic } from '../../i18n/dic'
+import type { Lang } from '../../i18n/utils'
+import NavLogo from './NavLogo.astro'
+import NavLinks from './NavLinks.astro'
+import LangDropdown from './LangDropdown.astro'
+import ThemeToggle from './ThemeToggle.astro'
+import IconMenu from '../icons/IconMenu.astro'
+import IconClose from '../icons/IconClose.astro'
+import IconGitHub from '../icons/IconGitHub.astro'
+import { langOptions } from '@/i18n/langOptions'
+import IconSun from '../icons/IconSun.astro'
+import IconMoon from '../icons/IconMoon.astro'
+
+interface Props {
+	lang: Lang
+}
+
+const { lang } = Astro.props as Props
+const t = dic[lang]
+const dashboardUrl =
+	import.meta.env.PUBLIC_DASHBOARD_URL || 'http://localhost:3001'
+---
+
+<!-- ═══════════════════════════════════════════════════════
+     HEADER
+     ═══════════════════════════════════════════════════════ -->
+<header
+	class="fixed top-0 left-0 right-0 z-50 h-20 flex items-center
+         border-b border-white/10 bg-surface-base/70 backdrop-blur-lg
+         shadow-lg shadow-black/10 transition-all duration-300"
+>
+	<div
+		class="max-w-7xl mx-auto w-full px-4 sm:px-6 xl:px-8 2xl:px-16 flex items-center justify-between gap-4 lg:gap-6"
+	>
+		<!-- Logo -->
+		<NavLogo />
+
+		<!-- Desktop center nav -->
+		<NavLinks
+			home={t.nav.home}
+			features={t.nav.features}
+			dashboard={t.nav.dashboard}
+			why={t.nav.why}
+			faq={t.nav.faq}
+			sponsor={t.nav.sponsor}
+		/>
+
+		<!-- Desktop right actions -->
+		<div class="hidden xl:flex items-center gap-1 shrink-0">
+			<a
+				href="https://github.com/PaoloHerrera/Min-URL"
+				target="_blank"
+				rel="noopener noreferrer"
+				class="btn btn-ghost btn-md btn-square text-gray-400 hover:text-white"
+				aria-label="View on GitHub"
+			>
+				<IconGitHub class="size-5" />
+			</a>
+			<LangDropdown lang={lang} />
+			<ThemeToggle />
+			<div class="h-6 w-px bg-white/10 mx-2" aria-hidden="true"></div>
+			<a
+				href={`${dashboardUrl}/login`}
+				class="btn btn-ghost btn-md text-sm text-gray-300 hover:text-white font-semibold"
+			>
+				{t.nav.login}
+			</a>
+			<a
+				href={`${dashboardUrl}/register`}
+				class="btn btn-md btn-cta rounded-xl px-5 text-sm"
+			>
+				{t.nav.register}
+			</a>
+		</div>
+
+		<!-- Mobile hamburger -->
+		<button
+			id="mobile-menu-toggle"
+			class="btn btn-ghost btn-md btn-square text-gray-400 hover:text-white xl:hidden"
+			aria-label="Toggle navigation menu"
+			aria-expanded="false"
+			aria-controls="mobile-menu-panel"
+		>
+			<IconMenu id="icon-hamburger" class="size-6" />
+			<IconClose id="icon-close" class="size-6 hidden" />
+		</button>
+	</div>
+
+	<!-- TODO: Refactorizar MOBILE PANEL -->
+
+	<!-- ═══════════════════════════════════════════════════
+       MOBILE PANEL
+       ═══════════════════════════════════════════════════ -->
+	<div
+		id="mobile-menu-panel"
+		role="dialog"
+		aria-label="Navigation menu"
+		class="fixed top-20 left-0 right-0 h-[calc(100vh-5rem)] overflow-y-auto
+           flex flex-col justify-between gap-8 px-6 py-8
+           bg-surface-base/95 backdrop-blur-xl border-b border-white/10
+           xl:hidden
+           transform -translate-y-full opacity-0 pointer-events-none
+           transition-all duration-300 z-40"
+	>
+		<!-- Top: Links & Preferences -->
+		<div class="flex flex-col gap-6">
+			<!-- 1 · Navigation links -->
+			<nav aria-label="Mobile navigation">
+				<a href="#home" class="mobile-nav-link">{t.nav.home}</a>
+				<a href="#features" class="mobile-nav-link">{t.nav.features}</a>
+				<a href="#dashboard" class="mobile-nav-link">{t.nav.dashboard}</a>
+				<a href="#why" class="mobile-nav-link">{t.nav.why}</a>
+				<a href="#faq" class="mobile-nav-link">{t.nav.faq}</a>
+				<a href="#sponsor" class="mobile-nav-link" style="border-bottom: none;"
+					>{t.nav.sponsor}</a
+				>
+			</nav>
+
+			<!-- 2 · Preferences -->
+			<div class="flex flex-col gap-4">
+				<!-- Language picker -->
+				<div class="flex flex-col gap-2">
+					<span class="mobile-panel-label">{t.nav.language}</span>
+					<div class="mobile-picker">
+						{
+							langOptions.map((opt) => (
+								<a
+									href={opt.href}
+									class={`mobile-picker-btn ${opt.code === lang ? 'mobile-picker-active' : ''}`}
+									aria-current={opt.code === lang ? 'true' : undefined}
+								>
+									<span aria-hidden="true">{opt.flag}</span>
+									<span>{opt.label}</span>
+								</a>
+							))
+						}
+					</div>
+				</div>
+
+				<!-- Theme picker -->
+				<div class="flex flex-col gap-2">
+					<span class="mobile-panel-label">{t.nav.theme}</span>
+					<div class="mobile-picker">
+						<button
+							id="mobile-theme-light"
+							type="button"
+							class="mobile-picker-btn"
+							aria-label={t.nav.themeLight}
+						>
+							<IconSun class="size-4 shrink-0" />
+							<span>{t.nav.themeLight}</span>
+						</button>
+						<button
+							id="mobile-theme-dark"
+							type="button"
+							class="mobile-picker-btn"
+							aria-label={t.nav.themeDark}
+						>
+							<IconMoon class="size-4 shrink-0" />
+							<span>{t.nav.themeDark}</span>
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Bottom: CTAs -->
+		<div class="flex flex-col gap-3">
+			<a
+				href="https://github.com/PaoloHerrera/Min-URL"
+				target="_blank"
+				rel="noopener noreferrer"
+				class="btn btn-ghost btn-md w-full border border-white/10 text-gray-300 hover:text-white hover:border-white/20 gap-2"
+			>
+				<IconGitHub class="size-5" />
+				GitHub
+			</a>
+			<div class="grid grid-cols-2 gap-3">
+				<a
+					href={`${dashboardUrl}/login`}
+					class="btn btn-ghost btn-md text-sm font-semibold border border-white/8 text-gray-300 hover:text-white w-full"
+				>
+					{t.nav.login}
+				</a>
+				<a
+					href={`${dashboardUrl}/register`}
+					class="btn btn-md btn-cta rounded-xl text-sm w-full"
+				>
+					{t.nav.register}
+				</a>
+			</div>
+		</div>
+	</div>
+</header>
+
+<script is:inline>
+	;(() => {
+		// ── Refs ────────────────────────────────────────────────
+		const toggleBtn = document.getElementById('mobile-menu-toggle')
+		const menuPanel = document.getElementById('mobile-menu-panel')
+		const iconHam = document.getElementById('icon-hamburger')
+		const iconClose = document.getElementById('icon-close')
+		const navLinks = document.querySelectorAll('.mobile-nav-link')
+		const lightBtn = document.getElementById('mobile-theme-light')
+		const darkBtn = document.getElementById('mobile-theme-dark')
+
+		if (!toggleBtn || !menuPanel || !iconHam || !iconClose) return
+
+		// ── Panel open/close ────────────────────────────────────
+		let isOpen = false
+
+		const openMenu = () => {
+			isOpen = true
+			toggleBtn.setAttribute('aria-expanded', 'true')
+			menuPanel.classList.remove(
+				'-translate-y-full',
+				'opacity-0',
+				'pointer-events-none',
+			)
+			menuPanel.classList.add(
+				'translate-y-0',
+				'opacity-100',
+				'pointer-events-auto',
+			)
+			iconHam.classList.add('hidden')
+			iconClose.classList.remove('hidden')
+			document.body.style.overflow = 'hidden'
+		}
+
+		const closeMenu = () => {
+			isOpen = false
+			toggleBtn.setAttribute('aria-expanded', 'false')
+			menuPanel.classList.remove(
+				'translate-y-0',
+				'opacity-100',
+				'pointer-events-auto',
+			)
+			menuPanel.classList.add(
+				'-translate-y-full',
+				'opacity-0',
+				'pointer-events-none',
+			)
+			iconClose.classList.add('hidden')
+			iconHam.classList.remove('hidden')
+			document.body.style.overflow = ''
+		}
+
+		toggleBtn.addEventListener('click', () =>
+			isOpen ? closeMenu() : openMenu(),
+		)
+
+		// Close on nav link click (smooth scroll to section)
+		navLinks.forEach((link) => link.addEventListener('click', closeMenu))
+
+		// Close on Escape key
+		document.addEventListener('keydown', (e) => {
+			if (e.key === 'Escape' && isOpen) closeMenu()
+		})
+
+		// ── Theme picker ────────────────────────────────────────
+		if (!lightBtn || !darkBtn) return
+
+		const syncThemeUi = (theme) => {
+			if (theme === 'light') {
+				lightBtn.classList.add('mobile-picker-active')
+				darkBtn.classList.remove('mobile-picker-active')
+			} else {
+				darkBtn.classList.add('mobile-picker-active')
+				lightBtn.classList.remove('mobile-picker-active')
+			}
+		}
+
+		// Initial sync
+		syncThemeUi(document.documentElement.getAttribute('data-theme') || 'dark')
+
+		// React to changes made by the desktop ThemeToggle
+		new MutationObserver(() => {
+			syncThemeUi(document.documentElement.getAttribute('data-theme') || 'dark')
+		}).observe(document.documentElement, {
+			attributes: true,
+			attributeFilter: ['data-theme'],
+		})
+
+		// Button handlers
+		lightBtn.addEventListener('click', () => {
+			localStorage.setItem('theme', 'light')
+			document.documentElement.setAttribute('data-theme', 'light')
+		})
+		darkBtn.addEventListener('click', () => {
+			localStorage.setItem('theme', 'dark')
+			document.documentElement.setAttribute('data-theme', 'dark')
+		})
+	})()
+</script>

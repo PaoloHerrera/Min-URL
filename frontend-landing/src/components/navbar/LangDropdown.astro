@@ -1,0 +1,78 @@
+---
+import type { Lang } from '../../i18n/utils'
+import IconTranslate from '../icons/IconTranslate.astro'
+import IconChevronDown from '../icons/IconChevronDown.astro'
+import { langOptions } from '../../i18n/langOptions'
+import IconCheck from '../icons/IconCheck.astro'
+
+interface Props {
+	lang: Lang
+}
+
+const { lang } = Astro.props
+---
+
+<div id="lang-dropdown" class="dropdown dropdown-end">
+	<!-- ── Trigger ───────────────────────────────────────── -->
+	<button
+		id="lang-trigger"
+		tabindex="0"
+		class="btn btn-ghost btn-md gap-1.5 text-gray-300 hover:text-white font-semibold px-2.5"
+		aria-label="Change language"
+		aria-haspopup="listbox"
+	>
+		<IconTranslate class="size-4.5 shrink-0 opacity-75" />
+		<span class="text-xs font-bold tracking-widest uppercase">{lang}</span>
+		<IconChevronDown
+			id="lang-chevron"
+			class="size-3 opacity-50 transition-transform duration-200"
+		/>
+	</button>
+
+	<!-- ── Panel ─────────────────────────────────────────── -->
+	<ul
+		tabindex="0"
+		role="listbox"
+		class="dropdown-content z-9999 p-1.5 mt-2 w-44 rounded-2xl border border-white/10 bg-surface-base/95 backdrop-blur-xl shadow-2xl shadow-black/50 flex flex-col gap-0.5"
+	>
+		{
+			langOptions.map((opt) => {
+				const isActive = opt.code === lang
+				return (
+					<li role="option" aria-selected={isActive}>
+						<a
+							href={opt.href}
+							class={[
+								'flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition-all duration-150 w-full border',
+								isActive
+									? 'text-white bg-primary-electric-blue/15 border-primary-electric-blue/25'
+									: 'text-gray-300 hover:text-white hover:bg-white/8 border-transparent',
+							].join(' ')}
+						>
+							<span class="text-base leading-none">{opt.flag}</span>
+							<span class="flex-1">{opt.label}</span>
+							{isActive && (
+								<IconCheck class="size-3.5 text-primary-electric-blue shrink-0" />
+							)}
+						</a>
+					</li>
+				)
+			})
+		}
+	</ul>
+</div>
+
+<!-- Chevron rotation on open/close (focus-based DaisyUI pattern) -->
+<script is:inline>
+	;(() => {
+		const dropdown = document.getElementById('lang-dropdown')
+		const chevron = document.getElementById('lang-chevron')
+		if (!dropdown || !chevron) return
+		dropdown.addEventListener('focusin', () =>
+			chevron.classList.add('rotate-180'),
+		)
+		dropdown.addEventListener('focusout', () =>
+			chevron.classList.remove('rotate-180'),
+		)
+	})()
+</script>

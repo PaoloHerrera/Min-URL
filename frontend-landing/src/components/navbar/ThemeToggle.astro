@@ -1,0 +1,46 @@
+---
+import IconSun from '../icons/IconSun.astro'
+import IconMoon from '../icons/IconMoon.astro'
+---
+
+<button
+	id="theme-toggle"
+	class="btn btn-ghost btn-md btn-square text-gray-400 hover:text-white"
+	aria-label="Toggle theme"
+>
+	<!-- Sun — visible in dark mode, clicking switches to light -->
+	<IconSun id="theme-toggle-sun" class="size-5 hidden" />
+	<!-- Moon — visible in light mode, clicking switches to dark -->
+	<IconMoon id="theme-toggle-moon" class="size-5 hidden" />
+</button>
+
+<script is:inline>
+	;(() => {
+		const btn = document.getElementById('theme-toggle')
+		const sunIcon = document.getElementById('theme-toggle-sun')
+		const moonIcon = document.getElementById('theme-toggle-moon')
+
+		const applyTheme = (theme) => {
+			document.documentElement.setAttribute('data-theme', theme)
+			if (theme === 'light') {
+				sunIcon.classList.add('hidden')
+				moonIcon.classList.remove('hidden')
+			} else {
+				moonIcon.classList.add('hidden')
+				sunIcon.classList.remove('hidden')
+			}
+		}
+
+		// Initialise from persisted preference
+		applyTheme(localStorage.getItem('theme') || 'dark')
+
+		btn.addEventListener('click', () => {
+			const next =
+				document.documentElement.getAttribute('data-theme') === 'light'
+					? 'dark'
+					: 'light'
+			localStorage.setItem('theme', next)
+			applyTheme(next)
+		})
+	})()
+</script>

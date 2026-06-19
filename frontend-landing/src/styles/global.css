@@ -1,0 +1,1034 @@
+@import "tailwindcss";
+@plugin "daisyui";
+
+/* 
+   Electric Blue palette derived from the logo colour #0056FF.
+   Named tokens follow a semantic convention so they work in
+   both dark and light mode via CSS custom properties below. */
+
+@theme {
+	/* Fonts */
+	--font-sans: "Inter", sans-serif;
+	--font-heading: "Outfit", sans-serif;
+
+	/* ── Brand / Electric Blue scale ───────────────────── */
+	--color-brand-50: #e6eeff;
+	--color-brand-100: #c0d4ff;
+	--color-brand-200: #85aaff;
+	--color-brand-300: #4d81ff;
+	--color-brand-400: #1a5eff;
+	--color-brand-500: #0056ff; /* ← core electric blue */
+	--color-brand-600: #0046d6;
+	--color-brand-700: #0037ad;
+	--color-brand-800: #002885;
+	--color-brand-900: #001a5c;
+	--color-brand-950: #000d2e;
+
+	/* Shorthand aliases used in markup */
+	--color-primary-electric-blue: #0056ff;
+	--color-primary-dark-electric-blue: #000ba1;
+
+	/* ── CTA gradient palette (violet → electric-blue) ─── */
+	--color-cta-from: #5b21b6;
+	--color-cta-via: #2563eb;
+	--color-cta-to: #0056ff;
+
+	/* ── Semantic surface colours (dark defaults) ─── */
+	--color-surface-base: #030712;
+	--color-surface-raised: #0a1120;
+	--color-surface-overlay: #111827;
+
+	/* ── Text (dark defaults) ─────────────────────── */
+	--color-text-primary: #f3f4f6;
+	--color-text-secondary: #9ca3af;
+	--color-text-muted: #6b7280;
+
+	/* ── Status colours ─────────────────────────── */
+	--color-success: #10b981;
+	--color-error: #ef4444;
+	--color-warning: #f59e0b;
+
+	/* Features photo custom theme variables */
+	--color-features-bg: var(--bg-features-photo);
+	--color-features-border: var(--border-features-photo);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   CSS CUSTOM PROPERTIES — dark (default) theme
+   ═══════════════════════════════════════════════════════════ */
+:root,
+:root[data-theme="dark"] {
+	--bg-base: #030712;
+	--bg-raised: #0a1120;
+	--bg-overlay: #111827;
+	--bg-navbar: rgba(3, 7, 18, 0.7);
+	--bg-glass: rgba(255, 255, 255, 0.02);
+	--bg-card: rgba(255, 255, 255, 0.03);
+	--bg-footer: rgba(3, 7, 18, 0.4);
+
+	--text-primary: #f1f5f9;
+	--text-secondary: #94a3b8;
+	--text-muted: #64748b;
+	--text-inverted: #030712;
+
+	--border-subtle: rgba(255, 255, 255, 0.08);
+	--border-soft: rgba(255, 255, 255, 0.12);
+	--border-footer: rgba(255, 255, 255, 0.05);
+
+	--glow-brand: rgba(0, 86, 255, 0.25);
+	--glow-cta: rgba(91, 33, 182, 0.3);
+
+	--cta-bg-from: #5b21b6;
+	--cta-bg-to: #0056ff;
+	--cta-shadow: rgba(91, 33, 182, 0.35);
+
+	/* Features photo container style variables */
+	--bg-features-photo: var(--color-brand-900);
+	--border-features-photo: rgba(0, 86, 255, 0.25);
+
+	background-color: var(--bg-base);
+	color: var(--text-primary);
+	font-family: "Inter", sans-serif;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   CSS CUSTOM PROPERTIES — light theme
+   ═══════════════════════════════════════════════════════════ */
+:root[data-theme="light"] {
+	--bg-base: #f8faff;
+	--bg-raised: #ffffff;
+	--bg-overlay: #ffffff;
+	--bg-navbar: rgba(248, 250, 255, 0.85);
+	--bg-glass: rgba(255, 255, 255, 0.7);
+	--bg-card: rgba(255, 255, 255, 0.85);
+	--bg-footer: rgba(236, 241, 255, 0.8);
+
+	--text-primary: #0f172a;
+	--text-secondary: #334155;
+	--text-muted: #64748b;
+	--text-inverted: #f1f5f9;
+
+	--border-subtle: rgba(15, 23, 42, 0.08);
+	--border-soft: rgba(15, 23, 42, 0.14);
+	--border-footer: rgba(15, 23, 42, 0.08);
+
+	--glow-brand: rgba(0, 86, 255, 0.1);
+	--glow-cta: rgba(91, 33, 182, 0.1);
+
+	--cta-bg-from: #5b21b6;
+	--cta-bg-to: #0056ff;
+	--cta-shadow: rgba(0, 86, 255, 0.25);
+
+	/* Features photo container style variables */
+	--bg-features-photo: var(--color-brand-100);
+	--border-features-photo: rgba(0, 86, 255, 0.2);
+
+	background-color: var(--bg-base);
+	color: var(--text-primary);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   SEMANTIC COMPONENT CLASSES
+   Used in Layout.astro so colours respond to the theme
+   without needing Tailwind class overrides.
+   ═══════════════════════════════════════════════════════════ */
+.theme-body {
+	background-color: var(--bg-base);
+	color: var(--text-primary);
+}
+
+.theme-footer {
+	background-color: var(--bg-footer);
+	color: var(--text-muted);
+	border-top: 1px solid var(--border-footer);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   COMPONENT UTILITIES
+   ═══════════════════════════════════════════════════════════ */
+
+/* Background grid */
+.bg-grid-pattern {
+	background-size: 50px 50px;
+	background-image: linear-gradient(
+			to right,
+			rgba(255, 255, 255, 0.015) 1px,
+			transparent 1px
+		),
+		linear-gradient(to bottom, rgba(255, 255, 255, 0.015) 1px, transparent 1px);
+}
+
+:root[data-theme="light"] .bg-grid-pattern {
+	background-image: linear-gradient(
+			to right,
+			rgba(0, 86, 255, 0.04) 1px,
+			transparent 1px
+		), linear-gradient(to bottom, rgba(0, 86, 255, 0.04) 1px, transparent 1px);
+}
+
+/* Ambient glow orbs */
+.glow-orb {
+	filter: blur(130px);
+	opacity: 0.18;
+	mix-blend-mode: plus-lighter;
+}
+
+:root[data-theme="light"] .glow-orb {
+	opacity: 0.12;
+	mix-blend-mode: multiply;
+}
+
+/* Glassmorphism surfaces */
+.glass-panel {
+	background: var(--bg-glass);
+	backdrop-filter: blur(20px);
+	-webkit-backdrop-filter: blur(20px);
+	border: 1px solid var(--border-subtle);
+}
+
+.glass-panel-hover:hover {
+	background: var(--bg-card);
+	border-color: var(--border-soft);
+	box-shadow: 0 0 30px var(--glow-brand);
+}
+
+/* CTA button (Register) — always coloured, works on both themes */
+.btn-cta {
+	background-image: linear-gradient(
+		135deg,
+		var(--cta-bg-from),
+		var(--cta-bg-to)
+	);
+	box-shadow: 0 4px 20px var(--cta-shadow);
+	border: 0;
+	color: #ffffff !important;
+	font-weight: 700;
+	letter-spacing: 0.01em;
+	transition: filter 0.2s, box-shadow 0.2s, transform 0.15s;
+}
+
+.btn-cta:hover {
+	filter: brightness(1.12);
+	box-shadow: 0 6px 28px var(--cta-shadow);
+	transform: translateY(-1px) scale(1.02);
+}
+
+.btn-cta:active {
+	transform: scale(0.97);
+	filter: brightness(0.95);
+}
+
+/* Custom animations */
+@keyframes pulse-slow {
+	0%,
+	100% {
+		transform: scale(1);
+		opacity: 0.18;
+	}
+	50% {
+		transform: scale(1.1);
+		opacity: 0.25;
+	}
+}
+
+.animate-pulse-slow {
+	animation: pulse-slow 8s ease-in-out infinite;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+	width: 8px;
+	height: 8px;
+}
+::-webkit-scrollbar-track {
+	background: var(--bg-base);
+}
+::-webkit-scrollbar-thumb {
+	background: rgba(255, 255, 255, 0.08);
+	border-radius: 999px;
+}
+::-webkit-scrollbar-thumb:hover {
+	background: rgba(255, 255, 255, 0.16);
+}
+
+:root[data-theme="light"] ::-webkit-scrollbar-thumb {
+	background: rgba(15, 23, 42, 0.14);
+}
+:root[data-theme="light"] ::-webkit-scrollbar-thumb:hover {
+	background: rgba(15, 23, 42, 0.26);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   LIGHT MODE — Tailwind class overrides
+   These flip dark-mode Tailwind classes to their light
+   counterparts for components not using semantic classes.
+   ═══════════════════════════════════════════════════════════ */
+
+/* ── Backgrounds ─────────────────────────────────────────── */
+:root[data-theme="light"] .bg-\[\#030712\] {
+	background-color: #f8faff;
+}
+:root[data-theme="light"] .bg-\[\#030712\]\/40 {
+	background-color: rgba(236, 241, 255, 0.7);
+}
+:root[data-theme="light"] .bg-\[\#030712\]\/60 {
+	background-color: rgba(248, 250, 255, 0.75);
+}
+:root[data-theme="light"] .bg-\[\#030712\]\/70 {
+	background-color: rgba(248, 250, 255, 0.85);
+}
+:root[data-theme="light"] .bg-\[\#030712\]\/90 {
+	background-color: rgba(255, 255, 255, 0.92);
+}
+:root[data-theme="light"] .bg-\[\#0a1120\] {
+	background-color: #ffffff;
+}
+:root[data-theme="light"] .bg-white\/5 {
+	background-color: rgba(15, 23, 42, 0.05);
+}
+:root[data-theme="light"] .bg-white\/8 {
+	background-color: rgba(15, 23, 42, 0.07);
+}
+:root[data-theme="light"] .bg-white\/10 {
+	background-color: rgba(15, 23, 42, 0.08);
+}
+
+/* surface-base token classes */
+:root[data-theme="light"] .bg-surface-base\/70 {
+	background-color: rgba(248, 250, 255, 0.85);
+}
+:root[data-theme="light"] .bg-surface-base\/90 {
+	background-color: rgba(255, 255, 255, 0.92);
+}
+:root[data-theme="light"] .bg-surface-base\/95 {
+	background-color: rgba(255, 255, 255, 0.97);
+}
+
+/* ── Borders ─────────────────────────────────────────────── */
+:root[data-theme="light"] .border-white\/5 {
+	border-color: rgba(15, 23, 42, 0.06);
+}
+:root[data-theme="light"] .border-white\/8 {
+	border-color: rgba(15, 23, 42, 0.08);
+}
+:root[data-theme="light"] .border-white\/10 {
+	border-color: rgba(15, 23, 42, 0.1);
+}
+:root[data-theme="light"] .border-white\/12 {
+	border-color: rgba(15, 23, 42, 0.12);
+}
+:root[data-theme="light"] .divide-white\/5 > * {
+	border-color: rgba(15, 23, 42, 0.06);
+}
+
+/* ── Text ──────────────────────────────────────────────────  */
+:root[data-theme="light"] .text-white {
+	color: #0f172a;
+}
+:root[data-theme="light"] .text-gray-100 {
+	color: #1e293b;
+}
+:root[data-theme="light"] .text-gray-200 {
+	color: #1e293b;
+}
+:root[data-theme="light"] .text-gray-300 {
+	color: #334155;
+}
+:root[data-theme="light"] .text-gray-400 {
+	color: #475569;
+}
+:root[data-theme="light"] .text-gray-500 {
+	color: #64748b;
+}
+
+/* ── Shadows ─────────────────────────────────────────────── */
+:root[data-theme="light"] .shadow-black\/5 {
+	box-shadow: 0 1px 3px rgba(15, 23, 42, 0.08);
+}
+:root[data-theme="light"] .shadow-black\/10 {
+	box-shadow: 0 2px 8px rgba(15, 23, 42, 0.1);
+}
+:root[data-theme="light"] .shadow-black\/40 {
+	box-shadow: 0 8px 30px rgba(15, 23, 42, 0.12);
+}
+:root[data-theme="light"] .shadow-black\/50 {
+	box-shadow: 0 8px 32px rgba(15, 23, 42, 0.14);
+}
+
+/* ── Language dropdown panel ─────────────────────────────── */
+:root[data-theme="light"] .bg-primary-electric-blue\/10 {
+	background-color: rgba(0, 86, 255, 0.07);
+}
+:root[data-theme="light"] .bg-primary-electric-blue\/15 {
+	background-color: rgba(0, 86, 255, 0.1);
+}
+:root[data-theme="light"] .border-primary-electric-blue\/25 {
+	border-color: rgba(0, 86, 255, 0.3);
+}
+
+/* ── Mobile menu panel ───────────────────────────────────── */
+
+/* Navigation anchor links inside the mobile panel */
+.mobile-nav-link {
+	display: block;
+	padding: 0.75rem 0;
+	border-bottom: 1px solid var(--border-subtle);
+	font-size: 1rem;
+	font-weight: 700;
+	color: var(--text-secondary);
+	transition: color 0.15s;
+}
+
+.mobile-nav-link:hover {
+	color: var(--text-primary);
+}
+
+/* Segmented picker wrapper (language/theme selectors)         */
+.mobile-picker {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 0.375rem;
+	padding: 0.25rem;
+	border-radius: 0.75rem;
+	background-color: var(--bg-glass);
+	border: 1px solid var(--border-subtle);
+}
+
+/* Inactive segment button */
+.mobile-picker-btn {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 0.5rem;
+	padding: 0.5rem;
+	border-radius: 0.5rem;
+	font-size: 0.875rem;
+	font-weight: 600;
+	color: var(--text-muted);
+	background: transparent;
+	transition: color 0.15s, background-color 0.15s;
+	cursor: pointer;
+}
+
+/* Hover — only for inactive buttons */
+.mobile-picker-btn:not(.mobile-picker-active):hover {
+	color: var(--text-secondary);
+	background: rgba(255, 255, 255, 0.06);
+}
+
+:root[data-theme="light"] .mobile-picker-btn:not(.mobile-picker-active):hover {
+	background: rgba(15, 23, 42, 0.06);
+}
+
+/* Active segment button — always blue bg, always white text  */
+/* :hover must also be explicit so the hover rule above       */
+/* doesn't bleed through the specificity chain.               */
+.mobile-picker-active,
+.mobile-picker-active:hover {
+	background-color: #0056ff !important;
+	color: #ffffff !important;
+	box-shadow: 0 2px 8px rgba(0, 86, 255, 0.3);
+}
+
+/* Section label inside mobile panel */
+.mobile-panel-label {
+	font-size: 0.6875rem;
+	font-weight: 700;
+	text-transform: uppercase;
+	letter-spacing: 0.08em;
+	color: var(--text-muted);
+}
+
+/* ════════════════════════════════════════════════════════════
+   FEATURES SECTION — semantic classes
+   ════════════════════════════════════════════════════════════ */
+
+/* ── Label badge ─────────────────────────────────────────── */
+.features-badge {
+	display: inline-flex;
+	align-items: center;
+	font-size: 0.75rem;
+	font-weight: 700;
+	letter-spacing: 0.07em;
+	text-transform: uppercase;
+	color: var(--color-brand-300);
+	width: fit-content;
+}
+
+/* ── Feature bullet item ─────────────────────────────────── */
+/* ── Feature Bento Grid & Cards ──────────────────────────── */
+
+/* Focus-dimming interactive container */
+@media (hover: hover) {
+	.features-bento-grid:hover .features-bento-card:not(:hover) {
+		opacity: 0.45;
+		/* Scale and blur removed to keep text pixel-perfect */
+	}
+}
+
+/* Base style for Bento Cards, extending DaisyUI's card component */
+.features-bento-card {
+	position: relative;
+	background: var(--bg-glass);
+	border: 1px solid var(--border-subtle);
+	backdrop-filter: blur(12px);
+	-webkit-backdrop-filter: blur(12px);
+	transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+	overflow: hidden;
+}
+
+:root[data-theme="light"] .features-bento-card {
+	background: rgba(255, 255, 255, 0.65);
+	border-color: rgba(15, 23, 42, 0.08);
+}
+
+/* Hover style for Bento Cards */
+.features-bento-card:hover {
+	transform: translateY(-4px); /* Removed scale(1.01) to keep text razor sharp */
+	border-color: rgba(0, 86, 255, 0.35);
+	background: rgba(255, 255, 255, 0.03);
+	box-shadow: 0 20px 40px -15px rgba(0, 86, 255, 0.15), inset 0 1px 1px 0
+		rgba(255, 255, 255, 0.05);
+}
+
+:root[data-theme="light"] .features-bento-card:hover {
+	background: #ffffff;
+	border-color: rgba(0, 86, 255, 0.25);
+	box-shadow: 0 20px 40px -15px rgba(0, 86, 255, 0.08), 0 4px 12px
+		rgba(0, 86, 255, 0.02);
+}
+
+/* Accent top/left line on hover */
+.features-bento-card::before {
+	content: "";
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 2px;
+	background: linear-gradient(
+		90deg,
+		var(--color-brand-400),
+		var(--color-brand-600)
+	);
+	opacity: 0;
+	transform: scaleX(0.2);
+	transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.features-bento-card:hover::before {
+	opacity: 1;
+	transform: scaleX(1);
+}
+
+/* Text elements */
+.features-bento-card .card-title {
+	font-family: var(--font-heading);
+	font-weight: 700;
+	color: var(--text-primary);
+	font-size: 1.05rem;
+	letter-spacing: -0.01em;
+	gap: 0.5rem;
+}
+
+.features-bento-card .features-bento-desc {
+	font-size: 0.875rem;
+	color: var(--text-muted);
+	line-height: 1.5;
+	transition: color 0.3s ease;
+}
+
+.features-bento-card:hover .features-bento-desc {
+	color: var(--text-secondary);
+}
+
+/* ── Bento Micro-Visual Elements ───────────────────────── */
+
+/* 1. Sparkline / Chart widget inside Analytics card */
+.bento-visual-chart {
+	display: flex;
+	align-items: flex-end;
+	gap: 6px;
+	height: 60px;
+	padding: 8px;
+	border-radius: 0.5rem;
+	background: rgba(255, 255, 255, 0.02);
+	border: 1px solid rgba(255, 255, 255, 0.03);
+	margin-top: 10px;
+}
+
+:root[data-theme="light"] .bento-visual-chart {
+	background: rgba(15, 23, 42, 0.02);
+	border-color: rgba(15, 23, 42, 0.04);
+}
+
+.bento-chart-bar {
+	flex: 1;
+	background: rgba(0, 86, 255, 0.15);
+	border-radius: 3px 3px 0 0;
+	height: 10%;
+	transition: all 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.features-bento-card:hover .bento-chart-bar {
+	background: linear-gradient(
+		to top,
+		var(--color-brand-600),
+		var(--color-brand-400)
+	);
+}
+
+/* Bar height variations */
+.bento-chart-bar:nth-child(1) {
+	height: 35%;
+	transition-delay: 50ms;
+}
+.bento-chart-bar:nth-child(2) {
+	height: 60%;
+	transition-delay: 100ms;
+}
+.bento-chart-bar:nth-child(3) {
+	height: 45%;
+	transition-delay: 150ms;
+}
+.bento-chart-bar:nth-child(4) {
+	height: 80%;
+	transition-delay: 200ms;
+}
+.bento-chart-bar:nth-child(5) {
+	height: 55%;
+	transition-delay: 250ms;
+}
+.bento-chart-bar:nth-child(6) {
+	height: 95%;
+	transition-delay: 300ms;
+}
+.bento-chart-bar:nth-child(7) {
+	height: 75%;
+	transition-delay: 350ms;
+}
+
+.features-bento-card:hover .bento-chart-bar:nth-child(1) {
+	height: 50%;
+}
+.features-bento-card:hover .bento-chart-bar:nth-child(2) {
+	height: 85%;
+}
+.features-bento-card:hover .bento-chart-bar:nth-child(3) {
+	height: 65%;
+}
+.features-bento-card:hover .bento-chart-bar:nth-child(4) {
+	height: 100%;
+}
+.features-bento-card:hover .bento-chart-bar:nth-child(5) {
+	height: 80%;
+}
+.features-bento-card:hover .bento-chart-bar:nth-child(6) {
+	height: 90%;
+}
+.features-bento-card:hover .bento-chart-bar:nth-child(7) {
+	height: 95%;
+}
+
+/* 2. Link mockup inside Instant Shortening card */
+.bento-visual-link {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 0.5rem 0.75rem;
+	border-radius: 0.5rem;
+	background: rgba(255, 255, 255, 0.02);
+	border: 1px solid rgba(255, 255, 255, 0.04);
+	font-family: monospace;
+	font-size: 0.75rem;
+	color: var(--color-brand-300);
+	margin-top: 10px;
+	transition: all 0.3s ease;
+}
+
+:root[data-theme="light"] .bento-visual-link {
+	background: rgba(15, 23, 42, 0.02);
+	border-color: rgba(15, 23, 42, 0.04);
+	color: var(--color-brand-600);
+}
+
+.features-bento-card:hover .bento-visual-link {
+	background: rgba(0, 86, 255, 0.05);
+	border-color: rgba(0, 86, 255, 0.15);
+	color: var(--text-primary);
+}
+
+/* 3. Offline Geolocation visuals */
+.bento-visual-geo {
+	display: flex;
+	gap: 6px;
+	margin-top: 10px;
+}
+
+.bento-geo-tag {
+	font-size: 0.7rem;
+	font-weight: 700;
+	padding: 2px 6px;
+	border-radius: 4px;
+	background: rgba(255, 255, 255, 0.03);
+	border: 1px solid rgba(255, 255, 255, 0.05);
+	color: var(--text-muted);
+	transition: all 0.3s ease;
+}
+
+:root[data-theme="light"] .bento-geo-tag {
+	background: rgba(15, 23, 42, 0.02);
+	border-color: rgba(15, 23, 42, 0.05);
+}
+
+.features-bento-card:hover .bento-geo-tag {
+	background: rgba(0, 86, 255, 0.08);
+	border-color: rgba(0, 86, 255, 0.2);
+	color: var(--color-brand-300);
+	transform: translateY(-1px);
+}
+
+.features-bento-card:hover .bento-geo-tag:nth-child(2) {
+	transition-delay: 50ms;
+}
+.features-bento-card:hover .bento-geo-tag:nth-child(3) {
+	transition-delay: 100ms;
+}
+
+/* 4. Link Control dashboard toggles */
+.bento-visual-controls {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 12px;
+	width: 100%;
+	margin-top: 10px;
+	padding: 8px;
+	border-radius: 0.5rem;
+	background: rgba(255, 255, 255, 0.01);
+	border: 1px solid rgba(255, 255, 255, 0.03);
+}
+
+:root[data-theme="light"] .bento-visual-controls {
+	background: rgba(15, 23, 42, 0.01);
+	border-color: rgba(15, 23, 42, 0.03);
+}
+
+.bento-control-item {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	font-size: 0.75rem;
+	color: var(--text-muted);
+	padding: 4px 8px;
+	border-radius: 6px;
+	background: rgba(255, 255, 255, 0.02);
+	border: 1px solid rgba(255, 255, 255, 0.04);
+	transition: all 0.3s ease;
+}
+
+:root[data-theme="light"] .bento-control-item {
+	background: rgba(15, 23, 42, 0.02);
+	border-color: rgba(15, 23, 42, 0.04);
+}
+
+.features-bento-card:hover .bento-control-item {
+	background: rgba(255, 255, 255, 0.04);
+	border-color: rgba(0, 86, 255, 0.15);
+	color: var(--text-secondary);
+}
+
+:root[data-theme="light"] .features-bento-card:hover .bento-control-item {
+	background: #ffffff;
+}
+
+/* ── Photo frame ─────────────────────────────────────────── */
+/* Perfect circle container with a dropshadow. Custom sizing and background
+   are handled via Tailwind classes in the template. */
+.features-photo-circle {
+	position: relative;
+	filter: drop-shadow(0 0 0 1.5px var(--border-features-photo))
+		drop-shadow(0 24px 60px rgba(0, 86, 255, 0.18))
+		drop-shadow(0 8px 40px rgba(0, 0, 0, 0.55));
+}
+
+/* ── Floating widgets ────────────────────────────────────── */
+.features-widget {
+	position: absolute;
+	z-index: 10;
+	background: rgba(10, 17, 32, 0.72);
+	backdrop-filter: blur(20px);
+	-webkit-backdrop-filter: blur(20px);
+	border: 1px solid rgba(255, 255, 255, 0.1);
+	border-radius: 1rem;
+	box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+}
+
+:root[data-theme="light"] .features-widget {
+	background: rgba(255, 255, 255, 0.9);
+	border-color: rgba(15, 23, 42, 0.1);
+	box-shadow: 0 8px 32px rgba(15, 23, 42, 0.14);
+}
+
+/* Stats widget — anchored top-left of the visual column */
+.features-widget--stats {
+	top: 30%;
+	left: -6%;
+	width: 9.5rem;
+}
+
+/* QR widget — anchored bottom-right of the visual column */
+.features-widget--qr {
+	top: 8%;
+	right: -2%;
+	width: 8.5rem;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	padding: 8px;
+}
+
+/* ── Stats widget internals ──────────────────────────────── */
+.features-bar {
+	flex: 1;
+	border-radius: 2px 2px 0 0;
+	background: linear-gradient(to top, #0056ff, #4d81ff);
+	opacity: 0.8;
+	min-height: 6px;
+}
+
+.features-stat-value {
+	font-size: 0.9375rem;
+	font-weight: 800;
+	color: var(--text-primary);
+	line-height: 1;
+}
+
+.features-stat-label {
+	font-size: 0.625rem;
+	font-weight: 500;
+	color: var(--text-muted);
+	margin-top: 0.125rem;
+	line-height: 1.2;
+}
+
+.features-stat-divider {
+	width: 1px;
+	height: 2rem;
+	background: var(--border-subtle);
+	flex-shrink: 0;
+}
+
+.features-live-dot {
+	display: block;
+	width: 0.5rem;
+	height: 0.5rem;
+	border-radius: 50%;
+	background-color: #10b981;
+	animation: pulse-live 2s ease-in-out infinite;
+}
+
+.features-live-label {
+	font-size: 0.625rem;
+	font-weight: 700;
+	color: #10b981;
+	letter-spacing: 0.06em;
+	text-transform: uppercase;
+}
+
+@keyframes pulse-live {
+	0%,
+	100% {
+		opacity: 1;
+		transform: scale(1);
+	}
+	50% {
+		opacity: 0.4;
+		transform: scale(0.9);
+	}
+}
+
+/* ── QR widget internals ─────────────────────────────────── */
+.features-qr-svg {
+	width: 80px;
+	height: 80px;
+	color: #4d81ff;
+}
+
+:root[data-theme="light"] .features-qr-svg {
+	color: #0046d6;
+}
+
+.features-qr-url {
+	font-size: 0.6875rem;
+	font-weight: 700;
+	color: var(--text-primary);
+	text-align: center;
+}
+
+.features-qr-sub {
+	font-size: 0.5625rem;
+	color: var(--text-muted);
+	text-align: center;
+}
+
+/* ════════════════════════════════════════════════════════════
+   HERO TOOL CARD — semantic classes (dark + light in one place)
+   ════════════════════════════════════════════════════════════ */
+
+/* Tab pill button */
+.tool-tab {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 0.5rem;
+	flex: 1 1 0%;
+	padding: 0.625rem 1rem;
+	border-radius: 0.75rem;
+	border: 1px solid transparent;
+	font-size: 0.875rem;
+	font-weight: 600;
+	cursor: pointer;
+	transition: color 0.15s, background-color 0.15s, border-color 0.15s;
+	color: var(--text-muted);
+	background: transparent;
+}
+
+.tool-tab:hover {
+	color: var(--text-primary);
+	background: rgba(255, 255, 255, 0.05);
+}
+
+:root[data-theme="light"] .tool-tab:hover {
+	background: rgba(15, 23, 42, 0.05);
+}
+
+.tool-tab-active {
+	color: #ffffff !important;
+	background-color: rgba(0, 86, 255, 0.14) !important;
+	border-color: rgba(0, 86, 255, 0.3) !important;
+}
+
+:root[data-theme="light"] .tool-tab-active {
+	color: #0056ff !important;
+	background-color: rgba(0, 86, 255, 0.09) !important;
+	border-color: rgba(0, 86, 255, 0.3) !important;
+}
+
+/* Tool card text input */
+.tool-input {
+	width: 100%;
+	height: 3.25rem;
+	padding-left: 3rem;
+	padding-right: 1rem;
+	border-radius: 0.75rem;
+	border: 1px solid rgba(255, 255, 255, 0.12);
+	background: rgba(255, 255, 255, 0.05);
+	color: var(--text-primary);
+	font-size: 1rem;
+	backdrop-filter: blur(8px);
+	transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.tool-input::placeholder {
+	color: #94a3b8; /* slate-400 — legible in dark mode */
+}
+
+.tool-input:focus {
+	outline: none;
+	border-color: rgba(0, 86, 255, 0.65);
+	box-shadow: 0 0 0 3px rgba(0, 86, 255, 0.15);
+}
+
+.tool-input:disabled {
+	opacity: 0.5;
+	cursor: not-allowed;
+}
+
+:root[data-theme="light"] .tool-input {
+	border-color: rgba(15, 23, 42, 0.15);
+	background: rgba(255, 255, 255, 0.9);
+	box-shadow: 0 1px 3px rgba(15, 23, 42, 0.07);
+}
+
+:root[data-theme="light"] .tool-input::placeholder {
+	color: #94a3b8;
+}
+
+:root[data-theme="light"] .tool-input:focus {
+	border-color: rgba(0, 86, 255, 0.55);
+	box-shadow: 0 0 0 3px rgba(0, 86, 255, 0.12);
+}
+
+/* Icon positioned inside the input (left adornment).         */
+/* Color per-theme for WCAG AA contrast compliance.           */
+/* Visibility is handled by z-99 on the wrapper element.      */
+.tool-input-icon {
+	color: #94a3b8; /* slate-400 — ~4.5:1 on dark surfaces */
+}
+
+:root[data-theme="light"] .tool-input-icon {
+	color: #475569; /* slate-600 — ~5.1:1 on white */
+}
+
+/* Tool card submit button */
+.tool-btn-submit {
+	height: 3.25rem;
+	padding: 0 2rem;
+	border-radius: 0.75rem;
+	background-image: linear-gradient(135deg, #0056ff, #000ba1);
+	font-weight: 700;
+	color: #ffffff;
+	white-space: nowrap;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 0.5rem;
+	box-shadow: 0 4px 16px rgba(0, 86, 255, 0.25);
+	transition: filter 0.2s, transform 0.15s, box-shadow 0.2s;
+}
+
+.tool-btn-submit:hover:not(:disabled) {
+	filter: brightness(1.12);
+	box-shadow: 0 6px 24px rgba(0, 86, 255, 0.35);
+}
+
+.tool-btn-submit:active:not(:disabled) {
+	transform: scale(0.97);
+	filter: brightness(0.95);
+}
+
+.tool-btn-submit:disabled {
+	opacity: 0.45;
+	cursor: not-allowed;
+}
+
+/* Tool card secondary action buttons (Copy, Visit, Download) */
+.tool-btn-ghost {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.5rem;
+	padding: 0.625rem 1rem;
+	border-radius: 0.75rem;
+	font-size: 0.875rem;
+	font-weight: 600;
+	border: 1px solid rgba(255, 255, 255, 0.08);
+	background: rgba(255, 255, 255, 0.04);
+	color: var(--text-secondary);
+	transition: color 0.15s, background 0.15s, border-color 0.15s;
+}
+
+.tool-btn-ghost:hover {
+	color: var(--text-primary);
+	background: rgba(255, 255, 255, 0.09);
+	border-color: rgba(255, 255, 255, 0.14);
+}
+
+:root[data-theme="light"] .tool-btn-ghost {
+	border-color: rgba(15, 23, 42, 0.12);
+	background: rgba(15, 23, 42, 0.04);
+}
+
+:root[data-theme="light"] .tool-btn-ghost:hover {
+	background: rgba(15, 23, 42, 0.08);
+	border-color: rgba(15, 23, 42, 0.18);
+}

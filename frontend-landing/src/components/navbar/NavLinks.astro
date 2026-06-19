@@ -1,0 +1,38 @@
+---
+/**
+ * NavLinks
+ * Center navigation anchor links. Receives translated strings as props.
+ */
+interface Props {
+	home: string
+	features: string
+	dashboard: string
+	why: string
+	faq: string
+	sponsor: string
+}
+
+const { home, features, dashboard, why, faq, sponsor } = Astro.props
+
+const links = [
+	{ href: '#home', label: home },
+	{ href: '#features', label: features },
+	{ href: '#dashboard', label: dashboard },
+	{ href: '#why', label: why },
+	{ href: '#faq', label: faq },
+	{ href: '#sponsor', label: sponsor },
+]
+---
+
+<nav class="hidden xl:flex items-center gap-1">
+	{
+		links.map(({ href, label }) => (
+			<a
+				href={href}
+				class="btn btn-ghost btn-md text-sm text-gray-300 hover:text-white font-semibold justify-center px-3.5"
+			>
+				{label}
+			</a>
+		))
+	}
+</nav>
