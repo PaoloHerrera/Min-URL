@@ -1,0 +1,254 @@
+---
+import { Image } from 'astro:assets'
+import manImage from '@/assets/images/excited-man.png'
+import qrCode from '@/assets/images/qr-min-url.png'
+import { dic } from '../i18n/dic'
+import type { Lang } from '../i18n/utils'
+import IconTrendUpArrow from './icons/IconTrendUpArrow.astro'
+
+interface Props {
+	lang: Lang
+}
+
+const { lang } = Astro.props
+const t = dic[lang]
+---
+
+<!-- ═══════════════════════════════════════════════════════
+     FEATURES SECTION
+     ═══════════════════════════════════════════════════════ -->
+<section
+	id="features"
+	class="relative mx-auto max-w-7xl px-4 sm:px-8 lg:px-16 py-24 lg:py-32 border-t border-white/5"
+>
+	<!-- Ambient glow behind visual column -->
+	<div
+		class="pointer-events-none absolute right-0 top-1/4 w-[600px] h-[600px] rounded-full glow-orb bg-primary-electric-blue"
+		aria-hidden="true"
+	>
+	</div>
+
+	<div
+		class="relative grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-20 items-center"
+	>
+		<!-- ── LEFT: Copy ──────────────────────────────────── -->
+		<div class="flex flex-col gap-10">
+			<!-- Label + Heading -->
+			<div class="flex flex-col gap-4">
+				<span class="features-badge">
+					{t.features.badge}
+				</span>
+
+				<h2
+					class="font-heading text-3xl sm:text-4xl lg:text-[2.65rem] font-extrabold text-white leading-tight tracking-tight"
+				>
+					{t.features.title}
+				</h2>
+
+				<p class="text-gray-400 text-base sm:text-lg leading-relaxed max-w-xl">
+					{t.features.description}
+				</p>
+			</div>
+
+			<!-- Feature Bento Grid -->
+			<div class="features-bento-grid grid grid-cols-1 sm:grid-cols-2 gap-4">
+				<!-- CARD 1: Real-Time Analytics (col-span-2) -->
+				<div
+					class="card features-bento-card col-span-1 sm:col-span-2 shadow-sm group"
+				>
+					<div class="card-body p-5 flex flex-col justify-between gap-4">
+						<div class="flex items-start gap-3">
+							<div class="flex flex-col gap-0.5">
+								<h3
+									class="card-title flex items-center flex-wrap gap-2 text-white"
+								>
+									{t.features.items.analytics.title}
+									<span
+										class="badge badge-success badge-xs gap-1 py-1.5 px-2 font-bold text-[9px] uppercase tracking-wider text-white"
+									>
+										<span
+											class="w-1.5 h-1.5 rounded-full bg-white animate-pulse"
+										></span>
+										Live
+									</span>
+								</h3>
+								<p class="features-bento-desc">
+									{t.features.items.analytics.desc}
+								</p>
+							</div>
+						</div>
+
+						<!-- CSS sparkline visual -->
+						<div class="bento-visual-chart w-full" aria-hidden="true">
+							<div class="bento-chart-bar"></div>
+							<div class="bento-chart-bar"></div>
+							<div class="bento-chart-bar"></div>
+							<div class="bento-chart-bar"></div>
+							<div class="bento-chart-bar"></div>
+							<div class="bento-chart-bar"></div>
+							<div class="bento-chart-bar"></div>
+						</div>
+					</div>
+				</div>
+
+				<!-- CARD 2: Instant Shortening (col-span-1) -->
+				<div class="card features-bento-card col-span-1 shadow-sm group">
+					<div class="card-body p-5 flex flex-col justify-between gap-3">
+						<div class="flex flex-col gap-2">
+							<h3 class="card-title text-white">
+								{t.features.items.instant.title}
+							</h3>
+							<p class="features-bento-desc">{t.features.items.instant.desc}</p>
+						</div>
+
+						<!-- Shortened link mockup visual -->
+						<div class="bento-visual-link" aria-hidden="true">
+							<span class="truncate">murl.cl/qR87z</span>
+							<svg
+								xmlns="http://www.w3.org/2000/svg"
+								class="h-3.5 w-3.5 text-brand-400 group-hover:text-white transition-colors"
+								viewBox="0 0 24 24"
+								fill="none"
+								stroke="currentColor"
+								stroke-width="2"
+								stroke-linecap="round"
+								stroke-linejoin="round"
+							>
+								<rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+								<path
+									d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"
+								></path>
+							</svg>
+						</div>
+					</div>
+				</div>
+
+				<!-- CARD 3: Offline Geolocation (col-span-1) -->
+				<div class="card features-bento-card col-span-1 shadow-sm group">
+					<div class="card-body p-5 flex flex-col justify-between gap-3">
+						<div class="flex flex-col gap-2">
+							<h3 class="card-title text-white">
+								{t.features.items.geo.title}
+							</h3>
+							<p class="features-bento-desc">{t.features.items.geo.desc}</p>
+						</div>
+
+						<!-- Country pills visual -->
+						<div class="bento-visual-geo" aria-hidden="true">
+							<span class="bento-geo-tag">📍 US</span>
+							<span class="bento-geo-tag">📍 ES</span>
+							<span class="bento-geo-tag">📍 BR</span>
+						</div>
+					</div>
+				</div>
+
+				<!-- CARD 4: Link Control (col-span-2) -->
+				<div
+					class="card features-bento-card col-span-1 sm:col-span-2 shadow-sm group"
+				>
+					<div class="card-body p-5 flex flex-col justify-between gap-4">
+						<div class="flex items-start gap-3">
+							<div class="flex flex-col gap-0.5">
+								<h3 class="card-title text-white">
+									{t.features.items.control.title}
+								</h3>
+								<p class="features-bento-desc">
+									{t.features.items.control.desc}
+								</p>
+							</div>
+						</div>
+
+						<!-- Interactive settings toggle mockup -->
+						<div class="bento-visual-controls" aria-hidden="true">
+							<div class="bento-control-item">
+								<span>Password Protection</span>
+								<input
+									type="checkbox"
+									class="toggle toggle-primary toggle-xs pointer-events-none"
+									checked
+								/>
+							</div>
+							<div class="bento-control-item">
+								<span>Expiration Date</span>
+								<input
+									type="checkbox"
+									class="toggle toggle-primary toggle-xs pointer-events-none"
+									checked
+								/>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- ── RIGHT: Visual ────────────────────────────────────── -->
+		<div class="flex items-center justify-center py-12">
+			<!-- Contenedor relativo con el mismo tamaño del círculo
+           para anclar los widgets absolutos al círculo -->
+			<div class="relative w-[280px] sm:w-[360px] lg:w-[420px] aspect-square">
+				<!-- Círculo de foto -->
+				<div
+					class="features-photo-circle w-full h-full aspect-square rounded-full overflow-hidden bg-features-bg border border-features-border z-10 flex items-center justify-center"
+				>
+					<Image
+						src={manImage}
+						alt="Person using Min-URL to shorten links"
+						class="w-full h-full object-cover object-center bg-brand-300"
+						quality={95}
+						widths={[480, 640, 800]}
+						sizes="(max-width: 768px) 320px, (max-width: 1024px) 440px, 480px"
+					/>
+				</div>
+
+				<!-- ─ Floating widget: Stats card (mid-left) ─ -->
+				<div
+					class="features-widget top-[30%] left-[-8%] w-24 sm:w-32"
+					aria-label="Link performance stats"
+				>
+					<ul class="list">
+						<li class="list-row relative">
+							<div>
+								<div class="font-medium text-xs sm:text-base">
+									{t.features.stats}
+								</div>
+								<div class="font-bold text-brand-500 text-sm sm:text-xl">
+									120 K
+								</div>
+							</div>
+							<div class="absolute right-4 w-4 sm:w-6 bottom-5">
+								<IconTrendUpArrow />
+							</div>
+						</li>
+						<li class="list-row relative">
+							<div>
+								<div class="font-medium text-xs sm:text-base">Clicks</div>
+								<div class="font-bold text-brand-500 text-sm sm:text-xl">
+									921
+								</div>
+							</div>
+							<div class="absolute right-4 w-4 sm:w-6 bottom-5">
+								<IconTrendUpArrow />
+							</div>
+						</li>
+					</ul>
+				</div>
+
+				<!-- ─ Floating widget: QR card (up-right) ─ -->
+				<div
+					class="features-widget card w-16 sm:w-24 lg:w-28 top-0 right-0 p-4"
+					aria-label="QR code preview"
+				>
+					<Image
+						src={qrCode}
+						alt="QR code"
+						class="w-full h-full object-cover object-center bg-brand-300"
+						quality={95}
+						widths={[480, 640, 800]}
+						sizes="(max-width: 768px) 320px, (max-width: 1024px) 440px, 480px"
+					/>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>

@@ -1,0 +1,94 @@
+---
+import '../styles/global.css'
+import { dic } from '../i18n/dic'
+import type { Lang } from '../i18n/utils'
+import Navbar from '../components/navbar/Navbar.astro'
+
+interface Props {
+	lang: Lang
+	title?: string
+	description?: string
+}
+
+const { lang } = Astro.props
+const t = dic[lang]
+
+const titles: Record<Lang, string> = {
+	en: 'Min-URL — Open Source URL Shortener & QR Codes',
+	es: 'Min-URL — Acortador de Enlaces Open Source y Códigos QR',
+}
+
+const descriptions: Record<Lang, string> = {
+	en: 'A modern open-source URL shortener & QR Code generator with real-time analytics and offline geolocation.',
+	es: 'Un acortador de URLs completo y generador de códigos QR con analíticas en tiempo real y geolocalización offline.',
+}
+
+const title = titles[lang]
+const description = descriptions[lang]
+---
+
+<!doctype html>
+<html lang={lang} class="scroll-smooth overflow-x-hidden">
+	<head>
+		<meta charset="UTF-8" />
+		<!--
+      Run before first paint so there is no theme flash.
+      Reads from localStorage, falls back to OS preference.
+    -->
+		<script is:inline>
+			const theme =
+				localStorage.getItem('theme') ||
+				(window.matchMedia('(prefers-color-scheme: light)').matches
+					? 'light'
+					: 'dark')
+			document.documentElement.setAttribute('data-theme', theme)
+		</script>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="generator" content={Astro.generator} />
+
+		<!-- Primary Meta Tags -->
+		<title>{title}</title>
+		<meta name="title" content={title} />
+		<meta name="description" content={description} />
+
+		<!-- Fonts (Outfit & Inter) -->
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap"
+			rel="stylesheet"
+		/>
+	</head>
+	<body
+		class="theme-body antialiased bg-grid-pattern relative min-h-screen flex flex-col overflow-x-hidden"
+	>
+		<!-- Glowing Background Orbs -->
+		<div
+			class="absolute top-0 left-1/4 w-[500px] h-[500px] rounded-full bg-primary-electric-blue/10 glow-orb -translate-y-1/2 animate-pulse-slow"
+		>
+		</div>
+		<div
+			class="absolute top-[800px] right-1/4 w-[600px] h-[600px] rounded-full bg-primary-dark-electric-blue/15 glow-orb animate-pulse-slow"
+			style="animation-delay: 2s;"
+		>
+		</div>
+
+		<Navbar lang={lang} />
+
+		<!-- Main Content Area -->
+		<main class="grow">
+			<slot />
+		</main>
+
+		<!-- Footer -->
+		<footer class="theme-footer py-8 text-center text-xs">
+			<div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+				<p>
+					© {new Date().getFullYear()}
+					{t.footer.text}
+				</p>
+			</div>
+		</footer>
+	</body>
+</html>

@@ -1,0 +1,17 @@
+---
+import { Picture } from 'astro:assets'
+import logo from '../../assets/images/Logo-MinURL.png'
+---
+
+<a href="/" class="flex items-center gap-1 group shrink-0">
+	<Picture
+		src={logo}
+		alt="Min-URL Logo"
+		width={36}
+		height={36}
+		class="rounded-full group-hover:scale-105 transition-transform duration-300"
+	/>
+	<span class="font-heading text-lg font-bold tracking-tight text-white">
+		Min-<span class="text-primary-electric-blue">URL</span>
+	</span>
+</a>

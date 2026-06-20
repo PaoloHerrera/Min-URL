@@ -1,0 +1,195 @@
+---
+import { dic } from '../i18n/dic'
+import type { Lang } from '../i18n/utils'
+import IconLink from './icons/IconLink.astro'
+import IconQrCode from './icons/IconQrCode.astro'
+import { ShortenerForm } from './react/ShortenerForm'
+import { QrForm } from './react/QrForm'
+
+interface Props {
+	lang: Lang
+}
+
+const { lang } = Astro.props
+const t = dic[lang]
+
+const apiUrl =
+	import.meta.env.VITE_SHORT_URL_DIRECT || 'http://localhost:3000/api/shorturl'
+const recaptchaKey = import.meta.env.VITE_RECAPTCHA_SITE_KEY || ''
+---
+
+<section
+	id="hero"
+	class="relative w-full px-4 sm:px-6 lg:px-8 pt-32 pb-16 md:pt-36 md:pb-20 overflow-hidden"
+>
+	<!-- ── Ambient glow orbs ─────────────────────────────── -->
+	<div
+		aria-hidden="true"
+		class="pointer-events-none absolute inset-0 -z-10 overflow-hidden"
+	>
+		<div
+			class="glow-orb absolute -top-32 left-1/2 -translate-x-1/2 h-[480px] w-[480px] rounded-full bg-primary-electric-blue"
+		>
+		</div>
+		<div
+			class="glow-orb absolute top-48 -left-24 h-64 w-64 rounded-full bg-indigo-600 animate-pulse-slow"
+		>
+		</div>
+		<div
+			class="glow-orb absolute top-48 -right-24 h-64 w-64 rounded-full bg-primary-dark-electric-blue animate-pulse-slow"
+			style="animation-delay:3s"
+		>
+		</div>
+	</div>
+
+	<!-- ── Content column ────────────────────────────────── -->
+	<div class="mx-auto max-w-3xl flex flex-col items-center gap-8 text-center">
+		<!-- H1 -->
+		<h1
+			class="font-heading text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight text-white leading-[1.1]"
+		>
+			{t.hero.titleStart}
+			<br class="hidden sm:inline" />
+			<span
+				class="bg-linear-to-r from-blue-400 via-indigo-300 to-[#0056ff] bg-clip-text text-transparent"
+			>
+				{t.hero.titleGradient}
+			</span>
+		</h1>
+
+		<!-- Description -->
+		<p
+			class="text-base sm:text-lg text-gray-400 max-w-2xl font-light leading-relaxed -mt-2"
+		>
+			{t.hero.description}
+		</p>
+
+		<!-- ── Tool Card ──────────────────────────────────── -->
+		<div
+			class="w-full glass-panel rounded-3xl shadow-2xl shadow-black/30 overflow-hidden"
+		>
+			<!-- Tab pill selector (JS-driven for SVG icon support) -->
+			<div
+				role="tablist"
+				aria-label={lang === 'en' ? 'Choose tool' : 'Elige herramienta'}
+				class="flex gap-1 p-2 border-b border-white/8"
+			>
+				<button
+					id="btn-tab-short"
+					role="tab"
+					aria-selected="true"
+					aria-controls="panel-short"
+					class="tool-tab tool-tab-active"
+				>
+					<IconLink class="size-4 shrink-0" />
+					<span>{t.hero.shortener.button}</span>
+				</button>
+				<button
+					id="btn-tab-qr"
+					role="tab"
+					aria-selected="false"
+					aria-controls="panel-qr"
+					class="tool-tab"
+				>
+					<IconQrCode class="size-4 shrink-0" />
+					<span>{t.hero.qrTool.tab}</span>
+				</button>
+			</div>
+
+			<!-- Tab panels -->
+			<div
+				id="panel-short"
+				role="tabpanel"
+				aria-labelledby="btn-tab-short"
+				class="p-6"
+			>
+				<ShortenerForm
+					client:load
+					apiUrl={apiUrl}
+					recaptchaKey={recaptchaKey}
+					texts={t.hero.shortener}
+				/>
+			</div>
+			<div
+				id="panel-qr"
+				role="tabpanel"
+				aria-labelledby="btn-tab-qr"
+				class="p-6 hidden"
+			>
+				<QrForm
+					client:load
+					placeholder={t.hero.qrTool.placeholder}
+					button={t.hero.qrTool.button}
+					downloadQr={t.hero.qrTool.downloadQr}
+					errorInvalid={t.hero.qrTool.errorInvalid}
+				/>
+			</div>
+		</div>
+
+		<!-- ── Trust indicators ──────────────────────────── -->
+		<div
+			class="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-xs font-medium text-gray-500"
+		>
+			{
+				[
+					t.hero.trust.noAccount,
+					t.hero.trust.free,
+					t.hero.trust.openSource,
+				].map((label) => (
+					<span class="flex items-center gap-1.5">
+						<svg
+							class="size-3.5 text-emerald-500 shrink-0"
+							fill="none"
+							viewBox="0 0 24 24"
+							stroke="currentColor"
+							stroke-width="2.5"
+							aria-hidden="true"
+						>
+							<path
+								stroke-linecap="round"
+								stroke-linejoin="round"
+								d="M5 13l4 4L19 7"
+							/>
+						</svg>
+						{label}
+					</span>
+				))
+			}
+		</div>
+	</div>
+</section>
+
+<!-- Tab switching script (minimal — only for icon-enabled tabs) -->
+<script is:inline>
+	;(() => {
+		const tabs = document.querySelectorAll('[role="tab"]')
+		const panels = document.querySelectorAll('[role="tabpanel"]')
+
+		tabs.forEach((tab, i) => {
+			tab.addEventListener('click', () => {
+				// Update tab buttons
+				tabs.forEach((t) => {
+					t.classList.remove('tool-tab-active')
+					t.setAttribute('aria-selected', 'false')
+				})
+				tab.classList.add('tool-tab-active')
+				tab.setAttribute('aria-selected', 'true')
+
+				// Show/hide panels
+				panels.forEach((p, j) => {
+					p.classList.toggle('hidden', i !== j)
+				})
+			})
+
+			// Keyboard: arrows to navigate between tabs
+			tab.addEventListener('keydown', (e) => {
+				const dir = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0
+				if (!dir) return
+				e.preventDefault()
+				const next = (i + dir + tabs.length) % tabs.length
+				tabs[next].click()
+				tabs[next].focus()
+			})
+		})
+	})()
+</script>

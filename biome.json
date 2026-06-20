@@ -7,7 +7,7 @@
 	},
 	"files": {
 		"ignoreUnknown": false,
-		"ignore": ["node_modules", "dist", "src/modules/core/ui"]
+		"ignore": ["node_modules", "dist", "src/modules/core/ui", "**/*.astro"]
 	},
 	"formatter": {
 		"enabled": true,
@@ -20,7 +20,10 @@
 		"ignore": ["google.strategy.ts", "models", "schema"],
 		"enabled": true,
 		"rules": {
-			"all": true
+			"all": true,
+			"suspicious": {
+				"noReactSpecificProps": "off"
+			}
 		}
 	},
 	"javascript": {
@@ -34,7 +37,7 @@
 	},
 	"overrides": [
 		{
-			"include": ["frontend-landing/**"],
+			"include": ["**/frontend-landing/**"],
 			"linter": {
 				"rules": {
 					"correctness": {
@@ -47,7 +50,7 @@
 			}
 		},
 		{
-			"include": ["frontend-dashboard/**"],
+			"include": ["**/frontend-dashboard/**"],
 			"linter": {
 				"rules": {
 					"correctness": {
@@ -60,7 +63,7 @@
 			}
 		},
 		{
-			"include": ["backend-services/**"],
+			"include": ["**/backend-services/**"],
 			"linter": {
 				"rules": {
 					"correctness": {
@@ -75,7 +78,7 @@
 			}
 		},
 		{
-			"include": ["backend-users/**"],
+			"include": ["**/backend-users/**"],
 			"linter": {
 				"rules": {
 					"correctness": {
@@ -90,7 +93,7 @@
 			}
 		},
 		{
-			"include": ["backend-redirector/**"],
+			"include": ["**/backend-redirector/**"],
 			"linter": {
 				"rules": {
 					"correctness": {
