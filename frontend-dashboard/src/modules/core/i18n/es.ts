@@ -7,9 +7,10 @@ export const ES_TRANSLATIONS: Translations = {
 	login: {
 		logo: MinUrlIcon,
 		companyName: 'Min-URL',
-		title: 'Bienvenido a Min-URL',
+		title: 'Bienvenido',
+		titleSufix: 'de Nuevo',
 		description:
-			'Inicia sesión para acceder a tu panel y comenzar a crear enlaces cortos en tiempo real.',
+			'Bienvenido, por favor ingresa tus datos.',
 		buttons: [
 			{
 				icon: MailIcon,
@@ -26,7 +27,43 @@ export const ES_TRANSLATIONS: Translations = {
 		terms: 'Términos de servicio',
 		conect: 'y',
 		privacy: 'Política de privacidad',
+		emailPlaceholder: 'mail@site.com',
+		emailValidatorHint: 'Ingresa una dirección de correo válida',
+		passwordPlaceholder: 'Contraseña',
+		rememberMe: 'Recordarme',
+		forgotPassword: '¿Olvidaste tu contraseña?',
+		signInButton: 'Iniciar sesión',
+		dividerText: 'O continuar con',
+		googleSignIn: 'Iniciar sesión con Google',
+		noAccount: '¿No tienes una cuenta?',
+		createNew: 'Crear una nueva',
+		allRightsReserved: 'Todos los derechos reservados.',
 	},
+
+	register: {
+		title: 'Crear',
+		titleSufix: 'Cuenta',
+		description: 'Crea tu cuenta para comenzar a usar Min-URL',
+		fullNamePlaceholder: 'Nombre completo',
+		fullNameValidatorHint: 'Debe tener entre 3 y 30 caracteres conteniendo solo letras',
+		emailPlaceholder: 'Dirección de correo',
+		emailValidatorHint: 'Ingresa una dirección de correo válida',
+		passwordPlaceholder: 'Contraseña',
+		passwordValidatorHint: 'Debe tener más de 8 caracteres, incluyendo número, minúscula y mayúscula',
+		confirmPasswordPlaceholder: 'Confirmar contraseña',
+		confirmPasswordValidatorHint: 'Debe tener más de 8 caracteres, incluyendo número, minúscula y mayúscula',
+		signUpButton: 'Registrarse',
+		termsCheckboxText1: 'Acepto los ',
+		termsLink: 'Términos de servicio',
+		termsCheckboxText2: ' y la ',
+		privacyLink: 'Política de privacidad',
+		dividerText: 'O continuar con',
+		googleSignUp: 'Registrarse con Google',
+		hasAccount: '¿Ya tienes una cuenta?',
+		loginLink: 'Inicia sesión',
+		allRightsReserved: 'Todos los derechos reservados.',
+	},
+
 	dashboard: {
 		navbar: {
 			greetings: {

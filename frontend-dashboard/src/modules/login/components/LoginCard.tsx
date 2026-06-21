@@ -1,70 +1,166 @@
-import {
-	Card,
-	CardBody,
-	CardFooter,
-	CardHeader,
-} from '@/modules/core/design-system/Card.tsx'
 import type { LoginCardProps } from '@/types'
-import { LoginButton } from './LoginButton.tsx'
+import LoginImage from '@/assets/images/login.webp'
+import Logo from '@/assets/images/Logo-MinURL.webp'
 
-export const LoginCard = ({ information }: LoginCardProps) => {
-	const {
-		logo: Logo,
-		companyName,
-		title,
-		description,
-		buttons,
-		footer,
-		terms,
-		conect,
-		privacy,
-	} = information
-
+export const LoginCard: React.FC<LoginCardProps> = ({
+	information,
+}: LoginCardProps) => {
 	return (
-		<Card>
-			<CardHeader>
-				<div className="flex items-center gap-2">
-					<div className="flex items-center justify-center">
-						<Logo />
+		<div className="container flex justify-center items-center px-4 lg:px-0 py-10">
+			<div className="card lg:card-side shadow-2xl rounded-4xl w-full flex-col-reverse lg:flex-row border-4 border-brand-400 min-h-[700px] h-auto max-w-[1024px]">
+				<div className="card-body lg:w-1/2 lg:h-auto items-center gap-6">
+					<figure className="flex items-center flex-col">
+						<img src={Logo} alt="Logo MinURL" className="w-12" />
+						<div className="font-bold text-xl text-center">Min-URL</div>
+					</figure>
+
+					<div className="flex items-center flex-col gap-6">
+						<h2 className="card-title text-2xl sm:text-4xl">
+							{' '}
+							{information.title}{' '}
+							<span className="text-brand-200">
+								{' '}
+								{information.titleSufix}
+							</span>{' '}
+						</h2>
+						<p className="text-xs"> {information.description} </p>
 					</div>
-					<div className="text-center">
-						<p className="text-xl font-bold text-mariner-500">{companyName}</p>
-					</div>
-				</div>
-			</CardHeader>
-			<CardBody>
-				<h1 className="text-3xl font-extrabold text-mariner-950">{title}</h1>
-				<p className="text-md text-mariner-950 opacity-80">{description}</p>
-				<div className="mt-6 flex flex-col gap-4">
-					{buttons.map((button) => (
-						<LoginButton key={button.text} {...button} />
-					))}
-				</div>
-			</CardBody>
-			<CardFooter>
-				<div className="flex">
-					<p className="text-center font-normal text-sm text-mariner-950">
-						{footer}{' '}
-						<a
-							href="https://github.com/Min-URL/min-url"
-							target="_blank"
-							rel="noreferrer"
-							className="text-blue-500 hover:underline"
+					<form action="" className="w-full flex flex-col gap-6">
+						<div>
+							<label className="input validator w-full rounded-4xl">
+								<svg
+									className="h-[1em] opacity-50"
+									xmlns="http://www.w3.org/2000/svg"
+									viewBox="0 0 24 24"
+								>
+									<g
+										strokeLinejoin="round"
+										strokeLinecap="round"
+										strokeWidth="2.5"
+										fill="none"
+										stroke="currentColor"
+									>
+										<rect width="20" height="16" x="2" y="4" rx="2"></rect>
+										<path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
+									</g>
+								</svg>
+								<input
+									type="email"
+									placeholder={information.emailPlaceholder}
+									required
+								/>
+							</label>
+							<div className="validator-hint hidden">
+								{information.emailValidatorHint}
+							</div>
+						</div>
+
+						<div>
+							<label className="input validator w-full rounded-4xl">
+								<svg
+									className="h-[1em] opacity-50"
+									xmlns="http://www.w3.org/2000/svg"
+									viewBox="0 0 24 24"
+								>
+									<g
+										strokeLinejoin="round"
+										strokeLinecap="round"
+										strokeWidth="2.5"
+										fill="none"
+										stroke="currentColor"
+									>
+										<path d="M2.586 17.414A2 2 0 0 0 2 18.828V21a1 1 0 0 0 1 1h3a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h1a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h.172a2 2 0 0 0 1.414-.586l.814-.814a6.5 6.5 0 1 0-4-4z"></path>
+										<circle
+											cx="16.5"
+											cy="7.5"
+											r=".5"
+											fill="currentColor"
+										></circle>
+									</g>
+								</svg>
+								<input
+									type="password"
+									required
+									placeholder={information.passwordPlaceholder}
+								/>
+							</label>
+						</div>
+						<div className="flex justify-between flex-col gap-10 sm:flex-row text-center sm:text-start items-center">
+							<label className="label">
+								<input
+									type="checkbox"
+									defaultChecked={false}
+									className="checkbox bg-white text-black checkbox-xs"
+								/>
+								<span className="text-xs text-white">
+									{' '}
+									{information.rememberMe}{' '}
+								</span>
+							</label>
+							<a href="#" className="link link-hover text-xs">
+								{' '}
+								{information.forgotPassword}{' '}
+							</a>
+						</div>
+						<button
+							className="btn bg-brand-400 w-full rounded-4xl hover:bg-brand-500"
+							type="submit"
 						>
-							{terms}
-						</a>{' '}
-						{conect}{' '}
-						<a
-							href="https://github.com/Min-URL/min-url"
-							target="_blank"
-							rel="noreferrer"
-							className="text-blue-500 hover:underline"
+							{information.signInButton}
+						</button>
+					</form>
+					<div className="divider text-xs">{information.dividerText}</div>
+					<button className="btn bg-white text-black border-[#e5e5e5] w-full rounded-4xl">
+						<svg
+							aria-label="Google logo"
+							width="16"
+							height="16"
+							xmlns="http://www.w3.org/2000/svg"
+							viewBox="0 0 512 512"
 						>
-							{privacy}
+							<g>
+								<path d="m0 0H512V512H0" fill="#fff"></path>
+								<path
+									fill="#34a853"
+									d="M153 292c30 82 118 95 171 60h62v48A192 192 0 0190 341"
+								></path>
+								<path
+									fill="#4285f4"
+									d="m386 400a140 175 0 0053-179H260v74h102q-7 37-38 57"
+								></path>
+								<path
+									fill="#fbbc02"
+									d="m90 341a208 200 0 010-171l63 49q-12 37 0 73"
+								></path>
+								<path
+									fill="#ea4335"
+									d="m153 219c22-69 116-109 179-50l55-54c-78-75-230-72-297 55"
+								></path>
+							</g>
+						</svg>
+						<span className="text-xs"> {information.googleSignIn} </span>
+					</button>
+					<p className="text-xs">
+						{information.noAccount}{' '}
+						<a href="/register" className="link link-hover text-brand-200">
+							{information.createNew}
 						</a>
 					</p>
+					<footer className="flex w-full justify-center items-center">
+						<span className="text-[10px]">
+							© {new Date().getFullYear()} Min-URL.{' '}
+							{information.allRightsReserved}
+						</span>
+					</footer>
 				</div>
-			</CardFooter>
-		</Card>
+				<figure className="lg:w-1/2 hidden lg:block">
+					<img
+						src={LoginImage}
+						alt="Login Image"
+						className="w-full h-full object-cover rounded-tr-xl lg:rounded-br-xl rounded-tl-xl rounded-br-none rounded-bl-none lg:rounded-tl-none"
+					/>
+				</figure>
+			</div>
+		</div>
 	)
 }
