@@ -10,7 +10,7 @@ import { MobileSidebar } from './components/MobileSidebar.tsx'
 import { NotificationsDropdown } from './components/NotificationsDropdown.tsx'
 import { SearchInput } from './components/SearchInput.tsx'
 import { UserProfileDropdown } from './components/UserProfileDropdown.tsx'
-import { Greeting } from './components/greetings.tsx'
+import { Greeting } from './components/Greeting.tsx'
 
 export const Navbar = () => {
 	const {
