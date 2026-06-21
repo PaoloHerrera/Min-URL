@@ -7,10 +7,10 @@
 	},
 	"files": {
 		"ignoreUnknown": false,
-		"ignore": ["node_modules", "dist", "src/modules/core/ui", "**/*.astro"]
+		"ignore": ["node_modules", "dist", "build", "src/modules/core/ui", "**/*.astro"]
 	},
 	"formatter": {
-		"enabled": true,
+		"enabled": false,
 		"indentStyle": "tab"
 	},
 	"organizeImports": {
@@ -35,9 +35,15 @@
 			"semicolons": "asNeeded"
 		}
 	},
+	"json": {
+		"parser": {
+			"allowComments": true,
+			"allowTrailingCommas": true
+		}
+	},
 	"overrides": [
 		{
-			"include": ["**/frontend-landing/**"],
+			"include": ["**/frontend-landing/**", "frontend-landing/**"],
 			"linter": {
 				"rules": {
 					"correctness": {
@@ -50,7 +56,7 @@
 			}
 		},
 		{
-			"include": ["**/frontend-dashboard/**"],
+			"include": ["**/frontend-dashboard/**", "frontend-dashboard/**"],
 			"linter": {
 				"rules": {
 					"correctness": {
@@ -63,7 +69,7 @@
 			}
 		},
 		{
-			"include": ["**/backend-services/**"],
+			"include": ["**/backend-services/**", "backend-services/**"],
 			"linter": {
 				"rules": {
 					"correctness": {
@@ -73,12 +79,16 @@
 					"suspicious": {
 						"noConsole": "off",
 						"noConsoleLog": "off"
+					},
+					"style": {
+						"noDefaultExport": "off",
+						"useNamingConvention": "off"
 					}
 				}
 			}
 		},
 		{
-			"include": ["**/backend-users/**"],
+			"include": ["**/backend-users/**", "backend-users/**"],
 			"linter": {
 				"rules": {
 					"correctness": {
@@ -88,12 +98,16 @@
 					"suspicious": {
 						"noConsole": "off",
 						"noConsoleLog": "off"
+					},
+					"style": {
+						"noDefaultExport": "off",
+						"useNamingConvention": "off"
 					}
 				}
 			}
 		},
 		{
-			"include": ["**/backend-redirector/**"],
+			"include": ["**/backend-redirector/**", "backend-redirector/**"],
 			"linter": {
 				"rules": {
 					"correctness": {
@@ -106,6 +120,58 @@
 						"noReactSpecificProps": "off"
 					}
 				}
+			}
+		},
+		{
+			"include": [
+				"**/backend-redirector/vite.config.ts",
+				"backend-redirector/vite.config.ts"
+			],
+			"linter": {
+				"rules": {
+					"style": {
+						"noDefaultExport": "off",
+						"useNamingConvention": "off"
+					}
+				}
+			}
+		},
+		{
+			"include": [
+				"**/backend-redirector/app/routes/**",
+				"backend-redirector/app/routes/**",
+				"**/backend-redirector/app/root.tsx",
+				"backend-redirector/app/root.tsx"
+			],
+			"linter": {
+				"rules": {
+					"style": {
+						"noDefaultExport": "off",
+						"useFilenamingConvention": "off"
+					}
+				}
+			}
+		},
+		{
+			"include": [
+				"**/backend-users/src/**/*.spec.ts",
+				"backend-users/src/**/*.spec.ts",
+				"src/**/*.spec.ts",
+				"**/backend-users/test/**/*.e2e-spec.ts",
+				"backend-users/test/**/*.e2e-spec.ts",
+				"test/**/*.e2e-spec.ts"
+			],
+			"javascript": {
+				"globals": [
+					"describe",
+					"beforeEach",
+					"it",
+					"expect",
+					"jest",
+					"beforeAll",
+					"afterAll",
+					"afterEach"
+				]
 			}
 		}
 	]

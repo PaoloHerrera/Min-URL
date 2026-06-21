@@ -3,7 +3,19 @@
 	"tasks": {
 		"build": {
 			"dependsOn": ["^build"],
-			"outputs": ["dist/**"]
+			"outputs": ["dist/**", ".next/**", "build/**", ".astro/**"]
+		},
+		"lint": {
+			"outputs": []
+		},
+		"test": {
+			"outputs": []
+		},
+		"typecheck": {
+			"outputs": []
+		},
+		"format:check": {
+			"outputs": []
 		},
 		"dev": {
 			"cache": false

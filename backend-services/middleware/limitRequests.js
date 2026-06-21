@@ -1,6 +1,6 @@
 import { Op } from 'sequelize'
 import { LIMITS_VALUES } from '../constants.js'
-import { UrlModel } from '../models/UrlModel.js'
+import { UrlModel } from '../models/urlModel.js'
 
 const getStartOfDay = (date) => {
 	const startOfDay = new Date(date)
@@ -19,7 +19,6 @@ const createRateLimitMiddleware = (purpose, limitType) => {
 			const urlCount = await UrlModel.count({
 				where: {
 					purpose,
-					// biome-ignore lint/style/useNamingConvention: UrlModel need use snake case
 					created_at: {
 						[Op.gte]: startOfDay, // Mayor o igual a la medianoche de hoy
 					},

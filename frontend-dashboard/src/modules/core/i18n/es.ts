@@ -1,5 +1,5 @@
 import { VITE_GITHUB_LOGIN_LINK, VITE_GOOGLE_LOGIN_LINK } from '@/constants'
-import { GithubIcon, MinUrlIcon } from '@/modules/core/design-system/Icons'
+import { GithubIcon, MinUrlIcon } from '@/modules/core/design-system/icons'
 import type { Translations } from '@/types'
 import { MailIcon } from 'lucide-react'
 
@@ -9,8 +9,7 @@ export const ES_TRANSLATIONS: Translations = {
 		companyName: 'Min-URL',
 		title: 'Bienvenido',
 		titleSufix: 'de Nuevo',
-		description:
-			'Bienvenido, por favor ingresa tus datos.',
+		description: 'Bienvenido, por favor ingresa tus datos.',
 		buttons: [
 			{
 				icon: MailIcon,
@@ -45,13 +44,16 @@ export const ES_TRANSLATIONS: Translations = {
 		titleSufix: 'Cuenta',
 		description: 'Crea tu cuenta para comenzar a usar Min-URL',
 		fullNamePlaceholder: 'Nombre completo',
-		fullNameValidatorHint: 'Debe tener entre 3 y 30 caracteres conteniendo solo letras',
+		fullNameValidatorHint:
+			'Debe tener entre 3 y 30 caracteres conteniendo solo letras',
 		emailPlaceholder: 'Dirección de correo',
 		emailValidatorHint: 'Ingresa una dirección de correo válida',
 		passwordPlaceholder: 'Contraseña',
-		passwordValidatorHint: 'Debe tener más de 8 caracteres, incluyendo número, minúscula y mayúscula',
+		passwordValidatorHint:
+			'Debe tener más de 8 caracteres, incluyendo número, minúscula y mayúscula',
 		confirmPasswordPlaceholder: 'Confirmar contraseña',
-		confirmPasswordValidatorHint: 'Debe tener más de 8 caracteres, incluyendo número, minúscula y mayúscula',
+		confirmPasswordValidatorHint:
+			'Debe tener más de 8 caracteres, incluyendo número, minúscula y mayúscula',
 		signUpButton: 'Registrarse',
 		termsCheckboxText1: 'Acepto los ',
 		termsLink: 'Términos de servicio',

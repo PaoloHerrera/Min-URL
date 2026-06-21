@@ -1,4 +1,4 @@
-import { getOrcreateGeolocation } from '../services/GeolocationServices.js'
+import { getOrcreateGeolocation } from '../services/geolocationServices.js'
 
 export const addGeolocation = async (req, _res, next) => {
 	const ip =

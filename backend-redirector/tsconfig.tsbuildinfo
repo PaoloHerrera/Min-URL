@@ -1,0 +1,1 @@
+{"root":["./vite.config.ts","./app/constants.ts","./app/config/redis.ts","./app/utils/getdivicetype.ts","./app/entry.client.tsx","./app/entry.server.tsx","./app/root.tsx","./app/routes/$slug.tsx","./app/routes/_index.tsx"],"version":"5.9.3"}

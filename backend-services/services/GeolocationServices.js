@@ -3,14 +3,13 @@ import geoip from 'geoip-lite'
 import {
 	createGeolocation,
 	getGeolocationByIp,
-} from '../models/GeolocationModel.js'
+} from '../models/geolocationModel.js'
 
 const createGeolocationService = async (ipAddress) => {
 	// Se busca la geolocalización del IP
 	const geo = lookupGeolocation(ipAddress)
 	// Si no se encuentra la geolocalización, se inserta como "unknown"
 	const geolocation = await createGeolocation({
-		// biome-ignore lint/style/useNamingConvention: Sequelize need use snake case
 		ip_address: ipAddress,
 		country: geo.country || 'unknown',
 		region: geo.region || 'unknown',

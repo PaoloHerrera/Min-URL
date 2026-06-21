@@ -50,14 +50,12 @@ export const EditLinkForm = ({
 	const slug = watch('slug')
 
 	const onSubmit = async (data: FormData) => {
-		const response = await updateUrlMutation({
+		await updateUrlMutation({
 			id,
 			title: data.title,
 			url: data.url,
 			slug: data.slug,
 		})
-
-		console.log('Response from updateUrlMutation:', response.message)
 	}
 
 	return (

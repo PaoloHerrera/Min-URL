@@ -4,14 +4,14 @@ import {
 	checkSlugAvailability,
 	getSlugData,
 	returnSlugAvailability,
-} from '../controllers/UrlController.js'
+} from '../controllers/urlController.js'
 import {
 	createQrCode,
 	createShortUrl,
 	createShortUrlWithCustomSlug,
 	deleteUserUrl,
 	updateUserUrl,
-} from '../controllers/UserController.js'
+} from '../controllers/userController.js'
 import { checkApiKey } from '../middleware/checkApiKey.js'
 import {
 	checkQrCodeAvailable,

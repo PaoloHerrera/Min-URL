@@ -1,4 +1,4 @@
-import { createQrCode } from '../models/QrCodeModel.js'
+import { createQrCode } from '../models/qrCodeModel.js'
 
 export const createQrForUrl = async ({
 	urlId,

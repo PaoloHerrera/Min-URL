@@ -2,7 +2,6 @@ export const downloadQrCode = (title: string, id: string) => {
 	// Check if the SVG element exists
 	const svg = document.getElementById(id) as SVGSVGElement | null
 	if (!svg) {
-		console.error('SVG element not found.')
 		return
 	}
 
@@ -22,7 +21,6 @@ export const downloadQrCode = (title: string, id: string) => {
 	const canvas = document.createElement('canvas')
 	const context = canvas.getContext('2d')
 	if (!context) {
-		console.error('Failed to get canvas context.')
 		return
 	}
 

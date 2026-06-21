@@ -108,7 +108,11 @@ export class AuthService {
 		userId,
 		username,
 		refreshToken,
-	}: { userId: number; username: string; refreshToken: string }) {
+	}: {
+		userId: number
+		username: string
+		refreshToken: string
+	}) {
 		const refresh = await this.refreshTokenModel.findOne({
 			where: { userId, refreshToken },
 		})

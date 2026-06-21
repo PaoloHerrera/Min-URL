@@ -1,9 +1,9 @@
 {
-	"editor.defaultFormatter": "biome.biome",
+	"editor.defaultFormatter": "esbenp.prettier-vscode",
 	"editor.formatOnSave": true,
 	"editor.codeActionsOnSave": {
-		"quickfix.biome": "explicit",
-		"source.organizeImports.biome": "explicit"
+		"source.organizeImports.biome": "explicit",
+		"quickfix.biome": "explicit"
 	},
 	"prettier.singleQuote": true,
 	"prettier.semi": false,

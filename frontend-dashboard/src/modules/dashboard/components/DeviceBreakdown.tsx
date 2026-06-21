@@ -3,7 +3,7 @@ import { useTranslations } from '@/modules/core/hooks/useTranslations.ts'
 import { useStatsStore } from '@/stores/statsStore.ts'
 import type { PieChartProps } from '@/types.d'
 import { Cell, Pie, PieChart, ResponsiveContainer, Tooltip } from 'recharts'
-import type { TooltipProps } from 'recharts/types/component/Tooltip'
+import type { TooltipContentProps } from 'recharts'
 import { NoData } from './NoData.tsx'
 
 const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042']
@@ -79,7 +79,7 @@ export const DeviceBreakdown = () => {
 	)
 }
 
-const CustomTooltip = ({ active, payload }: TooltipProps<number, string>) => {
+const CustomTooltip = ({ active, payload }: Partial<TooltipContentProps<number, string>>) => {
 	if (active && payload && payload.length > 0) {
 		return (
 			<div className="bg-white p-2 rounded-lg shadow-md">

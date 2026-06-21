@@ -1,6 +1,6 @@
 import { SHORTURL_VALUES } from '../constants.js'
-import { ShortUrlModel } from '../models/ShortUrlModel.js'
-import { UrlModel } from '../models/UrlModel.js'
+import { ShortUrlModel } from '../models/shortUrlModel.js'
+import { UrlModel } from '../models/urlModel.js'
 
 const SLUG_REGEX = /^[a-zA-Z0-9]+$/
 

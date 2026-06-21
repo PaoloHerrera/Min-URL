@@ -1,8 +1,8 @@
 import Redis from 'ioredis'
-import { createClickDetail } from '../models/ClickDetailModel.js'
-import { createClick } from '../models/ClickModel.js'
-import { getGeolocationByIp } from '../models/GeolocationModel.js'
-import { createGeolocation } from '../models/GeolocationModel.js'
+import { createClickDetail } from '../models/clickDetailModel.js'
+import { createClick } from '../models/clickModel.js'
+import { getGeolocationByIp } from '../models/geolocationModel.js'
+import { createGeolocation } from '../models/geolocationModel.js'
 import { lookupGeolocation } from '../utils/geo.js'
 
 const redis = new Redis({
@@ -27,7 +27,6 @@ export const setupRedis = () => {
 
 		//Crear click en la tabla de clicks
 		const { id_clicks } = await createClick({
-			// biome-ignore lint/style/useNamingConvention: Sequelize need use snake case
 			url_id: idUrl,
 		})
 
@@ -39,7 +38,6 @@ export const setupRedis = () => {
 			const geo = lookupGeolocation(data.ip)
 			const { country, region, city, latitude, longitude } = geo
 			const { id_geolocations } = await createGeolocation({
-				// biome-ignore lint/style/useNamingConvention: Sequelize need use snake case
 				ip_address: ip,
 				country,
 				region,
@@ -52,13 +50,9 @@ export const setupRedis = () => {
 
 		//Crear click detalles en la tabla de clicks_details
 		await createClickDetail({
-			// biome-ignore lint/style/useNamingConvention: Sequelize need use snake case
 			click_id: id_clicks,
-			// biome-ignore lint/style/useNamingConvention: Sequelize need use snake case
 			geolocations_id: idGeolocation,
-			// biome-ignore lint/style/useNamingConvention: Sequelize need use snake case
 			user_agent: userAgent,
-			// biome-ignore lint/style/useNamingConvention: Sequelize need use snake case
 			device_type: deviceType,
 			referer: referer,
 		})

@@ -18,7 +18,10 @@ interface CheckSlugResponse {
 export const useCheckSlug = ({
 	slug,
 	originalSlug,
-}: { slug: string; originalSlug?: string }) => {
+}: {
+	slug: string
+	originalSlug?: string
+}) => {
 	const [checkSlugStatus, setCheckSlugStatus] = useState<CheckSlugResponse>({
 		isAvailable: false,
 		error: null,

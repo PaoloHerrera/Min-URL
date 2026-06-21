@@ -48,7 +48,6 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 	}
 }
 
-// biome-ignore lint/style/noDefaultExport: Remix Router will handle this
 export default function Slug() {
 	const { data } = useLoaderData<typeof loader>()
 	console.log('Datos frontend:', data)
