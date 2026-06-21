@@ -5,6 +5,7 @@ import { Dashboard } from './modules/dashboard/index.tsx'
 import { Link } from './modules/link/index.tsx'
 import { Login } from './modules/login/Login.tsx'
 import { QrCodes } from './modules/qrcodes/index.tsx'
+import { Register } from './modules/register/Register.tsx'
 
 const AuthRoute = ({ children }: { children: JSX.Element }) => {
 	const { isAuthenticated, isLoading } = useStats()
@@ -45,6 +46,15 @@ export const App = () => {
 					element={
 						<IsLoginRoute>
 							<Login />
+						</IsLoginRoute>
+					}
+				/>
+
+				<Route
+					path="/register"
+					element={
+						<IsLoginRoute>
+							<Register />
 						</IsLoginRoute>
 					}
 				/>

@@ -19,12 +19,52 @@ export interface LoginProps {
 	logo: React.ComponentType
 	companyName: string
 	title: string
+	titleSufix: string
 	description: string
 	buttons: LoginButtonProps[]
 	footer: string
 	terms: string
 	conect: string
 	privacy: string
+	emailPlaceholder: string
+	emailValidatorHint: string
+	passwordPlaceholder: string
+	rememberMe: string
+	forgotPassword: string
+	signInButton: string
+	dividerText: string
+	googleSignIn: string
+	noAccount: string
+	createNew: string
+	allRightsReserved: string
+}
+
+export interface RegisterProps {
+	title: string
+	titleSufix: string
+	description: string
+	fullNamePlaceholder: string
+	fullNameValidatorHint: string
+	emailPlaceholder: string
+	emailValidatorHint: string
+	passwordPlaceholder: string
+	passwordValidatorHint: string
+	confirmPasswordPlaceholder: string
+	confirmPasswordValidatorHint: string
+	signUpButton: string
+	termsCheckboxText1: string
+	termsLink: string
+	termsCheckboxText2: string
+	privacyLink: string
+	dividerText: string
+	googleSignUp: string
+	hasAccount: string
+	loginLink: string
+	allRightsReserved: string
+}
+
+export interface RegisterCardProps {
+	information: RegisterProps
 }
 
 export interface LoginCardProps {
@@ -146,6 +186,7 @@ export interface EditDialogProps extends BasicUrlFormProps {
 
 export interface Translations {
 	login: LoginProps
+	register: RegisterProps
 	dashboard: {
 		navbar: {
 			greetings: {

@@ -1,28 +1,38 @@
 @import "tailwindcss";
+@plugin "daisyui";
 
 @plugin "tailwindcss-animate";
 
 @custom-variant dark (&:is(.dark *));
 
 @theme {
-	--color-primary: #1971ce;
-	--color-mariner-50: #f1f6fe;
-	--color-mariner-100: #e2edfc;
-	--color-mariner-200: #bed9f9;
-	--color-mariner-300: #84b9f5;
-	--color-mariner-400: #4396ed;
-	--color-mariner-500: #1971ce;
-	--color-mariner-600: #0d5cbc;
-	--color-mariner-700: #0c4a98;
-	--color-mariner-800: #0e407e;
-	--color-mariner-900: #123768;
-	--color-mariner-950: #0c2245;
+	/* ── Brand / Electric Blue scale ───────────────────── */
+	--color-brand-50: #e6eeff;
+	--color-brand-100: #c0d4ff;
+	--color-brand-200: #85aaff;
+	--color-brand-300: #4d81ff;
+	--color-brand-400: #1a5eff;
+	--color-brand-500: #0056ff; /* ← core electric blue */
+	--color-brand-600: #0046d6;
+	--color-brand-700: #0037ad;
+	--color-brand-800: #002885;
+	--color-brand-900: #001a5c;
+	--color-brand-950: #000d2e;
 
-	--color-success: #17c964;
-	--color-error: #e90707;
-	--color-warning: #ffc107;
+	/* ── Text (dark defaults) ─────────────────────── */
+	--color-text-primary: #f3f4f6;
+	--color-text-secondary: #9ca3af;
+	--color-text-muted: #6b7280;
+
+	/* ── Status colours ─────────────────────────── */
+	--color-success: #10b981;
+	--color-error: #ef4444;
+	--color-warning: #f59e0b;
 
 	--color-background: #fff;
+
+	--color-bg-base: #030712;
+	--color-bg-raised: #0a1120;
 
 	--color-text: #000;
 	--color-text-inverted: #fff;
