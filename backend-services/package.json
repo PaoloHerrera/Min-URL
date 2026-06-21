@@ -12,7 +12,7 @@
 		"lintfix": "biome lint --fix",
 		"format": "prettier --write \"**/*.{js,ts,css,json}\"",
 		"format:check": "prettier --check \"**/*.{js,ts,css,json}\"",
-		"test": "echo \"Error: no test specified\" && exit 1"
+		"test": "echo 'No tests configured yet!'"
 	},
 	"keywords": [],
 	"author": "",
