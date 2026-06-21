@@ -1,4 +1,4 @@
-import { MinUrlIcon } from '@/modules/core/design-system/Icons.tsx'
+import { MinUrlIcon } from '@/modules/core/design-system/icons'
 
 export const SidebarTitle = () => {
 	return (

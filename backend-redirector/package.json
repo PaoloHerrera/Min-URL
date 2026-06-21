@@ -6,32 +6,37 @@
 	"scripts": {
 		"build": "remix vite:build",
 		"dev": "remix vite:dev",
-		"lint": "eslint --ignore-path .gitignore --cache --cache-location ./node_modules/.cache/eslint .",
-		"start": "remix-serve ./build/server/index.js",
-		"typecheck": "tsc"
+		"lint": "biome lint .",
+		"lintfix": "biome lint --write --unsafe",
+		"format": "prettier --write \"**/*.{js,ts,tsx,css,json}\"",
+		"format:check": "prettier --check \"**/*.{js,ts,tsx,css,json}\"",
+		"typecheck": "tsc -b",
+		"typefix": "tsc --fix",
+		"test": "echo \"Error: no test specified\" && exit 1"
 	},
 	"dependencies": {
-		"@remix-run/node": "^2.16.2",
-		"@remix-run/react": "^2.16.2",
-		"@remix-run/serve": "^2.16.2",
+		"@remix-run/node": "^2.17.5",
+		"@remix-run/react": "^2.17.5",
+		"@remix-run/serve": "^2.17.5",
 		"axios": "1.8.4",
 		"ioredis": "5.6.0",
 		"is-ip": "5.0.1",
-		"isbot": "^4.1.0",
+		"isbot": "^4.4.0",
+		"react": "18.3.1",
+		"react-dom": "18.3.1",
 		"remix-utils": "8.5.0",
 		"ua-parser-js": "2.0.3"
 	},
 	"devDependencies": {
-		"@remix-run/dev": "^2.16.2",
-		"@types/node": "^22.13.14",
-		"@types/react": "^18.2.20",
-		"@types/react-dom": "^18.2.7",
-		"autoprefixer": "^10.4.19",
-		"postcss": "^8.4.38",
-		"tailwindcss": "^3.4.4",
-		"typescript": "^5.1.6",
-		"vite": "^6.0.0",
-		"vite-tsconfig-paths": "^4.2.1"
+		"@remix-run/dev": "^2.17.5",
+		"@tailwindcss/vite": "^4.3.1",
+		"@types/node": "^22.20.0",
+		"@types/react": "18.3.31",
+		"@types/react-dom": "18.3.7",
+		"tailwindcss": "4",
+		"typescript": "^5.9.3",
+		"vite": "^6.4.3",
+		"vite-tsconfig-paths": "^4.3.2"
 	},
 	"engines": {
 		"node": ">=20.0.0"

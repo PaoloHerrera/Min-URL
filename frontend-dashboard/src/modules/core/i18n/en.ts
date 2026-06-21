@@ -1,5 +1,5 @@
 import { VITE_GITHUB_LOGIN_LINK, VITE_GOOGLE_LOGIN_LINK } from '@/constants'
-import { GithubIcon, MinUrlIcon } from '@/modules/core/design-system/Icons'
+import { GithubIcon, MinUrlIcon } from '@/modules/core/design-system/icons'
 import type { Translations } from '@/types'
 import { MailIcon } from 'lucide-react'
 
@@ -9,8 +9,7 @@ export const EN_TRANSLATIONS: Translations = {
 		companyName: 'Min-URL',
 		title: 'Welcome',
 		titleSufix: 'Back',
-		description:
-			'Welcome, please enter your details.',
+		description: 'Welcome, please enter your details.',
 		buttons: [
 			{
 				icon: MailIcon,
@@ -49,9 +48,11 @@ export const EN_TRANSLATIONS: Translations = {
 		emailPlaceholder: 'Email address',
 		emailValidatorHint: 'Enter valid email address',
 		passwordPlaceholder: 'Password',
-		passwordValidatorHint: 'Must be more than 8 characters, including number, lowercase letter, uppercase letter',
+		passwordValidatorHint:
+			'Must be more than 8 characters, including number, lowercase letter, uppercase letter',
 		confirmPasswordPlaceholder: 'Confirm password',
-		confirmPasswordValidatorHint: 'Must be more than 8 characters, including number, lowercase letter, uppercase letter',
+		confirmPasswordValidatorHint:
+			'Must be more than 8 characters, including number, lowercase letter, uppercase letter',
 		signUpButton: 'Sign up',
 		termsCheckboxText1: 'I agree to the ',
 		termsLink: 'Terms of Service',

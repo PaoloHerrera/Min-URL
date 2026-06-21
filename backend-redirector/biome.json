@@ -1,0 +1,41 @@
+{
+	"$schema": "https://biomejs.dev/schemas/1.9.4/schema.json",
+	"extends": ["../biome.json"],
+	"linter": {
+		"rules": {
+			"correctness": {
+				"noUndeclaredDependencies": "off",
+				"noNodejsModules": "off"
+			},
+			"suspicious": {
+				"noConsole": "off",
+				"noConsoleLog": "off",
+				"noReactSpecificProps": "off"
+			}
+		}
+	},
+	"overrides": [
+		{
+			"include": ["vite.config.ts"],
+			"linter": {
+				"rules": {
+					"style": {
+						"noDefaultExport": "off",
+						"useNamingConvention": "off"
+					}
+				}
+			}
+		},
+		{
+			"include": ["app/routes/**", "app/root.tsx"],
+			"linter": {
+				"rules": {
+					"style": {
+						"noDefaultExport": "off",
+						"useFilenamingConvention": "off"
+					}
+				}
+			}
+		}
+	]
+}

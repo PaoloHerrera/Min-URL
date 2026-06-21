@@ -1,0 +1,7 @@
+{
+	"recommendations": [
+		"biome.biome",
+		"esbenp.prettier-vscode",
+		"astro-build.astro-vscode"
+	]
+}

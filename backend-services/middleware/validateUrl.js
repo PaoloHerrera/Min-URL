@@ -16,7 +16,6 @@ export const validateUrl = (req, res, next) => {
 	// Si falta el protocolo se añade
 	originalUrl = addHttpScheme(originalUrl)
 
-	// biome-ignore lint/style/useNamingConvention: Validator need use snake case
 	if (validator.isURL(originalUrl, { require_protocol: true })) {
 		req.body.originalUrl = originalUrl
 		next()

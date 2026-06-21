@@ -14,6 +14,7 @@ import { renderToPipeableStream } from 'react-dom/server'
 
 const ABORT_DELAY = 5_000
 
+// biome-ignore lint/style/noDefaultExport: required by Remix
 export default function handleRequest(
 	request: Request,
 	responseStatusCode: number,
@@ -22,7 +23,7 @@ export default function handleRequest(
 	// This is ignored so we can keep it in the template for visibility.  Feel
 	// free to delete this parameter in your app if you're not using it!
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
-	loadContext: AppLoadContext,
+	_loadContext: AppLoadContext,
 ) {
 	return isbot(request.headers.get('user-agent') || '')
 		? handleBotRequest(
@@ -74,6 +75,7 @@ function handleBotRequest(
 					reject(error)
 				},
 				onError(error: unknown) {
+					// biome-ignore lint/style/noParameterAssign: Remix template reassigns responseStatusCode
 					responseStatusCode = 500
 					// Log streaming rendering errors from inside the shell.  Don't log
 					// errors encountered during initial shell rendering since they'll
@@ -124,6 +126,7 @@ function handleBrowserRequest(
 					reject(error)
 				},
 				onError(error: unknown) {
+					// biome-ignore lint/style/noParameterAssign: Remix template reassigns responseStatusCode
 					responseStatusCode = 500
 					// Log streaming rendering errors from inside the shell.  Don't log
 					// errors encountered during initial shell rendering since they'll

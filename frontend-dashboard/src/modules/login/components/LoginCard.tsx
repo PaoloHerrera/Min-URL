@@ -1,6 +1,7 @@
-import type { LoginCardProps } from '@/types'
-import LoginImage from '@/assets/images/login.webp'
 import Logo from '@/assets/images/Logo-MinURL.webp'
+import LoginImage from '@/assets/images/login.webp'
+import type { LoginCardProps } from '@/types'
+import type React from 'react'
 
 export const LoginCard: React.FC<LoginCardProps> = ({
 	information,
@@ -33,6 +34,7 @@ export const LoginCard: React.FC<LoginCardProps> = ({
 									xmlns="http://www.w3.org/2000/svg"
 									viewBox="0 0 24 24"
 								>
+									<title>email icon</title>
 									<g
 										strokeLinejoin="round"
 										strokeLinecap="round"
@@ -40,14 +42,14 @@ export const LoginCard: React.FC<LoginCardProps> = ({
 										fill="none"
 										stroke="currentColor"
 									>
-										<rect width="20" height="16" x="2" y="4" rx="2"></rect>
-										<path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
+										<rect width="20" height="16" x="2" y="4" rx="2" />
+										<path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
 									</g>
 								</svg>
 								<input
 									type="email"
 									placeholder={information.emailPlaceholder}
-									required
+									required={true}
 								/>
 							</label>
 							<div className="validator-hint hidden">
@@ -62,6 +64,7 @@ export const LoginCard: React.FC<LoginCardProps> = ({
 									xmlns="http://www.w3.org/2000/svg"
 									viewBox="0 0 24 24"
 								>
+									<title>password icon</title>
 									<g
 										strokeLinejoin="round"
 										strokeLinecap="round"
@@ -69,18 +72,13 @@ export const LoginCard: React.FC<LoginCardProps> = ({
 										fill="none"
 										stroke="currentColor"
 									>
-										<path d="M2.586 17.414A2 2 0 0 0 2 18.828V21a1 1 0 0 0 1 1h3a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h1a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h.172a2 2 0 0 0 1.414-.586l.814-.814a6.5 6.5 0 1 0-4-4z"></path>
-										<circle
-											cx="16.5"
-											cy="7.5"
-											r=".5"
-											fill="currentColor"
-										></circle>
+										<path d="M2.586 17.414A2 2 0 0 0 2 18.828V21a1 1 0 0 0 1 1h3a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h1a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h.172a2 2 0 0 0 1.414-.586l.814-.814a6.5 6.5 0 1 0-4-4z" />
+										<circle cx="16.5" cy="7.5" r=".5" fill="currentColor" />
 									</g>
 								</svg>
 								<input
 									type="password"
-									required
+									required={true}
 									placeholder={information.passwordPlaceholder}
 								/>
 							</label>
@@ -97,7 +95,7 @@ export const LoginCard: React.FC<LoginCardProps> = ({
 									{information.rememberMe}{' '}
 								</span>
 							</label>
-							<a href="#" className="link link-hover text-xs">
+							<a href="/forgot-password" className="link link-hover text-xs">
 								{' '}
 								{information.forgotPassword}{' '}
 							</a>
@@ -110,7 +108,10 @@ export const LoginCard: React.FC<LoginCardProps> = ({
 						</button>
 					</form>
 					<div className="divider text-xs">{information.dividerText}</div>
-					<button className="btn bg-white text-black border-[#e5e5e5] w-full rounded-4xl">
+					<button
+						className="btn bg-white text-black border-[#e5e5e5] w-full rounded-4xl"
+						type="button"
+					>
 						<svg
 							aria-label="Google logo"
 							width="16"
@@ -118,24 +119,25 @@ export const LoginCard: React.FC<LoginCardProps> = ({
 							xmlns="http://www.w3.org/2000/svg"
 							viewBox="0 0 512 512"
 						>
+							<title>google icon</title>
 							<g>
-								<path d="m0 0H512V512H0" fill="#fff"></path>
+								<path d="m0 0H512V512H0" fill="#fff" />
 								<path
 									fill="#34a853"
 									d="M153 292c30 82 118 95 171 60h62v48A192 192 0 0190 341"
-								></path>
+								/>
 								<path
 									fill="#4285f4"
 									d="m386 400a140 175 0 0053-179H260v74h102q-7 37-38 57"
-								></path>
+								/>
 								<path
 									fill="#fbbc02"
 									d="m90 341a208 200 0 010-171l63 49q-12 37 0 73"
-								></path>
+								/>
 								<path
 									fill="#ea4335"
 									d="m153 219c22-69 116-109 179-50l55-54c-78-75-230-72-297 55"
-								></path>
+								/>
 							</g>
 						</svg>
 						<span className="text-xs"> {information.googleSignIn} </span>
@@ -156,7 +158,7 @@ export const LoginCard: React.FC<LoginCardProps> = ({
 				<figure className="lg:w-1/2 hidden lg:block">
 					<img
 						src={LoginImage}
-						alt="Login Image"
+						alt="Two men sharing a laptop screen, in representation of Min-URL login page"
 						className="w-full h-full object-cover rounded-tr-xl lg:rounded-br-xl rounded-tl-xl rounded-br-none rounded-bl-none lg:rounded-tl-none"
 					/>
 				</figure>

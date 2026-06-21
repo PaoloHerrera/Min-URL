@@ -1,16 +1,16 @@
 import { REDIRECTOR_URL } from '../constants.js'
-import { addQrCodeUsage, addShortUrlUsage } from '../models/UserModel.js'
-import { createQrForUrl } from '../services/QrServices.js'
+import { addQrCodeUsage, addShortUrlUsage } from '../models/userModel.js'
+import { createQrForUrl } from '../services/qrServices.js'
 import {
 	createShortUrlForUrl,
 	createShortUrlForUrlWithSlug,
 	updateSlugForUrl,
-} from '../services/ShorturlServices.js'
+} from '../services/shortUrlServices.js'
 import {
 	createValidatedUrl,
 	deleteUrlbyUserId,
 	updateUrlById,
-} from '../services/UrlServices.js'
+} from '../services/urlServices.js'
 
 const createBaseUrl = async (req, purpose) => {
 	const urlData = {

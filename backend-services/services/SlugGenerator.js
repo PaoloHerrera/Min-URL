@@ -1,5 +1,5 @@
 import crypto from 'node:crypto'
-import { ShortUrlModel } from '../models/ShortUrlModel.js'
+import { ShortUrlModel } from '../models/shortUrlModel.js'
 import { base64ToBase62 } from '../utils/utils.js'
 import { generateHash } from '../utils/utils.js'
 
