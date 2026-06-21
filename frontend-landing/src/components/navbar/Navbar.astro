@@ -19,7 +19,7 @@ interface Props {
 const { lang } = Astro.props as Props
 const t = dic[lang]
 const dashboardUrl =
-	import.meta.env.PUBLIC_DASHBOARD_URL || 'http://localhost:3001'
+	import.meta.env.PUBLIC_DASHBOARD_URL || 'http://localhost:4001'
 ---
 
 <!-- ═══════════════════════════════════════════════════════
@@ -61,13 +61,13 @@ const dashboardUrl =
 			<ThemeToggle />
 			<div class="h-6 w-px bg-white/10 mx-2" aria-hidden="true"></div>
 			<a
-				href={`${dashboardUrl}/login`}
+				href={`${dashboardUrl}/login?lang=${lang}`}
 				class="btn btn-ghost btn-md text-sm text-gray-300 hover:text-white font-semibold"
 			>
 				{t.nav.login}
 			</a>
 			<a
-				href={`${dashboardUrl}/register`}
+				href={`${dashboardUrl}/register?lang=${lang}`}
 				class="btn btn-md btn-cta rounded-xl px-5 text-sm"
 			>
 				{t.nav.register}
@@ -178,13 +178,13 @@ const dashboardUrl =
 			</a>
 			<div class="grid grid-cols-2 gap-3">
 				<a
-					href={`${dashboardUrl}/login`}
+					href={`${dashboardUrl}/login?lang=${lang}`}
 					class="btn btn-ghost btn-md text-sm font-semibold border border-white/8 text-gray-300 hover:text-white w-full"
 				>
 					{t.nav.login}
 				</a>
 				<a
-					href={`${dashboardUrl}/register`}
+					href={`${dashboardUrl}/register?lang=${lang}`}
 					class="btn btn-md btn-cta rounded-xl text-sm w-full"
 				>
 					{t.nav.register}
