@@ -1,0 +1,8 @@
+{
+	"*.{js,ts,jsx,tsx,json}": [
+		"bun x biome lint --write --no-errors-on-unmatched",
+		"bunx prettier --write"
+	],
+	"*.astro": ["bunx prettier --write --plugin=prettier-plugin-astro"],
+	"*.{md,css}": ["bunx prettier --write"]
+}
