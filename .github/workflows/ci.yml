@@ -2,13 +2,13 @@ name: CI/CD for Min-URL
 
 on:
   push:
-    branches: ['master']
+    branches: ['master', 'develop']
     paths-ignore:
       - 'docs/**'
       - 'README.md'
       - '.gitignore'
   pull_request:
-    branches: ['master']
+    branches: ['master', 'develop']
     paths-ignore:
       - 'docs/**'
       - 'README.md'
