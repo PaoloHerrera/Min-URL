@@ -36,5 +36,5 @@
 		"editor.defaultFormatter": "astro-build.astro-vscode",
 		"editor.formatOnSave": true
 	},
-	"conventionalCommits.scopes": ["root", "git"]
+	"conventionalCommits.scopes": ["root", "git", "format"]
 }
