@@ -6,3 +6,4 @@ dist
 .env.production
 build/
 .astro/
+personal_notes
