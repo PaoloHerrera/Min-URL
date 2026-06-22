@@ -1,3 +1,5 @@
+[![CI/CD for Min-URL](https://github.com/PaoloHerrera/Min-URL/actions/workflows/ci.yml/badge.svg)](https://github.com/PaoloHerrera/Min-URL/actions/workflows/ci.yml)
+
 <div align="center">
 
 # 🔗 Min-URL
