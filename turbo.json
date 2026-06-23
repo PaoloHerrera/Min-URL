@@ -9,6 +9,26 @@
 			"outputs": []
 		},
 		"test": {
+			"env": [
+				"PORT",
+				"DB_NAME",
+				"DB_USER",
+				"DB_PASS",
+				"DB_HOST",
+				"DB_PORT",
+				"API_KEY",
+				"SECRET_HASH",
+				"LOCAL_IP",
+				"RECAPTCHA_SECRET_KEY",
+				"CLOUDINARY_CLOUD_NAME",
+				"CLOUDINARY_API_KEY",
+				"CLOUDINARY_API_SECRET",
+				"NODE_ENV",
+				"REDIRECTOR_URL",
+				"SESSION_SECRET",
+				"REDIS_URL",
+				"REDIS_PORT"
+			],
 			"outputs": []
 		},
 		"typecheck": {
