@@ -31,15 +31,6 @@ export const base64ToBase62 = (base64) => {
 	return bytesToBase62(bytes)
 }
 
-export const handleAsyncError = (fn) => async (req, res, next) => {
-	try {
-		await fn(req, res, next)
-	} catch (error) {
-		console.log(error)
-		next(error)
-	}
-}
-
 export const generateHash = (input, crypto) => {
 	return crypto.createHash('sha256').update(input).digest('base64')
 }

@@ -1,5 +1,5 @@
 const forbiddenExtensions = [
-	// Archivos ejecutables y de scripts
+	// Archivos ejecutables y scripts de sistema
 	'.exe',
 	'.bat',
 	'.msi',
@@ -14,47 +14,21 @@ const forbiddenExtensions = [
 	'.scr',
 	'.com',
 	'.jar',
-	'.js',
 	'.dll',
-	'.py',
-	'.php',
-	'.rb',
 	'.xpi',
 	'.crx',
 
-	// Archivos comprimidos y contenedores
-	'.zip',
-	'.rar',
-	'.7z',
-	'.tar',
+	// Contenedores e imágenes de disco ejecutables
+	'.dmg',
 	'.iso',
 	'.img',
-	'.dmg',
 
-	// Archivos de configuración y registros
+	// Archivos de configuración y registros de sistema
 	'.inf',
 	'.reg',
 	'.scf',
 	'.lnk',
-
-	// Documentos de Office (por riesgo de macros)
-	'.doc',
-	'.xls',
-	'.ppt',
-	'.pdf',
-
-	// Archivos de código fuente
-	'.c',
-	'.cpp',
-	'.h',
-	'.hpp',
-	'.cs',
-	'.java',
 	'.class',
-
-	// Otras extensiones a considerar
-	'.torrent',
-	'.svg',
 ]
 
 // Función para verificar si la extensión del archivo es prohibida
@@ -67,7 +41,7 @@ function hasForbiddenExtension(url) {
 		const extension = lastPart.includes('.')
 			? `.${lastPart.split('.').pop()}`
 			: ''
-		return forbiddenExtensions.includes(`.${extension}`)
+		return forbiddenExtensions.includes(`${extension}`)
 	} catch (error) {
 		console.log('Error en la función hasForbiddenExtension:', error)
 		return true

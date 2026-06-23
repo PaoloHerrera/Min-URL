@@ -19,9 +19,7 @@ import {
 } from '../middleware/checkAvailable.js'
 import { checkForbiddenExtension } from '../middleware/checkForbiddenExtension.js'
 import { addGeolocation } from '../middleware/geolocationMiddleware.js'
-import { saveIp } from '../middleware/saveIp.js'
 import { validateUrl } from '../middleware/validateUrl.js'
-import { handleAsyncError } from '../utils/utils.js'
 
 const protectedRouter = Router()
 
@@ -41,40 +39,33 @@ protectedRouter.post(
 	checkShortUrlAvailable,
 	checkSlug,
 	checkSlugAvailability,
-	saveIp,
 	validateUrl,
 	checkForbiddenExtension,
-	handleAsyncError(addGeolocation),
-	handleAsyncError(createShortUrlWithCustomSlug),
+	addGeolocation,
+	createShortUrlWithCustomSlug,
 )
 
 protectedRouter.post(
 	'/create-short-url',
 	checkApiKey,
 	checkShortUrlAvailable,
-	saveIp,
 	validateUrl,
 	checkForbiddenExtension,
-	handleAsyncError(addGeolocation),
-	handleAsyncError(createShortUrl),
+	addGeolocation,
+	createShortUrl,
 )
 
 protectedRouter.post(
 	'/create-qr-code',
 	checkApiKey,
 	checkQrCodeAvailable,
-	saveIp,
 	validateUrl,
 	checkForbiddenExtension,
-	handleAsyncError(addGeolocation),
-	handleAsyncError(createQrCode),
+	addGeolocation,
+	createQrCode,
 )
 
-protectedRouter.delete(
-	'/delete-url/:id',
-	checkApiKey,
-	handleAsyncError(deleteUserUrl),
-)
+protectedRouter.delete('/delete-url/:id', checkApiKey, deleteUserUrl)
 
 protectedRouter.patch(
 	'/update-url/:id',
@@ -82,7 +73,7 @@ protectedRouter.patch(
 	validateUrl,
 	checkForbiddenExtension,
 	checkSlug,
-	handleAsyncError(updateUserUrl),
+	updateUserUrl,
 )
 
 export { protectedRouter }
