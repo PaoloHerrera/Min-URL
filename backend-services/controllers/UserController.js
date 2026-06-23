@@ -13,12 +13,24 @@ import {
 } from '../services/urlServices.js'
 
 const createBaseUrl = async (req, purpose) => {
-	const urlData = {
-		user_id: req.body.userId,
-		geolocationsId: req.geolocation.id_geolocations,
-		title: req.body.title,
-		long_url: req.body.originalUrl,
-		purpose,
+	const userId = req.body.userId
+	let urlData = {}
+
+	if (userId) {
+		urlData = {
+			user_id: userId,
+			geolocations_id: req.geolocation.id_geolocations,
+			title: req.body.title || 'Anonymous link',
+			long_url: req.body.originalUrl,
+			purpose,
+		}
+	} else {
+		urlData = {
+			geolocations_id: req.geolocation.id_geolocations,
+			title: req.body.title || 'Anonymous link',
+			long_url: req.body.originalUrl,
+			purpose,
+		}
 	}
 	return await createValidatedUrl(urlData)
 }
@@ -35,6 +47,25 @@ export const createShortUrl = async (req, res) => {
 
 	/* Se incrementa el uso de Short URLs */
 	await addShortUrlUsage(req.body.userId)
+
+	res.json({
+		originalUrl: req.body.originalUrl,
+		shortUrl: `${REDIRECTOR_URL}/${shortUrl.slug}`,
+		slug: shortUrl.slug,
+		purpose: url.purpose,
+		createdAt: url.created_at,
+	})
+}
+
+export const createShortUrlAnonymous = async (req, res) => {
+	// Se valida la URL y se crea
+	const url = await createBaseUrl(req, 'direct')
+
+	/* Se crea una ShortUrl con el slug aleatorio */
+	const shortUrl = await createShortUrlForUrl({
+		url: url.long_url,
+		urlId: url.id_urls,
+	})
 
 	res.json({
 		originalUrl: req.body.originalUrl,

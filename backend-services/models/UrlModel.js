@@ -22,7 +22,6 @@ export const UrlModel = sequelize.define(
 		geolocations_id: {
 			type: DataTypes.UUID,
 			allowNull: true,
-			unique: true,
 			references: {
 				model: 'geolocations',
 				key: 'id_geolocations',
