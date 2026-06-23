@@ -32,7 +32,7 @@ jobs:
       CLOUDINARY_CLOUD_NAME: ci_test_cloudinary_cloud
       CLOUDINARY_API_KEY: ci_test_cloudinary_api_key
       CLOUDINARY_API_SECRET: ci_test_cloudinary_api_secret
-      NODE_ENV: development
+      NODE_ENV: test
       REDIRECTOR_URL: http://localhost:3002
       SESSION_SECRET: ci_test_session_secret_at_least_32_characters
       REDIS_URL: localhost
