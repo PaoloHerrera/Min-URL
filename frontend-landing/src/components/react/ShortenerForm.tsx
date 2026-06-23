@@ -1,7 +1,5 @@
 import axios from 'axios'
-import { type SubmitEvent, useRef, useState } from 'react'
-// biome-ignore lint/style/useNamingConvention: QRCode library required
-import QRCode from 'react-qr-code'
+import { type SubmitEvent, useState } from 'react'
 import type { Translations } from '../../i18n/types.ts'
 
 //TODO: Refactorizar y validar correctamente. De ser necesario utilizar zod.
@@ -31,7 +29,6 @@ export const ShortenerForm = ({
 	const [isLoading, setIsLoading] = useState(false)
 	const [error, setError] = useState({ active: false, message: '' })
 	const [isSuccessCopy, setIsSuccessCopy] = useState(false)
-	const qrRef = useRef<HTMLDivElement>(null)
 
 	const addProtocolIfNeeded = (url: string): string => {
 		if (!PROTOCOL_REGEX.test(url)) {
@@ -141,33 +138,6 @@ export const ShortenerForm = ({
 		setTimeout(() => setIsSuccessCopy(false), 2000)
 	}
 
-	const downloadQrCode = () => {
-		if (!qrRef.current) {
-			return
-		}
-		const svgElement = qrRef.current.querySelector('svg')
-		if (!svgElement) {
-			return
-		}
-
-		const svgData = new XMLSerializer().serializeToString(svgElement)
-		const canvas = document.createElement('canvas')
-		const ctx = canvas.getContext('2d')
-		const img = new Image()
-
-		img.onload = () => {
-			canvas.width = 256
-			canvas.height = 256
-			ctx?.drawImage(img, 0, 0, 256, 256)
-			const pngFile = canvas.toDataURL('image/png')
-			const downloadLink = document.createElement('a')
-			downloadLink.download = 'min-url-qr.png'
-			downloadLink.href = pngFile
-			downloadLink.click()
-		}
-		img.src = `data:image/svg+xml;base64,${btoa(unescape(encodeURIComponent(svgData)))}`
-	}
-
 	return (
 		<div className="w-full flex flex-col gap-6">
 			{/* Input Form */}
@@ -192,6 +162,7 @@ export const ShortenerForm = ({
 							</svg>
 						</div>
 						<input
+							data-testid="url-input"
 							type="text"
 							value={longUrl}
 							onChange={(e) => handleUrlChange(e.target.value)}
@@ -203,6 +174,7 @@ export const ShortenerForm = ({
 						/>
 					</div>
 					<button
+						data-testid="shorten-submit"
 						type="submit"
 						disabled={isLoading || !longUrl.trim()}
 						aria-busy={isLoading}
@@ -241,7 +213,7 @@ export const ShortenerForm = ({
 				</div>
 				{error.active && (
 					<p
-						id="shortener-error"
+						data-testid="shortener-error"
 						role="alert"
 						className="mt-2 text-sm text-red-400 font-medium flex items-center gap-1.5 pl-1"
 					>
@@ -266,14 +238,20 @@ export const ShortenerForm = ({
 
 			{/* Success Card Result */}
 			{shortUrl && (
-				<div className="w-full glass-panel rounded-2xl p-6 shadow-xl border border-white/8 flex flex-col md:flex-row items-center gap-6 animate-[fadeIn_0.4s_ease-out]">
+				<div
+					data-testid="success-panel"
+					className="w-full glass-panel rounded-2xl p-6 shadow-xl border border-white/8 flex flex-col md:flex-row items-center gap-6 animate-[fadeIn_0.4s_ease-out]"
+				>
 					{/* Text Side */}
 					<div className="grow w-full flex flex-col gap-4">
 						<div>
 							<h3 className="text-sm font-semibold text-gray-400 uppercase tracking-wider">
 								{texts.successTitle}
 							</h3>
-							<p className="mt-1.5 text-2xl font-bold tracking-tight text-primary-electric-blue select-all overflow-x-auto whitespace-nowrap pb-1 scrollbar-thin">
+							<p
+								data-testid="short-url-display"
+								className="mt-1.5 text-2xl font-bold tracking-tight text-primary-electric-blue select-all overflow-x-auto whitespace-nowrap pb-1 scrollbar-thin"
+							>
 								{shortUrl}
 							</p>
 						</div>
@@ -284,7 +262,7 @@ export const ShortenerForm = ({
 								type="button"
 								onClick={copyToClipboard}
 								aria-label={isSuccessCopy ? texts.copied : texts.copy}
-								className={`tool-btn-ghost ${
+								className={`tool-btn-ghost cursor-pointer ${
 									isSuccessCopy
 										? 'bg-emerald-500/10! text-emerald-400! border-emerald-500/25!'
 										: ''
@@ -358,43 +336,6 @@ export const ShortenerForm = ({
 
 					{/* Divider */}
 					<div className="h-px w-full md:h-24 md:w-px bg-white/8" />
-
-					{/* QR Code Side */}
-					<div className="flex flex-col items-center gap-3 shrink-0">
-						<div
-							ref={qrRef}
-							className="p-3 bg-white rounded-xl shadow-inner select-none"
-						>
-							<QRCode
-								id="qr-code-svg"
-								value={shortUrl}
-								size={100}
-								style={{ height: 'auto', maxWidth: '100%', width: '100%' }}
-								viewBox="0 0 256 256"
-							/>
-						</div>
-						<button
-							type="button"
-							onClick={downloadQrCode}
-							className="inline-flex items-center gap-1.5 text-xs text-gray-400 hover:text-white font-medium transition-colors"
-						>
-							<svg
-								className="h-3.5 w-3.5"
-								fill="none"
-								viewBox="0 0 24 24"
-								stroke="currentColor"
-								strokeWidth="2.2"
-								aria-hidden="true"
-							>
-								<path
-									strokeLinecap="round"
-									strokeLinejoin="round"
-									d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
-								/>
-							</svg>
-							{texts.downloadQr}
-						</button>
-					</div>
 				</div>
 			)}
 		</div>

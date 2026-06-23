@@ -7,3 +7,10 @@ dist
 build/
 .astro/
 personal_notes
+
+# Playwright
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+/playwright/.auth/
