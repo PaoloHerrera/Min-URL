@@ -18,6 +18,48 @@ jobs:
   build-and-test:
     name: Build and Test
     runs-on: ubuntu-24.04
+    env:
+      PORT: 3001
+      DB_NAME: Min-URL
+      DB_USER: admin
+      DB_PASS: admin
+      DB_HOST: localhost
+      DB_PORT: 5432
+      API_KEY: ci_test_api_key_placeholder
+      SECRET_HASH: ci_test_sec_hash
+      LOCAL_IP: 127.0.0.1
+      RECAPTCHA_SECRET_KEY: ci_test_recaptcha_secret_key_placeholder
+      CLOUDINARY_CLOUD_NAME: ci_test_cloudinary_cloud
+      CLOUDINARY_API_KEY: ci_test_cloudinary_api_key
+      CLOUDINARY_API_SECRET: ci_test_cloudinary_api_secret
+      NODE_ENV: development
+      REDIRECTOR_URL: http://localhost:3002
+      SESSION_SECRET: ci_test_session_secret_at_least_32_characters
+      REDIS_URL: localhost
+      REDIS_PORT: 6379
+    services:
+      postgres:
+        image: postgres:16.0
+        env:
+          POSTGRES_USER: admin
+          POSTGRES_PASSWORD: admin
+          POSTGRES_DB: Min-URL
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+      redis:
+        image: redis:latest
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
 
     steps:
       - name: Checkout code
@@ -40,6 +82,10 @@ jobs:
       # Install dependencies
       - name: Install dependencies
         run: bun install
+
+      # Initialize Database
+      - name: Initialize Database
+        run: PGPASSWORD=admin psql -h localhost -U admin -d Min-URL -f db/init.sql
 
       # Build Lint Test
       - name: Build Lint Test
