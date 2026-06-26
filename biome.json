@@ -24,7 +24,12 @@
 		"enabled": true
 	},
 	"linter": {
-		"ignore": ["google.strategy.ts", "models", "schema"],
+		"ignore": [
+			"google.strategy.ts",
+			"models",
+			"schema",
+			"playwright.config.ts"
+		],
 		"enabled": true,
 		"rules": {
 			"all": true,
