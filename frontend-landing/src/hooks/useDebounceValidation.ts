@@ -2,12 +2,18 @@ import { validateUrl } from '@/lib/utils'
 import debounce from 'just-debounce-it'
 import { useCallback, useEffect, useState } from 'react'
 
+interface UseDebounceValidationProps {
+	errorUrlInvalidText: string
+}
+
 interface UseDebounceValidationReturn {
 	debounceError: string
 	debounceValidate: (url: string) => void
 }
 
-export const useDebounceValidation = (): UseDebounceValidationReturn => {
+export const useDebounceValidation = ({
+	errorUrlInvalidText,
+}: UseDebounceValidationProps): UseDebounceValidationReturn => {
 	const [debounceError, setDebounceError] = useState('')
 
 	const debounceValidate = useCallback(
@@ -15,7 +21,7 @@ export const useDebounceValidation = (): UseDebounceValidationReturn => {
 			if (validateUrl(url)) {
 				setDebounceError('')
 			} else {
-				setDebounceError('Please enter a valid URL')
+				setDebounceError(errorUrlInvalidText)
 			}
 		}, 500),
 		[],

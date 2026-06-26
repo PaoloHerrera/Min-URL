@@ -1,6 +1,10 @@
 import { shortenAnonService } from '@/services/shortenAnonService'
 import { useState } from 'react'
 
+interface UseShortenerProps {
+	errorShortenFailedText: string
+}
+
 interface UseShortenerReturn {
 	isLoading: boolean
 	apiError: string
@@ -9,7 +13,9 @@ interface UseShortenerReturn {
 	reset: () => void
 }
 
-export const useShortener = (): UseShortenerReturn => {
+export const useShortener = ({
+	errorShortenFailedText,
+}: UseShortenerProps): UseShortenerReturn => {
 	const [isLoading, setIsLoading] = useState(false)
 	const [shortUrl, setShortUrl] = useState('')
 	const [apiError, setApiError] = useState('')
@@ -24,7 +30,7 @@ export const useShortener = (): UseShortenerReturn => {
 			const urlResult = await shortenAnonService(longUrl)
 			setShortUrl(urlResult)
 		} catch (_error) {
-			setApiError('Something went wrong. Please try again later.')
+			setApiError(errorShortenFailedText)
 		} finally {
 			setIsLoading(false)
 		}
@@ -34,6 +40,7 @@ export const useShortener = (): UseShortenerReturn => {
 	const reset = () => {
 		setShortUrl('')
 		setApiError('')
+		setIsLoading(false)
 	}
 
 	return {
