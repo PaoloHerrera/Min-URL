@@ -13,9 +13,13 @@ interface Props {
 const { lang } = Astro.props
 const t = dic[lang]
 
-const apiUrl =
-	import.meta.env.VITE_SHORT_URL_DIRECT || 'http://localhost:3000/api/shorturl'
-const recaptchaKey = import.meta.env.VITE_RECAPTCHA_SITE_KEY || ''
+const texts = {
+	buttonText: t.hero.shortener.button,
+	loadingText: t.hero.shortener.loading,
+	errorUrlInvalidText: t.hero.shortener.errorUrlInvalid,
+	errorShortenFailedText: t.hero.shortener.errorShortenFailed,
+	placeholderText: t.hero.shortener.placeholder,
+}
 ---
 
 <section
@@ -103,12 +107,7 @@ const recaptchaKey = import.meta.env.VITE_RECAPTCHA_SITE_KEY || ''
 				aria-labelledby="btn-tab-short"
 				class="p-6"
 			>
-				<ShortenerForm
-					client:load
-					apiUrl={apiUrl}
-					recaptchaKey={recaptchaKey}
-					texts={t.hero.shortener}
-				/>
+				<ShortenerForm client:load texts={texts} />
 			</div>
 			<div
 				id="panel-qr"
