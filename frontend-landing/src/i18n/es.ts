@@ -24,8 +24,9 @@ export const es: Translations = {
 			placeholder: 'https://ejemplo.com/mi-url-larga',
 			button: 'Acortar URL',
 			loading: 'Procesando...',
-			errorEmpty: 'Por favor, introduce un enlace',
-			errorInvalid: 'Por favor, ingresa una URL válida.',
+			errorUrlInvalid: 'Por favor, ingresa una URL válida.',
+			errorShortenFailed:
+				'Algo salió mal. Por favor, inténtalo de nuevo más tarde.',
 			successTitle: 'Tu enlace acortado está listo',
 			copied: '¡Copiado!',
 			copy: 'Copiar',

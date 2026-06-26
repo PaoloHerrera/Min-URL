@@ -22,8 +22,8 @@ export interface Translations {
 			placeholder: string
 			button: string
 			loading: string
-			errorEmpty: string
-			errorInvalid: string
+			errorUrlInvalid: string
+			errorShortenFailed: string
 			successTitle: string
 			copied: string
 			copy: string

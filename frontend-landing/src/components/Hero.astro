@@ -12,6 +12,14 @@ interface Props {
 
 const { lang } = Astro.props
 const t = dic[lang]
+
+const texts = {
+	buttonText: t.hero.shortener.button,
+	loadingText: t.hero.shortener.loading,
+	errorUrlInvalidText: t.hero.shortener.errorUrlInvalid,
+	errorShortenFailedText: t.hero.shortener.errorShortenFailed,
+	placeholderText: t.hero.shortener.placeholder,
+}
 ---
 
 <section
@@ -99,7 +107,7 @@ const t = dic[lang]
 				aria-labelledby="btn-tab-short"
 				class="p-6"
 			>
-				<ShortenerForm client:load />
+				<ShortenerForm client:load texts={texts} />
 			</div>
 			<div
 				id="panel-qr"
