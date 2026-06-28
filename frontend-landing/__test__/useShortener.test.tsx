@@ -28,7 +28,7 @@ describe('hook: useShortener', () => {
 
 		vi.mocked(shortenAnonService).mockReturnValue(new Promise<string>(() => {}))
 		act(() => {
-			result.current.shorten('https://google.com')
+			result.current.shorten('https://google.com', 'mock-turnstile-token')
 		})
 		await waitFor(() => {
 			expect(result.current.isLoading).toBe(true)
@@ -40,7 +40,7 @@ describe('hook: useShortener', () => {
 
 		vi.mocked(shortenAnonService).mockResolvedValue('https://murl.cl/abc123')
 		act(() => {
-			result.current.shorten('https://google.com')
+			result.current.shorten('https://google.com', 'mock-turnstile-token')
 		})
 
 		await waitFor(() => {
@@ -53,7 +53,7 @@ describe('hook: useShortener', () => {
 
 		vi.mocked(shortenAnonService).mockRejectedValue(new Error('API Error'))
 		act(() => {
-			result.current.shorten('https://google.com')
+			result.current.shorten('https://google.com', 'mock-turnstile-token')
 		})
 
 		await waitFor(() => {
@@ -68,7 +68,7 @@ describe('hook: useShortener', () => {
 
 		vi.mocked(shortenAnonService).mockRejectedValue(new Error('API Error'))
 		act(() => {
-			result.current.shorten('https://google.com')
+			result.current.shorten('https://google.com', 'mock-turnstile-token')
 		})
 
 		await waitFor(() => {
@@ -89,7 +89,7 @@ describe('hook: useShortener', () => {
 
 		vi.mocked(shortenAnonService).mockResolvedValue('https://murl.cl/abc123')
 		act(() => {
-			result.current.shorten('https://google.com')
+			result.current.shorten('https://google.com', 'mock-turnstile-token')
 		})
 
 		await waitFor(() => {
@@ -108,7 +108,7 @@ describe('hook: useShortener', () => {
 
 		vi.mocked(shortenAnonService).mockReturnValue(new Promise<string>(() => {}))
 		act(() => {
-			result.current.shorten('https://google.com')
+			result.current.shorten('https://google.com', 'mock-turnstile-token')
 		})
 
 		await waitFor(() => {
@@ -127,14 +127,14 @@ describe('hook: useShortener', () => {
 
 		vi.mocked(shortenAnonService).mockReturnValue(new Promise<string>(() => {}))
 		act(() => {
-			result.current.shorten('https://google.com')
+			result.current.shorten('https://google.com', 'mock-turnstile-token')
 		})
 		await waitFor(() => {
 			expect(result.current.isLoading).toBe(true)
 		})
 
 		act(() => {
-			result.current.shorten('https://google.com')
+			result.current.shorten('https://google.com', 'mock-turnstile-token')
 		})
 
 		expect(vi.mocked(shortenAnonService)).toHaveBeenCalledTimes(1)

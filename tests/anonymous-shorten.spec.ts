@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test'
+import { expect, test } from '@playwright/test'
 
 const REDIRECTOR_URL = process.env.REDIRECTOR_URL || 'localhost:3002'
 
@@ -10,12 +10,12 @@ test.describe('Anonymous URL Shortener E2E', () => {
 		await page.goto('/')
 
 		//2. Locate the input field and fill it with the long URL to shorten
-		const input = page.getByTestId('url-input')
+		const input = page.getByRole('textbox', { name: 'longUrl' })
 		await expect(input).toBeVisible()
 		await input.fill('https://www.google.com')
 
 		//3. Locate the shorten button and click it
-		const submitButton = page.getByTestId('shorten-submit')
+		const submitButton = page.getByRole('button', { name: 'shorten' })
 		await expect(submitButton).toBeVisible()
 		await submitButton.click()
 
@@ -24,7 +24,7 @@ test.describe('Anonymous URL Shortener E2E', () => {
 		await expect(successPanel).toBeVisible()
 
 		//5. Extract the short URL and that it is not empty
-		const shortUrlElement = page.getByTestId('short-url-display')
+		const shortUrlElement = page.getByRole('paragraph', { name: 'shortUrl' })
 		await expect(shortUrlElement).toBeVisible()
 		await expect(shortUrlElement).not.toBeEmpty()
 		const shortUrl = await shortUrlElement.textContent()
