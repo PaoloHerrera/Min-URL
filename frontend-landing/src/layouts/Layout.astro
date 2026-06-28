@@ -59,6 +59,19 @@ const description = descriptions[lang]
 			href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap"
 			rel="stylesheet"
 		/>
+		<link rel="preconnect" href="https://challenges.cloudflare.com" />
+
+		<!-- Cloudflare Turnstile API -->
+		<script is:inline>
+			window.onTurnstileLoad = () => {
+				window.dispatchEvent(new CustomEvent('turnstile-loaded'))
+			}
+		</script>
+		<script
+			is:inline
+			src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit&onload=onTurnstileLoad"
+			async
+			defer></script>
 	</head>
 	<body
 		class="theme-body antialiased bg-grid-pattern relative min-h-screen flex flex-col overflow-x-hidden"

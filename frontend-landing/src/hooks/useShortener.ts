@@ -9,7 +9,7 @@ interface UseShortenerReturn {
 	isLoading: boolean
 	apiError: string
 	shortUrl: string
-	shorten: (longUrl: string) => void
+	shorten: (originalUrl: string, turnstileToken: string) => void
 	reset: () => void
 }
 
@@ -20,14 +20,17 @@ export const useShortener = ({
 	const [shortUrl, setShortUrl] = useState('')
 	const [apiError, setApiError] = useState('')
 
-	const shorten = async (longUrl: string) => {
+	const shorten = async (originalUrl: string, turnstileToken: string) => {
 		if (isLoading) {
 			return
 		}
 
 		setIsLoading(true)
 		try {
-			const urlResult = await shortenAnonService(longUrl)
+			const urlResult = await shortenAnonService({
+				originalUrl,
+				turnstileToken,
+			})
 			setShortUrl(urlResult)
 		} catch (_error) {
 			setApiError(errorShortenFailedText)

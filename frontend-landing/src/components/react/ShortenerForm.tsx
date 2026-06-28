@@ -1,5 +1,6 @@
 import { useDebounceValidation } from '@/hooks/useDebounceValidation'
 import { useShortener } from '@/hooks/useShortener'
+import { useTurnstile } from '@/hooks/useTurnstile'
 import { validateUrl } from '@/lib/utils'
 import { useState } from 'react'
 import type React from 'react'
@@ -13,17 +14,22 @@ interface TextContextProps {
 }
 
 export const ShortenerForm = ({ texts }: { texts: TextContextProps }) => {
-	const [longUrl, setLongUrl] = useState('')
+	const [longUrl, setLongUrl] = useState<string>('')
 	const { isLoading, shortUrl, shorten, apiError, reset } = useShortener({
 		errorShortenFailedText: texts.errorShortenFailedText,
 	})
 	const { debounceError, debounceValidate } = useDebounceValidation({
 		errorUrlInvalidText: texts.errorUrlInvalidText,
 	})
+	const { turnstileToken, resetTurnstile } = useTurnstile({
+		sitekey: import.meta.env.PUBLIC_TURNSTILE_SITE_KEY || '',
+	})
 
 	const handleSubmit = (e: React.SubmitEvent<HTMLFormElement>) => {
 		e.preventDefault()
-		shorten(longUrl)
+		if (turnstileToken) {
+			shorten(longUrl, turnstileToken)
+		}
 	}
 
 	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -35,10 +41,12 @@ export const ShortenerForm = ({ texts }: { texts: TextContextProps }) => {
 	const handleReset = () => {
 		reset()
 		setLongUrl('')
+		resetTurnstile()
 	}
 
 	return (
 		<>
+			<div id="turnstile-container" />
 			{!shortUrl && (
 				<form onSubmit={handleSubmit}>
 					<input
@@ -50,7 +58,7 @@ export const ShortenerForm = ({ texts }: { texts: TextContextProps }) => {
 					/>
 					<button
 						type="submit"
-						disabled={!validateUrl(longUrl) || isLoading}
+						disabled={!validateUrl(longUrl) || isLoading || !turnstileToken}
 						aria-label="shorten"
 						aria-busy={isLoading}
 					>
@@ -60,7 +68,7 @@ export const ShortenerForm = ({ texts }: { texts: TextContextProps }) => {
 			)}
 
 			{shortUrl && (
-				<>
+				<div data-testid="success-panel">
 					<p aria-label="shortUrl">{shortUrl}</p>
 					<button
 						aria-label="copy"
@@ -72,7 +80,7 @@ export const ShortenerForm = ({ texts }: { texts: TextContextProps }) => {
 					<button onClick={handleReset} aria-label="reset" type="button">
 						Reset
 					</button>
-				</>
+				</div>
 			)}
 
 			{apiError && (
