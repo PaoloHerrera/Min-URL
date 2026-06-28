@@ -2,11 +2,16 @@ import request from 'supertest'
 import { describe, expect, test } from 'vitest'
 import { app } from '../app.js'
 
+const SITE_KEY = process.env.TURNSTILE_SITEKEY
+
 describe('POST /direct/shorten', () => {
 	test('should successfully create a shortened URL anonymously', async () => {
-		const response = await request(app).post('/direct/shorten').send({
+		const json = {
 			originalUrl: 'https://www.google.com',
-		})
+			turnstileToken: SITE_KEY,
+		}
+
+		const response = await request(app).post('/direct/shorten').send(json)
 
 		//1. Check format and correct response status code.
 		expect(response.status).toBe(200)
