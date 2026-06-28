@@ -14,7 +14,6 @@ interface TurnstileRenderOptions {
 	mode?: 'non-interactive' | 'invisible' | 'managed'
 }
 
-// biome-ignore lint/correctness/noUnusedVariables: Window is not used directly but Turnstile is a global object
 interface Window {
 	turnstile?: {
 		render: (
