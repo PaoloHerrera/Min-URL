@@ -29,6 +29,7 @@ jobs:
       SECRET_HASH: ci_test_sec_hash
       LOCAL_IP: 127.0.0.1
       RECAPTCHA_SECRET_KEY: ci_test_recaptcha_secret_key_placeholder
+      TURNSTILE_SITEKEY: 1x0000000000000000000000000000000AA
       CLOUDINARY_CLOUD_NAME: ci_test_cloudinary_cloud
       CLOUDINARY_API_KEY: ci_test_cloudinary_api_key
       CLOUDINARY_API_SECRET: ci_test_cloudinary_api_secret
