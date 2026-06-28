@@ -1,5 +1,5 @@
-import { describe, expect, it, afterEach } from 'vitest'
-import { render, screen, cleanup, waitFor } from '@testing-library/react'
+import { describe, expect, it, afterEach, beforeEach, vi } from 'vitest'
+import { render, screen, cleanup, waitFor, act } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { HttpResponse, http } from 'msw'
 import { server } from '@/mocks/server'
@@ -16,6 +16,19 @@ const EN_TEXTS = {
 describe('ShortenerForm', () => {
 	afterEach(() => {
 		cleanup()
+	})
+
+	beforeEach(() => {
+		// Window Turnstile mock
+		;(window as any).turnstile = {
+			render: vi.fn((_container: string | HTMLElement, options: any) => {
+				options.callback('mock-turnstile-token')
+				return 'mock-widget-id'
+			}),
+
+			reset: vi.fn(),
+			remove: vi.fn(),
+		}
 	})
 
 	it('should render the form with correct initial texts', () => {
@@ -252,5 +265,55 @@ describe('ShortenerForm', () => {
 		).toBeInTheDocument()
 		expect(screen.getByRole('textbox', { name: 'longUrl' })).toHaveValue('')
 		expect(screen.getByRole('button')).toBeDisabled()
+	})
+
+	it('should body contain turnstile token', async () => {
+		let requestBody: any = null
+		server.use(
+			http.post('*/direct/shorten', async ({ request }) => {
+				requestBody = await request.json()
+				return HttpResponse.json({
+					shortUrl: 'https://murl.cl/abc123',
+				})
+			}),
+		)
+		const user = userEvent.setup()
+		render(<ShortenerForm texts={EN_TEXTS} />)
+		const urlInput = screen.getByRole('textbox', { name: 'longUrl' })
+		await user.type(urlInput, 'https://www.google.com')
+		expect(screen.getByRole('button')).toBeEnabled()
+		await user.click(screen.getByRole('button'))
+
+		await screen.findByText('https://murl.cl/abc123')
+
+		expect(requestBody).toHaveProperty('turnstileToken', 'mock-turnstile-token')
+	})
+
+	it('should keep the submit button disabled until turnstile is resolved', async () => {
+		// Overwrite global turnstile render to not trigger the callback immediately
+		let triggerTurnstileCallback: (token: string) => void = () => {}
+		;(window as any).turnstile.render = vi.fn((_container, options) => {
+			triggerTurnstileCallback = options.callback
+			return 'mock-widget-id'
+		})
+
+		const user = userEvent.setup()
+		render(<ShortenerForm texts={EN_TEXTS} />)
+
+		// Type valid URL
+		const urlInput = screen.getByRole('textbox', { name: 'longUrl' })
+		await user.type(urlInput, 'https://www.google.com')
+
+		// Button should be disabled because Turnstile hasn't resolved
+		const submitButton = screen.getByRole('button', { name: 'shorten' })
+		expect(submitButton).toBeDisabled()
+
+		// Trigger Turnstile callback manually
+		act(() => {
+			triggerTurnstileCallback('manual-mock-token')
+		})
+
+		// Now the button should be enabled
+		expect(submitButton).toBeEnabled()
 	})
 })

@@ -4,9 +4,13 @@ dist
 .env
 .env.development
 .env.production
+.env.test
 build/
 .astro/
 personal_notes
+
+# Temporally
+docs/*
 
 # Playwright
 /test-results/
