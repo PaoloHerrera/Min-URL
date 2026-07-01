@@ -1,9 +1,9 @@
-import { UrlController } from './adapters/primary/http/Url.controller.js'
+import { UrlController } from './adapters/primary/http/url.controller.js'
 import { TurnstileCaptchaService } from './adapters/secondary/captcha/TurnstileCaptchaService.js'
 import { SequelizeGeolocationService } from './adapters/secondary/db/SequelizeGeolocationService.js'
 import { SequelizeUrlRepository } from './adapters/secondary/db/SequelizeUrlRepository.js'
 import { RandomBase62SlugGenerator } from './core/services/RandomBase62SlugGenerator.js'
-import { ShortenUrlAnonymousUseCase } from './core/usecases/ShortenUrlAnonymous.usecase.js'
+import { ShortenUrlAnonymousUseCase } from './core/usecases/shortenUrlAnonymous.usecase.js'
 
 //1. Slug Configuration
 

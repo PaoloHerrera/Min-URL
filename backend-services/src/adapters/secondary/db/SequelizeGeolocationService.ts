@@ -1,6 +1,6 @@
 import geoipCountry from 'geoip-country'
 import geoip from 'geoip-lite'
-import type { GeolocationsServices } from '../../../core/ports/GeolocationServices.interface.js'
+import type { GeolocationsServices } from '../../../core/ports/geolocationServices.interface.js'
 import { GeolocationModel } from './models/Geolocation.model.js'
 
 interface GeoId {

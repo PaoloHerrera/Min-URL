@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest'
-import { ShortenUrlAnonymousUseCase } from '../src/core/usecases/ShortenUrlAnonymous.usecase.ts'
+import { ShortenUrlAnonymousUseCase } from '../src/core/usecases/shortenUrlAnonymous.usecase.js'
 
 describe('ShortenUrlAnonymousUseCase', () => {
 	it('should successfully create an anonymous short URL', async () => {

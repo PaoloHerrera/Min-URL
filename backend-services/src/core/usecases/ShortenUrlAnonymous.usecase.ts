@@ -1,5 +1,5 @@
 import type { CaptchaServices } from '../ports/CaptchaServices.interface.js'
-import type { GeolocationsServices } from '../ports/GeolocationServices.interface.js'
+import type { GeolocationsServices } from '../ports/geolocationServices.interface.js'
 import type { SlugGenerator } from '../ports/SlugGenerator.interface.js'
 import type { UrlRepository } from '../ports/UrlRepository.interface.js'
 

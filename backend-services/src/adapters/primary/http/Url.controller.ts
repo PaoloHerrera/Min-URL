@@ -1,5 +1,5 @@
 import type { Request, Response } from 'express'
-import type { ShortenUrlAnonymousUseCase } from '../../../core/usecases/ShortenUrlAnonymous.usecase.js'
+import type { ShortenUrlAnonymousUseCase } from '../../../core/usecases/shortenUrlAnonymous.usecase.js'
 
 export class UrlController {
 	private readonly shortenUrlAnonymousUseCase: ShortenUrlAnonymousUseCase
