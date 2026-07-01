@@ -45,6 +45,7 @@
 		"scope",
 		"shortener",
 		"i18n",
-		"frontend"
+		"frontend",
+		"db"
 	]
 }
