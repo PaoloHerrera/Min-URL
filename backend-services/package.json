@@ -12,6 +12,7 @@
 		"lintfix": "biome lint --fix",
 		"format": "prettier --write \"**/*.{js,ts,css,json}\"",
 		"format:check": "prettier --check \"**/*.{js,ts,css,json}\"",
+		"typecheck": "tsc --noEmit",
 		"test": "vitest"
 	},
 	"keywords": [],

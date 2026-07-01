@@ -11,11 +11,7 @@
 		"forceConsistentCasingInFileNames": true,
 		"outDir": "./dist",
 		"allowImportingTsExtensions": true,
-		"noEmit": true,
-		"baseUrl": ".",
-		"paths": {
-			"@/*": ["./*"]
-		}
+		"noEmit": true
 	},
 	"include": ["src/**/*", "routes/**/*", "middleware/**/*", "__test__/**/*"],
 	"exclude": ["node_modules", "dist"]
