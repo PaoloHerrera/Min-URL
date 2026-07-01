@@ -26,10 +26,7 @@ CREATE TABLE "Min-URL".users (
 	given_name varchar(255),
 	family_name varchar(255),
 	avatar text,
-	short_url_usage numeric NOT NULL DEFAULT 0,
-	short_url_available numeric NOT NULL DEFAULT 50,
-	qr_code_usage numeric NOT NULL DEFAULT 0,
-	qr_code_available numeric NOT NULL DEFAULT 25,
+	credits numeric NOT NULL DEFAULT 100,
 	deleted boolean NOT NULL DEFAULT false,
 	created_at timestamp with time zone NOT NULL DEFAULT NOW(),
 	updated_at timestamp with time zone NOT NULL DEFAULT NOW(),
@@ -95,11 +92,13 @@ CREATE TABLE "Min-URL".urls (
     REFERENCES "Min-URL".geolocations (id_geolocations) ON DELETE CASCADE
 );
 
-CREATE TABLE "Min-URL".short_urls (
-	id_short_urls UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-	url_id UUID NOT NULL UNIQUE,
+CREATE TABLE "Min-URL".slugs (
+	id_slugs UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+	url_id UUID NOT NULL,
 	slug varchar(16) NOT NULL UNIQUE,
 	created_at timestamp with time zone NOT NULL DEFAULT NOW(),
+	deleted boolean NOT NULL DEFAULT false,
+	deleted_at timestamp with time zone,
 	CONSTRAINT url_id_fk FOREIGN KEY (url_id) 
     REFERENCES "Min-URL".urls (id_urls) ON DELETE CASCADE
 );
