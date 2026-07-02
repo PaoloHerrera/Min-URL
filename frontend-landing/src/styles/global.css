@@ -150,20 +150,14 @@
 /* Background grid */
 .bg-grid-pattern {
 	background-size: 50px 50px;
-	background-image: linear-gradient(
-			to right,
-			rgba(255, 255, 255, 0.015) 1px,
-			transparent 1px
-		),
+	background-image:
+		linear-gradient(to right, rgba(255, 255, 255, 0.015) 1px, transparent 1px),
 		linear-gradient(to bottom, rgba(255, 255, 255, 0.015) 1px, transparent 1px);
 }
 
 :root[data-theme='light'] .bg-grid-pattern {
-	background-image: linear-gradient(
-			to right,
-			rgba(0, 86, 255, 0.04) 1px,
-			transparent 1px
-		),
+	background-image:
+		linear-gradient(to right, rgba(0, 86, 255, 0.04) 1px, transparent 1px),
 		linear-gradient(to bottom, rgba(0, 86, 255, 0.04) 1px, transparent 1px);
 }
 
