@@ -69,9 +69,9 @@ export const ShortenerSuccess = ({
 			<div className="flex flex-col sm:flex-row items-stretch gap-2 px-5">
 				{/* Brand-tinted URL box */}
 				<div className="flex-1 font-mono text-sm bg-brand-500/6 border border-brand-500/20 rounded-xl px-4 py-3 flex items-center min-w-0 overflow-hidden">
-					<span className="truncate font-semibold" aria-label="shortUrl">
+					<p className="truncate font-semibold" aria-label="shortUrl">
 						{shortUrl}
-					</span>
+					</p>
 				</div>
 
 				<div className="flex gap-2 shrink-0">
