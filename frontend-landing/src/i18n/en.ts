@@ -23,14 +23,16 @@ export const en: Translations = {
 		shortener: {
 			placeholder: 'https://example.com/my-long-url',
 			button: 'Shorten URL',
-			loading: 'Processing...',
+			loading: 'Shorten...',
 			errorUrlInvalid: 'Please enter a valid URL.',
 			errorShortenFailed: 'Something went wrong. Please try again later.',
-			successTitle: 'Your shortened link is ready',
+			successTitle: 'Your link has been shortened!',
+			successSubtitle: 'Ready to share',
 			copied: 'Copied!',
 			copy: 'Copy',
 			visit: 'Visit',
 			downloadQr: 'Download QR',
+			reset: 'Shorten another link',
 		},
 		qrTool: {
 			tab: 'QR Generator',

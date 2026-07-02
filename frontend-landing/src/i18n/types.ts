@@ -25,10 +25,12 @@ export interface Translations {
 			errorUrlInvalid: string
 			errorShortenFailed: string
 			successTitle: string
+			successSubtitle: string
 			copied: string
 			copy: string
 			visit: string
 			downloadQr: string
+			reset: string
 		}
 		qrTool: {
 			tab: string

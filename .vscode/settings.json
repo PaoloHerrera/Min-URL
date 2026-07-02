@@ -46,6 +46,7 @@
 		"shortener",
 		"i18n",
 		"frontend",
-		"db"
+		"db",
+		"deps"
 	]
 }

@@ -5,12 +5,22 @@ import { HttpResponse, http } from 'msw'
 import { server } from '@/mocks/server'
 import { ShortenerForm } from '@/components/react/ShortenerForm'
 
+vi.mock('canvas-confetti', () => ({
+	default: vi.fn(),
+}))
+
 const EN_TEXTS = {
 	buttonText: 'Shorten',
 	loadingText: 'Shortening...',
 	errorUrlInvalidText: 'Please enter a valid URL',
 	errorShortenFailedText: 'Something went wrong. Please try again later.',
 	placeholderText: 'https://example.com',
+	successTitleText: 'Your shortened link is ready',
+	successSubtitleText: 'Ready to share',
+	copiedText: 'Copied!',
+	copyText: 'Copy',
+	visitText: 'Visit',
+	resetText: 'Shorten another link',
 }
 
 describe('ShortenerForm', () => {
@@ -248,8 +258,8 @@ describe('ShortenerForm', () => {
 		render(<ShortenerForm texts={EN_TEXTS} />)
 		const urlInput = screen.getByRole('textbox', { name: 'longUrl' })
 		await user.type(urlInput, 'https://www.google.com')
-		expect(screen.getByRole('button')).toBeEnabled()
-		await user.click(screen.getByRole('button'))
+		expect(screen.getByRole('button', { name: 'shorten' })).toBeEnabled()
+		await user.click(screen.getByRole('button', { name: 'shorten' }))
 
 		await waitFor(() => {
 			expect(screen.getByRole('button', { name: 'reset' })).toBeInTheDocument()
@@ -264,7 +274,7 @@ describe('ShortenerForm', () => {
 			screen.queryByRole('button', { name: 'shorten' }),
 		).toBeInTheDocument()
 		expect(screen.getByRole('textbox', { name: 'longUrl' })).toHaveValue('')
-		expect(screen.getByRole('button')).toBeDisabled()
+		expect(screen.getByRole('button', { name: 'shorten' })).toBeDisabled()
 	})
 
 	it('should body contain turnstile token', async () => {
@@ -281,8 +291,8 @@ describe('ShortenerForm', () => {
 		render(<ShortenerForm texts={EN_TEXTS} />)
 		const urlInput = screen.getByRole('textbox', { name: 'longUrl' })
 		await user.type(urlInput, 'https://www.google.com')
-		expect(screen.getByRole('button')).toBeEnabled()
-		await user.click(screen.getByRole('button'))
+		expect(screen.getByRole('button', { name: 'shorten' })).toBeEnabled()
+		await user.click(screen.getByRole('button', { name: 'shorten' }))
 
 		await screen.findByText('https://murl.cl/abc123')
 
