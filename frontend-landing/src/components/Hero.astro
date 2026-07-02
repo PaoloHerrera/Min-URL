@@ -1,10 +1,7 @@
 ---
 import { dic } from '../i18n/dic'
 import type { Lang } from '../i18n/utils'
-import IconLink from './icons/IconLink.astro'
-import IconQrCode from './icons/IconQrCode.astro'
 import { ShortenerForm } from './react/ShortenerForm'
-import { QrForm } from './react/QrForm'
 
 interface Props {
 	lang: Lang
@@ -19,6 +16,12 @@ const texts = {
 	errorUrlInvalidText: t.hero.shortener.errorUrlInvalid,
 	errorShortenFailedText: t.hero.shortener.errorShortenFailed,
 	placeholderText: t.hero.shortener.placeholder,
+	successTitleText: t.hero.shortener.successTitle,
+	copiedText: t.hero.shortener.copied,
+	copyText: t.hero.shortener.copy,
+	visitText: t.hero.shortener.visit,
+	resetText: t.hero.shortener.reset,
+	successSubtitleText: t.hero.shortener.successSubtitle,
 }
 ---
 
@@ -70,59 +73,9 @@ const texts = {
 
 		<!-- ── Tool Card ──────────────────────────────────── -->
 		<div
-			class="w-full glass-panel rounded-3xl shadow-2xl shadow-black/30 overflow-hidden"
+			class="w-full glass-panel rounded-3xl shadow-2xl shadow-black/30 p-6 overflow-hidden"
 		>
-			<!-- Tab pill selector (JS-driven for SVG icon support) -->
-			<div
-				role="tablist"
-				aria-label={lang === 'en' ? 'Choose tool' : 'Elige herramienta'}
-				class="flex gap-1 p-2 border-b border-white/8"
-			>
-				<button
-					id="btn-tab-short"
-					role="tab"
-					aria-selected="true"
-					aria-controls="panel-short"
-					class="tool-tab tool-tab-active"
-				>
-					<IconLink class="size-4 shrink-0" />
-					<span>{t.hero.shortener.button}</span>
-				</button>
-				<button
-					id="btn-tab-qr"
-					role="tab"
-					aria-selected="false"
-					aria-controls="panel-qr"
-					class="tool-tab"
-				>
-					<IconQrCode class="size-4 shrink-0" />
-					<span>{t.hero.qrTool.tab}</span>
-				</button>
-			</div>
-
-			<!-- Tab panels -->
-			<div
-				id="panel-short"
-				role="tabpanel"
-				aria-labelledby="btn-tab-short"
-				class="p-6"
-			>
-				<ShortenerForm client:load texts={texts} />
-			</div>
-			<div
-				id="panel-qr"
-				role="tabpanel"
-				aria-labelledby="btn-tab-qr"
-				class="p-6 hidden"
-			>
-				<QrForm
-					client:load
-					placeholder={t.hero.qrTool.placeholder}
-					button={t.hero.qrTool.button}
-					downloadQr={t.hero.qrTool.downloadQr}
-					errorInvalid={t.hero.qrTool.errorInvalid}
-				/>
-			</div>
+			<ShortenerForm client:load texts={texts} />
 		</div>
 
 		<!-- ── Trust indicators ──────────────────────────── -->
@@ -157,38 +110,3 @@ const texts = {
 		</div>
 	</div>
 </section>
-
-<!-- Tab switching script (minimal — only for icon-enabled tabs) -->
-<script is:inline>
-	;(() => {
-		const tabs = document.querySelectorAll('[role="tab"]')
-		const panels = document.querySelectorAll('[role="tabpanel"]')
-
-		tabs.forEach((tab, i) => {
-			tab.addEventListener('click', () => {
-				// Update tab buttons
-				tabs.forEach((t) => {
-					t.classList.remove('tool-tab-active')
-					t.setAttribute('aria-selected', 'false')
-				})
-				tab.classList.add('tool-tab-active')
-				tab.setAttribute('aria-selected', 'true')
-
-				// Show/hide panels
-				panels.forEach((p, j) => {
-					p.classList.toggle('hidden', i !== j)
-				})
-			})
-
-			// Keyboard: arrows to navigate between tabs
-			tab.addEventListener('keydown', (e) => {
-				const dir = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0
-				if (!dir) return
-				e.preventDefault()
-				const next = (i + dir + tabs.length) % tabs.length
-				tabs[next].click()
-				tabs[next].focus()
-			})
-		})
-	})()
-</script>
