@@ -24,7 +24,7 @@ test.describe('Anonymous URL Shortener E2E', () => {
 		await expect(successPanel).toBeVisible()
 
 		//5. Extract the short URL and that it is not empty
-		const shortUrlElement = page.getByRole('paragraph', { name: 'shortUrl' })
+		const shortUrlElement = page.getByLabel('shortUrl')
 		await expect(shortUrlElement).toBeVisible()
 		await expect(shortUrlElement).not.toBeEmpty()
 		const shortUrl = await shortUrlElement.textContent()
