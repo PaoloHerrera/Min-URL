@@ -7,17 +7,17 @@
 -- Database creation must be performed outside a multi lined SQL file. 
 -- These commands were put in this file only as a convenience.
 -- 
--- object: "Min-URL" | type: DATABASE --
--- DROP DATABASE IF EXISTS "Min-URL";
+-- object: "min_url" | type: DATABASE --
+-- DROP DATABASE IF EXISTS "min_url";
 
--- object: "Min-URL" | type: SCHEMA --
--- DROP SCHEMA IF EXISTS "Min-URL" CASCADE;
-CREATE SCHEMA "Min-URL";
+-- object: "min_url" | type: SCHEMA --
+-- DROP SCHEMA IF EXISTS "min_url" CASCADE;
+CREATE SCHEMA "min_url";
 -- ddl-end --
 
--- object: "Min-URL".users | type: TABLE --
--- DROP TABLE IF EXISTS "Min-URL".users CASCADE;
-CREATE TABLE "Min-URL".users (
+-- object: "min_url".users | type: TABLE --
+-- DROP TABLE IF EXISTS "min_url".users CASCADE;
+CREATE TABLE "min_url".users (
 	id_users UUID PRIMARY KEY DEFAULT gen_random_uuid(),
 	google_id varchar(255) UNIQUE,
 	github_id varchar(255) UNIQUE,
@@ -33,9 +33,9 @@ CREATE TABLE "Min-URL".users (
 	deleted_at timestamp with time zone
 );
 
--- object: "Min-URL".users | type: TABLE --
--- DROP TABLE IF EXISTS "Min-URL".refresh_tokens CASCADE;
-CREATE TABLE "Min-URL".refresh_tokens (
+-- object: "min_url".users | type: TABLE --
+-- DROP TABLE IF EXISTS "min_url".refresh_tokens CASCADE;
+CREATE TABLE "min_url".refresh_tokens (
 	id_refresh_tokens UUID PRIMARY KEY DEFAULT gen_random_uuid(),
 	user_id UUID,
  	refresh_token varchar(255) NOT NULL,
@@ -45,11 +45,11 @@ CREATE TABLE "Min-URL".refresh_tokens (
 	updated_at timestamp with time zone NOT NULL DEFAULT NOW(),
 	expired_at timestamp with time zone,
 	CONSTRAINT user_id_fk FOREIGN KEY (user_id)
-		REFERENCES "Min-URL".users (id_users) ON DELETE CASCADE
+		REFERENCES "min_url".users (id_users) ON DELETE CASCADE
 );
 
 
-CREATE TABLE "Min-URL".geolocations (
+CREATE TABLE "min_url".geolocations (
 	id_geolocations UUID PRIMARY KEY DEFAULT gen_random_uuid(),
 	ip_address varchar(50) NOT NULL UNIQUE DEFAULT 'unknown',
 	country varchar(10) DEFAULT 'unknown',
@@ -62,20 +62,20 @@ CREATE TABLE "Min-URL".geolocations (
 );
 
 
--- object: "Min-URL"."Purpose_enum" | type: TYPE --
--- DROP TYPE IF EXISTS "Min-URL"."Purpose_enum" CASCADE;
-CREATE TYPE "Min-URL"."Purpose_enum" AS
+-- object: "min_url"."Purpose_enum" | type: TYPE --
+-- DROP TYPE IF EXISTS "min_url"."Purpose_enum" CASCADE;
+CREATE TYPE "min_url"."Purpose_enum" AS
 ENUM ('direct','qr','api');
 
--- object: "Min-URL".urls | type: TABLE --
--- DROP TABLE IF EXISTS "Min-URL".urls CASCADE;
-CREATE TABLE "Min-URL".urls (
+-- object: "min_url".urls | type: TABLE --
+-- DROP TABLE IF EXISTS "min_url".urls CASCADE;
+CREATE TABLE "min_url".urls (
 	id_urls UUID PRIMARY KEY DEFAULT gen_random_uuid(),
 	user_id UUID,
 	geolocations_id UUID,
 	title varchar(100) NOT NULL,
 	long_url text NOT NULL,
-	purpose "Min-URL"."Purpose_enum" NOT NULL DEFAULT 'direct',
+	purpose "min_url"."Purpose_enum" NOT NULL DEFAULT 'direct',
 	password boolean NOT NULL DEFAULT false,
 	password_hash varchar(128),
 	expiration boolean NOT NULL DEFAULT false,
@@ -87,12 +87,12 @@ CREATE TABLE "Min-URL".urls (
 	updated_at timestamp with time zone NOT NULL DEFAULT NOW(),
 	deleted_at timestamp with time zone,
 	CONSTRAINT user_id_fk FOREIGN KEY (user_id)
-    REFERENCES "Min-URL".users (id_users) ON DELETE CASCADE,
+    REFERENCES "min_url".users (id_users) ON DELETE CASCADE,
 	CONSTRAINT geolocations_id_fk FOREIGN KEY (geolocations_id)
-    REFERENCES "Min-URL".geolocations (id_geolocations) ON DELETE CASCADE
+    REFERENCES "min_url".geolocations (id_geolocations) ON DELETE CASCADE
 );
 
-CREATE TABLE "Min-URL".slugs (
+CREATE TABLE "min_url".slugs (
 	id_slugs UUID PRIMARY KEY DEFAULT gen_random_uuid(),
 	url_id UUID NOT NULL,
 	slug varchar(16) NOT NULL UNIQUE,
@@ -100,10 +100,10 @@ CREATE TABLE "Min-URL".slugs (
 	deleted boolean NOT NULL DEFAULT false,
 	deleted_at timestamp with time zone,
 	CONSTRAINT url_id_fk FOREIGN KEY (url_id) 
-    REFERENCES "Min-URL".urls (id_urls) ON DELETE CASCADE
+    REFERENCES "min_url".urls (id_urls) ON DELETE CASCADE
 );
 
-CREATE TABLE "Min-URL".qr_codes (
+CREATE TABLE "min_url".qr_codes (
   id_qr_codes UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   url_id UUID NOT NULL UNIQUE,
 	foreground_color varchar(7) NOT NULL,
@@ -111,18 +111,18 @@ CREATE TABLE "Min-URL".qr_codes (
   created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW(),
 	updated_at timestamp with time zone NOT NULL DEFAULT NOW(),
   CONSTRAINT url_id_fk FOREIGN KEY (url_id) 
-    REFERENCES "Min-URL".urls (id_urls) ON DELETE CASCADE
+    REFERENCES "min_url".urls (id_urls) ON DELETE CASCADE
 );
 
-CREATE TABLE "Min-URL".clicks (
+CREATE TABLE "min_url".clicks (
   id_clicks UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   url_id UUID NOT NULL,
   created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW(),
   CONSTRAINT url_id_fk FOREIGN KEY (url_id) 
-    REFERENCES "Min-URL".urls (id_urls) ON DELETE CASCADE
+    REFERENCES "min_url".urls (id_urls) ON DELETE CASCADE
 );
 
-CREATE TABLE "Min-URL".clicks_details (
+CREATE TABLE "min_url".clicks_details (
   id_clicks_details UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   click_id UUID NOT NULL UNIQUE,
 	geolocations_id UUID,
@@ -131,23 +131,23 @@ CREATE TABLE "Min-URL".clicks_details (
   referer TEXT,
   created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW(),
   CONSTRAINT click_id_fk FOREIGN KEY (click_id) 
-    REFERENCES "Min-URL".clicks (id_clicks) ON DELETE CASCADE,
+    REFERENCES "min_url".clicks (id_clicks) ON DELETE CASCADE,
 	CONSTRAINT geolocations_id_fk FOREIGN KEY (geolocations_id)
-    REFERENCES "Min-URL".geolocations (id_geolocations) ON DELETE CASCADE
+    REFERENCES "min_url".geolocations (id_geolocations) ON DELETE CASCADE
 );
 
-CREATE INDEX short_url_slug_index ON "Min-URL".short_urls (slug);
-CREATE INDEX url_title_index ON "Min-URL".urls (title);
-CREATE INDEX url_long_url_index ON "Min-URL".urls (long_url);
-CREATE INDEX url_user_id_index ON "Min-URL".urls (user_id);
-CREATE INDEX url_geolocations_id_index ON "Min-URL".urls (geolocations_id);
-CREATE INDEX qr_code_long_url_index ON "Min-URL".qr_codes (url_id);
-CREATE INDEX click_long_url_index ON "Min-URL".clicks (url_id);
-CREATE INDEX click_detail_click_index ON "Min-URL".clicks_details (click_id);
-CREATE INDEX click_detail_geolocations_index ON "Min-URL".clicks_details (geolocations_id);
+CREATE INDEX slugs_slug_index ON "min_url".slugs (slug);
+CREATE INDEX url_title_index ON "min_url".urls (title);
+CREATE INDEX url_long_url_index ON "min_url".urls (long_url);
+CREATE INDEX url_user_id_index ON "min_url".urls (user_id);
+CREATE INDEX url_geolocations_id_index ON "min_url".urls (geolocations_id);
+CREATE INDEX qr_code_long_url_index ON "min_url".qr_codes (url_id);
+CREATE INDEX click_long_url_index ON "min_url".clicks (url_id);
+CREATE INDEX click_detail_click_index ON "min_url".clicks_details (click_id);
+CREATE INDEX click_detail_geolocations_index ON "min_url".clicks_details (geolocations_id);
 
 
-CREATE VIEW "Min-URL".dashboard_cards_view AS
+CREATE VIEW "min_url".dashboard_cards_view AS
 SELECT
   u.user_id,
 
@@ -196,20 +196,20 @@ SELECT
 					THEN c.id_clicks END)) * 100 - 100
 	END AS unique_clicks_variation
 
-FROM "Min-URL".urls u
-LEFT JOIN "Min-URL".clicks c ON u.id_urls = c.url_id
-LEFT JOIN "Min-URL".clicks_details cd ON c.id_clicks = cd.click_id
+FROM "min_url".urls u
+LEFT JOIN "min_url".clicks c ON u.id_urls = c.url_id
+LEFT JOIN "min_url".clicks_details cd ON c.id_clicks = cd.click_id
 WHERE u.deleted = false
 GROUP BY u.user_id;
 
 -- Vista para mostrar los clicks de los últimos 7 días
-CREATE VIEW "Min-URL".dashboard_last_7_days_clicks_view AS
+CREATE VIEW "min_url".dashboard_last_7_days_clicks_view AS
 SELECT
   u.user_id,
 	COUNT(DISTINCT c.id_clicks) AS total_clicks,
   TO_CHAR(DATE_TRUNC('day', c.created_at AT TIME ZONE 'UTC'), 'YYYY-MM-DD') AS click_day
-FROM "Min-URL".urls u
-LEFT JOIN "Min-URL".clicks c ON u.id_urls = c.url_id
+FROM "min_url".urls u
+LEFT JOIN "min_url".clicks c ON u.id_urls = c.url_id
 WHERE u.deleted = false 
 	AND c.created_at >= DATE_TRUNC('day', NOW() AT TIME ZONE 'UTC') - INTERVAL '7 days'
   AND c.created_at < DATE_TRUNC('day', NOW() AT TIME ZONE 'UTC') + INTERVAL '1 day'
@@ -217,34 +217,34 @@ GROUP BY u.user_id, click_day
 ORDER BY total_clicks DESC;
 
 -- Vista para mostrar los países de uso
-CREATE VIEW "Min-URL".dashboard_countries_view AS
+CREATE VIEW "min_url".dashboard_countries_view AS
 SELECT
   u.user_id,
 	COUNT(DISTINCT c.id_clicks) AS total_clicks,
 	g.country
-	FROM "Min-URL".urls u
-	LEFT JOIN "Min-URL".clicks c ON u.id_urls = c.url_id
-	LEFT JOIN "Min-URL".clicks_details cd ON c.id_clicks = cd.click_id
-	LEFT JOIN "Min-URL".geolocations g ON cd.geolocations_id = g.id_geolocations
+	FROM "min_url".urls u
+	LEFT JOIN "min_url".clicks c ON u.id_urls = c.url_id
+	LEFT JOIN "min_url".clicks_details cd ON c.id_clicks = cd.click_id
+	LEFT JOIN "min_url".geolocations g ON cd.geolocations_id = g.id_geolocations
 	WHERE u.deleted = false
 	GROUP BY u.user_id, g.country
 	ORDER BY total_clicks DESC;
 
 -- Vista para mostrar los dispositivos más utilizados
-CREATE VIEW "Min-URL".dashboard_devices_view AS
+CREATE VIEW "min_url".dashboard_devices_view AS
 SELECT
   u.user_id,
 	COUNT(DISTINCT c.id_clicks) AS total_clicks,
 	cd.device_type
-	FROM "Min-URL".urls u
-	LEFT JOIN "Min-URL".clicks c ON u.id_urls = c.url_id
-	LEFT JOIN "Min-URL".clicks_details cd ON c.id_clicks = cd.click_id
+	FROM "min_url".urls u
+	LEFT JOIN "min_url".clicks c ON u.id_urls = c.url_id
+	LEFT JOIN "min_url".clicks_details cd ON c.id_clicks = cd.click_id
 	WHERE u.deleted = false
 	GROUP BY u.user_id, cd.device_type
 	ORDER BY total_clicks DESC;
 
 -- Vista para mostrar los Links más clickeados
-CREATE VIEW "Min-URL".dashboard_top_links_view AS
+CREATE VIEW "min_url".dashboard_top_links_view AS
 SELECT
   u.user_id,
 	u.id_urls,
@@ -253,15 +253,15 @@ SELECT
   u.long_url,
 	s.slug,
   u.created_at
-FROM "Min-URL".urls u
-LEFT JOIN "Min-URL".clicks c ON u.id_urls = c.url_id
-LEFT JOIN "Min-URL".short_urls s ON u.id_urls = s.url_id
+FROM "min_url".urls u
+LEFT JOIN "min_url".clicks c ON u.id_urls = c.url_id
+LEFT JOIN "min_url".slugs s ON u.id_urls = s.url_id
 WHERE u.deleted = false AND u.purpose = 'direct'
 GROUP BY u.user_id, u.id_urls, u.title, u.long_url, s.slug, u.created_at
 ORDER BY total_clicks DESC;
 
 -- Vista para mostrar los QR Codes más se han escaneado
-CREATE VIEW "Min-URL".dashboard_top_qr_codes_view AS
+CREATE VIEW "min_url".dashboard_top_qr_codes_view AS
 SELECT
   u.user_id,
 	u.id_urls,
@@ -272,10 +272,10 @@ SELECT
 	q.foreground_color,
 	q.background_color,
   u.created_at
-FROM "Min-URL".urls u
-LEFT JOIN "Min-URL".clicks c ON u.id_urls = c.url_id
-LEFT JOIN "Min-URL".short_urls s ON u.id_urls = s.url_id
-LEFT JOIN "Min-URL".qr_codes q ON u.id_urls = q.url_id
+FROM "min_url".urls u
+LEFT JOIN "min_url".clicks c ON u.id_urls = c.url_id
+LEFT JOIN "min_url".slugs s ON u.id_urls = s.url_id
+LEFT JOIN "min_url".qr_codes q ON u.id_urls = q.url_id
 WHERE u.deleted = false AND u.purpose = 'qr'
 GROUP BY u.user_id, u.id_urls, u.title, u.long_url, s.slug, q.foreground_color, q.background_color, u.created_at
 ORDER BY total_scans DESC;

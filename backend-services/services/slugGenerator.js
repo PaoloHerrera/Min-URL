@@ -1,5 +1,5 @@
 import crypto from 'node:crypto'
-import { ShortUrlModel } from '../models/shortUrlModel.js'
+import { SlugModel } from '../src/adapters/secondary/db/models/Slug.model.js'
 import { base64ToBase62 } from '../utils/utils.js'
 import { generateHash } from '../utils/utils.js'
 
@@ -48,7 +48,7 @@ export class SlugGenerator {
 	//Verifica si el slug ya existe
 	async isSlugAvailable(slug) {
 		try {
-			const exists = await ShortUrlModel.findOne({ where: { slug } })
+			const exists = await SlugModel.findOne({ where: { slug } })
 			return !exists
 		} catch (error) {
 			throw new Error(error.message)

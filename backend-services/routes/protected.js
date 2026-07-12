@@ -6,17 +6,13 @@ import {
 	returnSlugAvailability,
 } from '../controllers/urlController.js'
 import {
-	createQrCode,
 	createShortUrl,
 	createShortUrlWithCustomSlug,
 	deleteUserUrl,
 	updateUserUrl,
 } from '../controllers/userController.js'
 import { checkApiKey } from '../middleware/checkApiKey.js'
-import {
-	checkQrCodeAvailable,
-	checkShortUrlAvailable,
-} from '../middleware/checkAvailable.js'
+import { checkShortUrlAvailable } from '../middleware/checkAvailable.js'
 import { checkForbiddenExtension } from '../middleware/checkForbiddenExtension.js'
 import { addGeolocation } from '../middleware/geolocationMiddleware.js'
 import { validateUrl } from '../middleware/validateUrl.js'
@@ -53,16 +49,6 @@ protectedRouter.post(
 	checkForbiddenExtension,
 	addGeolocation,
 	createShortUrl,
-)
-
-protectedRouter.post(
-	'/create-qr-code',
-	checkApiKey,
-	checkQrCodeAvailable,
-	validateUrl,
-	checkForbiddenExtension,
-	addGeolocation,
-	createQrCode,
 )
 
 protectedRouter.delete('/delete-url/:id', checkApiKey, deleteUserUrl)

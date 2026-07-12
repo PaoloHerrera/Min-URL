@@ -1,6 +1,6 @@
 import { Op } from 'sequelize'
 import { LIMITS_VALUES } from '../constants.js'
-import { UrlModel } from '../models/urlModel.js'
+import { UrlModel } from '../src/adapters/secondary/db/models/Url.model.js'
 
 const getStartOfDay = (date) => {
 	const startOfDay = new Date(date)

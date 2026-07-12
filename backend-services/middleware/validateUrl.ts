@@ -1,3 +1,4 @@
+import type { NextFunction, Request, Response } from 'express'
 import validator from 'validator'
 import { addHttpScheme } from '../utils/utils.js'
 
@@ -5,7 +6,11 @@ import { addHttpScheme } from '../utils/utils.js'
 // Si la URL es válida se guarda en el body de la petición
 // Si no es válida se devuelve un error
 
-export const validateUrl = (req, res, next) => {
+export const validateUrl = (
+	req: Request<unknown, unknown, { originalUrl: string | null | undefined }>,
+	res: Response,
+	next: NextFunction,
+) => {
 	let { originalUrl } = req.body
 
 	// Verifica si la URL viene y es un string

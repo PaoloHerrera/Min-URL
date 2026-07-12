@@ -1,6 +1,4 @@
 import { REDIRECTOR_URL } from '../constants.js'
-import { addQrCodeUsage, addShortUrlUsage } from '../models/userModel.js'
-import { createQrForUrl } from '../services/qrServices.js'
 import {
 	createShortUrlForUrl,
 	createShortUrlForUrlWithSlug,
@@ -11,6 +9,7 @@ import {
 	deleteUrlbyUserId,
 	updateUrlById,
 } from '../services/urlServices.js'
+import { addShortUrlUsage } from '../src/adapters/secondary/db/models/User.model.js'
 
 const createBaseUrl = async (req, purpose) => {
 	const userId = req.body.userId
@@ -94,36 +93,6 @@ export const createShortUrlWithCustomSlug = async (req, res) => {
 		shortUrl: `${REDIRECTOR_URL}/${shortUrl.slug}`,
 		slug: shortUrl.slug,
 		purpose: url.purpose,
-		createdAt: url.created_at,
-	})
-}
-
-export const createQrCode = async (req, res) => {
-	// Se valida la URL y se crea
-	const url = await createBaseUrl(req, 'qr')
-
-	/* Se crea una ShortUrl con el slug aleatorio */
-	const shortUrl = await createShortUrlForUrl({
-		url: url.long_url,
-		urlId: url.id_urls,
-	})
-
-	/* Se crea el código QR */
-	const qrCode = await createQrForUrl({
-		urlId: url.id_urls,
-		foregroundColor: req.body.foregroundColor,
-		backgroundColor: req.body.backgroundColor,
-	})
-
-	/* Se decrementa el uso de QR Codes */
-	await addQrCodeUsage(req.body.userId)
-
-	res.json({
-		originalUrl: req.body.originalUrl,
-		shortUrl: `${REDIRECTOR_URL}/${shortUrl.slug}`,
-		slug: shortUrl.slug,
-		foregroundColor: qrCode.foreground_color,
-		backgroundColor: qrCode.background_color,
 		createdAt: url.created_at,
 	})
 }

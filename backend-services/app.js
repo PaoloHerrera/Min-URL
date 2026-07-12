@@ -5,7 +5,7 @@ import express from 'express'
 import session from 'express-session'
 import { setupRedis } from './config/redis.js'
 import { corsMiddleware } from './middleware/cors.js'
-import { protectedRouter } from './routes/protected.js'
+import { routesInternal } from './routes/internal.js'
 import { routesShortUrl } from './routes/shorturl.js'
 
 const __filename = fileURLToPath(import.meta.url)
@@ -38,7 +38,7 @@ setupRedis()
 // Routes
 
 app.use('/', routesShortUrl)
-app.use('/protected/', protectedRouter)
+app.use('/internal', routesInternal)
 
 app.get('/', (req, res) => {
 	console.log(`IP del cliente: ${req.ip}`)

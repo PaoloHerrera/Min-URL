@@ -1,6 +1,6 @@
 import { SHORTURL_VALUES } from '../constants.js'
-import { ShortUrlModel } from '../models/shortUrlModel.js'
-import { UrlModel } from '../models/urlModel.js'
+import { SlugModel } from '../src/adapters/secondary/db/models/Slug.model.ts'
+import { UrlModel } from '../src/adapters/secondary/db/models/Url.model.js'
 
 const SLUG_REGEX = /^[a-zA-Z0-9]+$/
 
@@ -47,7 +47,7 @@ export const checkSlugAvailability = async (req, res) => {
 		return res.status(404).json({ message: 'generic', isAvailable: false })
 	}
 
-	const shortUrl = await ShortUrlModel.findOne({
+	const shortUrl = await SlugModel.findOne({
 		where: { slug },
 	})
 
@@ -64,7 +64,7 @@ export const returnSlugAvailability = (_req, res) => {
 
 export const getSlugData = async (req, res) => {
 	const { slug } = req.params
-	const shortUrl = await ShortUrlModel.findOne({
+	const shortUrl = await SlugModel.findOne({
 		attributes: ['url_id', 'slug'],
 		where: { slug },
 	})
