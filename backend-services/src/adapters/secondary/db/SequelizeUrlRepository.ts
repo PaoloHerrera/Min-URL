@@ -1,6 +1,6 @@
 import { sequelize } from '../../../../config/database.js'
 import type {
-	Url,
+	UrlData,
 	UrlRepository,
 } from '../../../core/ports/UrlRepository.interface.js'
 import { SlugModel } from './models/Slug.model.js'
@@ -15,7 +15,7 @@ export class SequelizeUrlRepository implements UrlRepository {
 		originalUrl: string,
 		slug: string,
 		geoId: string,
-	): Promise<Url> {
+	): Promise<UrlData> {
 		const transaction = await sequelize.transaction()
 
 		try {
@@ -50,6 +50,36 @@ export class SequelizeUrlRepository implements UrlRepository {
 			throw new Error(
 				`Database error creating anonymous short url: ${(error as Error).message}`,
 			)
+		}
+	}
+
+	async getUrlBySlug(slug: string): Promise<UrlData | null> {
+		UrlModel.hasMany(SlugModel, { foreignKey: 'url_id' })
+		SlugModel.belongsTo(UrlModel, { foreignKey: 'url_id' })
+
+		const urlRecord = await UrlModel.findOne({
+			include: [
+				{
+					model: SlugModel,
+					where: { slug },
+					attributes: ['slug'],
+				},
+			],
+		})
+
+		if (!urlRecord) {
+			return null
+		}
+
+		return {
+			id_urls: urlRecord.id_urls,
+			long_url: urlRecord.long_url,
+			purpose: urlRecord.purpose,
+			slug: slug,
+			password: urlRecord.password,
+			expired: urlRecord.expired,
+			created_at: urlRecord.created_at,
+			deleted: urlRecord.deleted,
 		}
 	}
 }

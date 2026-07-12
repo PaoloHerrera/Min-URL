@@ -3,6 +3,7 @@ import { TurnstileCaptchaService } from './adapters/secondary/captcha/TurnstileC
 import { SequelizeGeolocationService } from './adapters/secondary/db/SequelizeGeolocationService.js'
 import { SequelizeUrlRepository } from './adapters/secondary/db/SequelizeUrlRepository.js'
 import { RandomBase62SlugGenerator } from './core/services/RandomBase62SlugGenerator.js'
+import { GetUrlMetadataUseCase } from './core/usecases/getUrlMetadata.usecase.js'
 import { ShortenUrlAnonymousUseCase } from './core/usecases/shortenUrlAnonymous.usecase.js'
 
 //1. Slug Configuration
@@ -29,5 +30,11 @@ const shortenUrlAnonymousUseCase = new ShortenUrlAnonymousUseCase(
 	slugGenerator,
 )
 
+//4.2 Use Cases Initialization (Dependency Injection)
+const getUrlMetadataUseCase = new GetUrlMetadataUseCase(urlRepository)
+
 //5. Export Controller: Ready for use
-export const urlController = new UrlController(shortenUrlAnonymousUseCase)
+export const urlController = new UrlController(
+	shortenUrlAnonymousUseCase,
+	getUrlMetadataUseCase,
+)

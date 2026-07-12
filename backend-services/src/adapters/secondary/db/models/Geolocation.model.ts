@@ -1,10 +1,10 @@
-import { sequelize } from '../../../../../config/database.js'
 import { DataTypes, Model } from 'sequelize'
 import type {
 	CreationOptional,
 	InferAttributes,
 	InferCreationAttributes,
 } from 'sequelize'
+import { sequelize } from '../../../../../config/database.js'
 
 export class GeolocationModel extends Model<
 	InferAttributes<GeolocationModel>,
@@ -65,7 +65,7 @@ GeolocationModel.init(
 	},
 	{
 		tableName: 'geolocations',
-		schema: 'Min-URL',
+		schema: 'min_url',
 		sequelize,
 		timestamps: false,
 	},

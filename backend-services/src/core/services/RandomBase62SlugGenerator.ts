@@ -1,4 +1,4 @@
-import crypto from 'node:crypto'
+import { randomUUID } from 'node:crypto'
 import { base64ToBase62, generateHash } from '../../../utils/utils.js'
 import type { SlugGenerator } from '../ports/SlugGenerator.interface.js'
 import type { UrlRepository } from '../ports/UrlRepository.interface.js'
@@ -36,8 +36,8 @@ export class RandomBase62SlugGenerator implements SlugGenerator {
 		let attempts = 0
 
 		while (attempts < this.config.maxAttempts) {
-			const inputForSlug = `${url}-${crypto.randomUUID()}`
-			const base62Hash = base64ToBase62(generateHash(inputForSlug, crypto))
+			const inputForSlug = `${url}-${randomUUID()}`
+			const base62Hash = base64ToBase62(generateHash(inputForSlug))
 			const slug = base62Hash.substring(0, length)
 			// Check availability
 			if (await this.checkAvailability(slug)) {

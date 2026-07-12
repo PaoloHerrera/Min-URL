@@ -122,7 +122,7 @@ UrlModel.init(
 	},
 	{
 		tableName: 'urls',
-		schema: 'Min-URL',
+		schema: 'min_url',
 		sequelize,
 		timestamps: false,
 	},

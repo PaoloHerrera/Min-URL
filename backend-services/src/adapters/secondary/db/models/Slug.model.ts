@@ -1,4 +1,3 @@
-import { sequelize } from '../../../../../config/database.js'
 import { DataTypes, Model } from 'sequelize'
 import type {
 	CreationOptional,
@@ -6,6 +5,7 @@ import type {
 	InferAttributes,
 	InferCreationAttributes,
 } from 'sequelize'
+import { sequelize } from '../../../../../config/database.js'
 import type { UrlModel } from './Url.model.js'
 
 export class SlugModel extends Model<
@@ -53,7 +53,7 @@ SlugModel.init(
 	},
 	{
 		tableName: 'slugs',
-		schema: 'Min-URL',
+		schema: 'min_url',
 		sequelize,
 		timestamps: false,
 	},

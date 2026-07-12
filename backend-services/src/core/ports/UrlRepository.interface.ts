@@ -1,9 +1,12 @@
-export interface Url {
+export interface UrlData {
 	id_urls: string
 	long_url: string
 	purpose: 'direct' | 'qr' | 'api'
 	slug: string
+	password?: boolean
+	expired?: boolean
 	created_at: Date
+	deleted?: boolean
 }
 
 export interface UrlRepository {
@@ -11,7 +14,9 @@ export interface UrlRepository {
 		originalUrl: string,
 		slug: string,
 		geoId: string,
-	): Promise<Url>
+	): Promise<UrlData>
 
 	isSlugAvailable: (slug: string) => Promise<boolean>
+
+	getUrlBySlug: (slug: string) => Promise<UrlData | null>
 }
