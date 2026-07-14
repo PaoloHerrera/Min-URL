@@ -85,4 +85,16 @@ export interface Translations {
 	footer: {
 		text: string
 	}
+	linkNotFound: {
+		title: string
+		subtitle: string
+		description: string
+		backHome: string
+	}
+	errorPage: {
+		title: string
+		subtitle: string
+		description: string
+		backHome: string
+	}
 }

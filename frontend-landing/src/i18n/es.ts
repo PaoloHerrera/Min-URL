@@ -115,4 +115,18 @@ export const es: Translations = {
 	footer: {
 		text: 'Min-URL. Licencia MIT. Desarrollado con ❤️',
 	},
+	linkNotFound: {
+		title: 'Enlace no encontrado',
+		subtitle: 'Esta URL corta no existe o ha expirado.',
+		description:
+			'El enlace que seguiste pudo haber sido eliminado, expirado o nunca existió. Verifica la URL e intenta de nuevo.',
+		backHome: 'Volver al inicio',
+	},
+	errorPage: {
+		title: 'Algo salió mal',
+		subtitle: 'Ocurrió un error inesperado.',
+		description:
+			'Nuestro servidor encontró un problema al procesar tu solicitud. Por favor, inténtalo de nuevo en un momento.',
+		backHome: 'Volver al inicio',
+	},
 }
