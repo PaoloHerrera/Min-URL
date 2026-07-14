@@ -1,0 +1,137 @@
+---
+import { dic } from '../../i18n/dic'
+import Layout from '../../layouts/Layout.astro'
+
+const lang = 'es' as const
+const t = dic[lang]
+---
+
+<Layout lang={lang}>
+	<div
+		class="grow flex flex-col items-center justify-center relative px-4 sm:px-6 py-16 text-center overflow-hidden"
+	>
+		<!-- Ambient glow orbs -->
+		<div
+			aria-hidden="true"
+			class="pointer-events-none absolute inset-0 -z-10 overflow-hidden"
+		>
+			<div
+				class="glow-orb absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 h-[360px] w-[360px] sm:h-[420px] sm:w-[420px] rounded-full bg-primary-electric-blue"
+			>
+			</div>
+			<div
+				class="glow-orb absolute bottom-1/4 -left-16 h-40 w-40 sm:h-56 sm:w-56 rounded-full bg-indigo-700 animate-pulse-slow"
+			>
+			</div>
+			<div
+				class="glow-orb absolute bottom-1/4 -right-16 h-40 w-40 sm:h-56 sm:w-56 rounded-full bg-primary-dark-electric-blue animate-pulse-slow"
+				style="animation-delay: 3s"
+			>
+			</div>
+		</div>
+
+		<div
+			class="w-full max-w-sm sm:max-w-md flex flex-col items-center gap-6 sm:gap-8"
+		>
+			<!-- Icon badge -->
+			<div class="error-icon-badge">
+				<svg
+					class="size-8 sm:size-9 text-primary-electric-blue"
+					fill="none"
+					viewBox="0 0 24 24"
+					stroke="currentColor"
+					stroke-width="1.5"
+					aria-hidden="true"
+				>
+					<path
+						stroke-linecap="round"
+						stroke-linejoin="round"
+						d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z"
+					></path>
+				</svg>
+				<span class="error-icon-ring" aria-hidden="true"></span>
+			</div>
+
+			<!-- Heading -->
+			<div class="flex flex-col gap-2 sm:gap-3">
+				<h1
+					class="font-heading text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight text-white leading-[1.1]"
+				>
+					{t.errorPage.title}
+				</h1>
+				<p class="text-sm sm:text-base font-medium text-gray-300">
+					{t.errorPage.subtitle}
+				</p>
+				<p
+					class="text-xs sm:text-sm text-gray-500 leading-relaxed max-w-xs mx-auto"
+				>
+					{t.errorPage.description}
+				</p>
+			</div>
+
+			<!-- Divider -->
+			<div class="error-divider"></div>
+
+			<!-- Single CTA -->
+			<a
+				href="/es/"
+				class="btn btn-cta rounded-xl px-7 py-3 text-sm inline-flex items-center gap-2"
+			>
+				<svg
+					class="size-4 shrink-0"
+					fill="none"
+					viewBox="0 0 24 24"
+					stroke="currentColor"
+					stroke-width="2"
+					aria-hidden="true"
+				>
+					<path
+						stroke-linecap="round"
+						stroke-linejoin="round"
+						d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18"></path>
+				</svg>
+				{t.errorPage.backHome}
+			</a>
+		</div>
+	</div>
+</Layout>
+
+<style>
+	.error-icon-badge {
+		position: relative;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 4.5rem;
+		height: 4.5rem;
+		border-radius: 9999px;
+		background: rgba(0, 86, 255, 0.08);
+		border: 1px solid rgba(0, 86, 255, 0.2);
+		backdrop-filter: blur(12px);
+	}
+
+	:root[data-theme='light'] .error-icon-badge {
+		background: rgba(0, 86, 255, 0.07);
+		border-color: rgba(0, 86, 255, 0.25);
+	}
+
+	.error-icon-ring {
+		position: absolute;
+		inset: -6px;
+		border-radius: 9999px;
+		border: 1px solid rgba(0, 86, 255, 0.25);
+		animation: ping-slow 2.8s ease-out infinite;
+	}
+
+	.error-divider {
+		width: 100%;
+		max-width: 16rem;
+		height: 1px;
+		background: linear-gradient(
+			90deg,
+			transparent,
+			rgba(0, 86, 255, 0.25),
+			transparent
+		);
+	}
+</style>
