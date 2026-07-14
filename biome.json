@@ -55,14 +55,25 @@
 	},
 	"overrides": [
 		{
-			"include": ["**/frontend-landing/**", "frontend-landing/**"],
+			"include": [
+				"**/frontend-landing/**",
+				"frontend-landing/**",
+				"tests/**",
+				"**/*.spec.ts",
+				"**/env.schemas.ts"
+			],
 			"linter": {
 				"rules": {
 					"correctness": {
 						"noUndeclaredDependencies": "off"
 					},
+					"style": {
+						"useNamingConvention": "off"
+					},
 					"suspicious": {
-						"noReactSpecificProps": "off"
+						"noReactSpecificProps": "off",
+						"noConsoleLog": "off",
+						"noConsole": "off"
 					}
 				}
 			}
