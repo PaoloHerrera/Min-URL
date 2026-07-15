@@ -3,7 +3,7 @@ import geoip from 'geoip-lite'
 import {
 	createGeolocation,
 	getGeolocationByIp,
-} from '../models/geolocationModel.js'
+} from '../src/adapters/secondary/db/models/Geolocation.model.js'
 
 const createGeolocationService = async (ipAddress) => {
 	// Se busca la geolocalización del IP

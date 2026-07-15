@@ -1,12 +1,17 @@
 import { describe, expect, it, vi } from 'vitest'
 import { RandomBase62SlugGenerator } from '../src/core/services/RandomBase62SlugGenerator.ts'
+import type { UrlRepository } from '../src/core/ports/UrlRepository.interface.ts'
 
 describe('GenerateUniqueSlugUseCase', () => {
-	it('should generate an unique slug with minimal length', async () => {
+	let mockUrlRepository: UrlRepository
+
+	it('Should generate an unique slug with minimal length', async () => {
 		//1. ARRANGE: Mock reposotory (SlugGenerator's port)
-		const mockUrlRepository = {
+		mockUrlRepository = {
 			//The slug don't exist in the database
+			createAnonymous: vi.fn().mockResolvedValue(null),
 			isSlugAvailable: vi.fn().mockResolvedValue(true),
+			getUrlBySlug: vi.fn().mockResolvedValue(null),
 		}
 
 		//Config for the slug generator
@@ -17,10 +22,7 @@ describe('GenerateUniqueSlugUseCase', () => {
 		}
 
 		// Instantiate the slug generator
-		const generator = new RandomBase62SlugGenerator(
-			mockUrlRepository as any,
-			config,
-		)
+		const generator = new RandomBase62SlugGenerator(mockUrlRepository, config)
 
 		//2. ACT: call the generator
 		const slug = await generator.generateUniqueSlug('https://google.com')
@@ -31,14 +33,16 @@ describe('GenerateUniqueSlugUseCase', () => {
 		expect(slug).toHaveLength(6)
 	})
 
-	it('should retry up to maxAttempts and return a slug of initial length if becomes available', async () => {
+	it('Should retry up to maxAttempts and return a slug of initial length if becomes available', async () => {
 		//1. ARRANGE: slug unavailable at first and second attempts, but available at third attempt (maxAttempts)
-		const mockUrlRepository = {
+		mockUrlRepository = {
 			isSlugAvailable: vi
 				.fn()
 				.mockResolvedValueOnce(false) // First attempt
 				.mockResolvedValueOnce(false) // Second attempt
 				.mockResolvedValueOnce(true), // Third attempt
+			createAnonymous: vi.fn().mockResolvedValue(null),
+			getUrlBySlug: vi.fn().mockResolvedValue(null),
 		}
 
 		//Config for the slug generator
@@ -49,10 +53,7 @@ describe('GenerateUniqueSlugUseCase', () => {
 		}
 
 		// Instantiate the slug generator
-		const generator = new RandomBase62SlugGenerator(
-			mockUrlRepository as any,
-			config,
-		)
+		const generator = new RandomBase62SlugGenerator(mockUrlRepository, config)
 
 		//2. ACT: call the generator
 		const slug = await generator.generateUniqueSlug('https://google.com')
@@ -63,16 +64,18 @@ describe('GenerateUniqueSlugUseCase', () => {
 		expect(mockUrlRepository.isSlugAvailable).toHaveBeenCalledTimes(3)
 	})
 
-	it('should increase slug length if maxAttempts is exceeded for the current length', async () => {
+	it('Should increase slug length if maxAttempts is exceeded for the current length', async () => {
 		//1. ARRANGE: 3 colisions for length 6, and success for length 7
 
-		const mockUrlRepository = {
+		mockUrlRepository = {
 			isSlugAvailable: vi
 				.fn()
 				.mockResolvedValueOnce(false)
 				.mockResolvedValueOnce(false)
 				.mockResolvedValueOnce(false)
 				.mockResolvedValueOnce(true),
+			createAnonymous: vi.fn().mockResolvedValue(null),
+			getUrlBySlug: vi.fn().mockResolvedValue(null),
 		}
 
 		//Config for the slug generator
@@ -83,10 +86,7 @@ describe('GenerateUniqueSlugUseCase', () => {
 		}
 
 		// Instantiate the slug generator
-		const generator = new RandomBase62SlugGenerator(
-			mockUrlRepository as any,
-			config,
-		)
+		const generator = new RandomBase62SlugGenerator(mockUrlRepository, config)
 
 		//2. ACT: call the generator
 		const slug = await generator.generateUniqueSlug('https://google.com')
@@ -97,11 +97,13 @@ describe('GenerateUniqueSlugUseCase', () => {
 		expect(mockUrlRepository.isSlugAvailable).toHaveBeenCalledTimes(4)
 	})
 
-	it('should throw an error if maxAttempts is exceeded for all lengths', async () => {
+	it('Should throw an error if maxAttempts is exceeded for all lengths', async () => {
 		//1. ARRANGE: mock that the slug is always unavailable
 
-		const mockUrlRepository = {
+		mockUrlRepository = {
 			isSlugAvailable: vi.fn().mockResolvedValue(false), // Always unavailable
+			createAnonymous: vi.fn().mockResolvedValue(null),
+			getUrlBySlug: vi.fn().mockResolvedValue(null),
 		}
 
 		//Config for the slug generator
@@ -112,10 +114,7 @@ describe('GenerateUniqueSlugUseCase', () => {
 		}
 
 		// Instantiate the slug generator
-		const generator = new RandomBase62SlugGenerator(
-			mockUrlRepository as any,
-			config,
-		)
+		const generator = new RandomBase62SlugGenerator(mockUrlRepository, config)
 
 		//2. ACT: call the generator
 		await expect(

@@ -1,0 +1,50 @@
+import request from 'supertest'
+import { describe, expect, it, vi } from 'vitest'
+import { app } from '../app.js'
+
+vi.mock('../middleware/verifyTurnstile.js', () => ({
+	verifyTurnstile: vi.fn((_req, _res, next) => next()),
+}))
+
+describe('POST /direct/shorten', () => {
+	it('Should successfully create a shortened URL anonymously', async () => {
+		const response = await request(app).post('/direct/shorten').send({
+			originalUrl: 'https://www.google.com',
+			captchaToken: 'fake-token',
+		})
+
+		expect(response.status).toBe(200)
+		expect(response.headers['content-type']).toBe(
+			'application/json; charset=utf-8',
+		)
+		expect(response.body).toBeInstanceOf(Object)
+
+		expect(response.body).toHaveProperty('originalUrl')
+		expect(response.body.originalUrl).toBe('https://www.google.com')
+
+		expect(response.body).toHaveProperty('shortUrl')
+		expect(typeof response.body.shortUrl).toBe('string')
+
+		expect(response.body).toHaveProperty('slug')
+		expect(typeof response.body.slug).toBe('string')
+
+		expect(response.body).toHaveProperty('purpose')
+		expect(response.body.purpose).toBe('direct')
+
+		expect(response.body).toHaveProperty('createdAt')
+		expect(new Date(response.body.createdAt)).toBeInstanceOf(Date)
+
+		expect(response.body.shortUrl).toContain(response.body.slug)
+	})
+
+	it('Should return 400 for an invalid URL', async () => {
+		const response = await request(app).post('/direct/shorten').send({
+			originalUrl: 'invalid-url-without-protocol',
+			captchaToken: 'fake-token',
+		})
+
+		expect(response.status).toBe(400)
+		expect(response.body).toHaveProperty('message')
+		expect(typeof response.body.message).toBe('string')
+	})
+})

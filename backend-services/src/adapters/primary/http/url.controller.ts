@@ -1,11 +1,17 @@
 import type { Request, Response } from 'express'
+import type { GetUrlMetadataUseCase } from '../../../core/usecases/getUrlMetadata.usecase.js'
 import type { ShortenUrlAnonymousUseCase } from '../../../core/usecases/shortenUrlAnonymous.usecase.js'
 
 export class UrlController {
 	private readonly shortenUrlAnonymousUseCase: ShortenUrlAnonymousUseCase
+	private readonly getUrlMetadataUseCase: GetUrlMetadataUseCase
 
-	constructor(shortenUrlAnonymousUseCase: ShortenUrlAnonymousUseCase) {
+	constructor(
+		shortenUrlAnonymousUseCase: ShortenUrlAnonymousUseCase,
+		getUrlMetadataUseCase: GetUrlMetadataUseCase,
+	) {
 		this.shortenUrlAnonymousUseCase = shortenUrlAnonymousUseCase
+		this.getUrlMetadataUseCase = getUrlMetadataUseCase
 	}
 
 	public createAnonymous = async (
@@ -34,6 +40,30 @@ export class UrlController {
 				slug: output.slug,
 				createdAt: output.createdAt,
 			})
+		} catch (error) {
+			console.error('UrlController Error:', error)
+			res.status(500).json({
+				message: (error as Error).message,
+			})
+		}
+	}
+
+	public getUrlMetadataInternal = async (
+		req: Request<{ slug: string }>,
+		res: Response,
+	): Promise<void> => {
+		try {
+			const { slug } = req.params
+			const output = await this.getUrlMetadataUseCase.execute({ slug })
+
+			if (!output) {
+				res.status(404).json({
+					message: 'Slug not found',
+				})
+				return
+			}
+
+			res.status(200).json(output)
 		} catch (error) {
 			console.error('UrlController Error:', error)
 			res.status(500).json({

@@ -1,9 +1,7 @@
 import Redis from 'ioredis'
-import { createClickDetail } from '../models/clickDetailModel.js'
-import { createClick } from '../models/clickModel.js'
-import { getGeolocationByIp } from '../models/geolocationModel.js'
-import { createGeolocation } from '../models/geolocationModel.js'
-import { lookupGeolocation } from '../utils/geo.js'
+import { SequelizeGeolocationService } from '../src/adapters/secondary/db/SequelizeGeolocationService.js'
+import { createClickDetail } from '../src/adapters/secondary/db/models/clickDetailModel.js'
+import { createClick } from '../src/adapters/secondary/db/models/clickModel.js'
 
 const redis = new Redis({
 	port: Number(process.env.REDIS_PORT),
@@ -31,22 +29,9 @@ export const setupRedis = () => {
 		})
 
 		// Verifica si la ip del cliente está en la tabla de geolocations. Si no está, crea una nueva geolocation
-		const geolocation = await getGeolocationByIp(data.ip)
-		if (geolocation) {
-			idGeolocation = geolocation.id_geolocations
-		} else {
-			const geo = lookupGeolocation(data.ip)
-			const { country, region, city, latitude, longitude } = geo
-			const { id_geolocations } = await createGeolocation({
-				ip_address: ip,
-				country,
-				region,
-				city,
-				latitude,
-				longitude,
-			})
-			idGeolocation = id_geolocations
-		}
+		const geolocationService = new SequelizeGeolocationService()
+		const { id_geolocations } = await geolocationService.getOrCreate(ip)
+		idGeolocation = id_geolocations
 
 		//Crear click detalles en la tabla de clicks_details
 		await createClickDetail({
