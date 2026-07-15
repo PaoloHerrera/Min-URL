@@ -14,12 +14,15 @@ import IconMoon from '../icons/IconMoon.astro'
 
 interface Props {
 	lang: Lang
+	isHomePage?: boolean
 }
 
-const { lang } = Astro.props as Props
+const { lang, isHomePage = false } = Astro.props as Props
 const t = dic[lang]
 const dashboardUrl =
 	import.meta.env.PUBLIC_DASHBOARD_URL || 'http://localhost:4001'
+// Anchor link prefix: on the index page use bare hashes; everywhere else prefix with the root path
+const base = isHomePage ? '' : lang === 'es' ? '/es/' : '/'
 ---
 
 <!-- ═══════════════════════════════════════════════════════
@@ -44,6 +47,7 @@ const dashboardUrl =
 			why={t.nav.why}
 			faq={t.nav.faq}
 			sponsor={t.nav.sponsor}
+			base={base}
 		/>
 
 		<!-- Desktop right actions -->
@@ -107,13 +111,20 @@ const dashboardUrl =
 		<div class="flex flex-col gap-6">
 			<!-- 1 · Navigation links -->
 			<nav aria-label="Mobile navigation">
-				<a href="#home" class="mobile-nav-link">{t.nav.home}</a>
-				<a href="#features" class="mobile-nav-link">{t.nav.features}</a>
-				<a href="#dashboard" class="mobile-nav-link">{t.nav.dashboard}</a>
-				<a href="#why" class="mobile-nav-link">{t.nav.why}</a>
-				<a href="#faq" class="mobile-nav-link">{t.nav.faq}</a>
-				<a href="#sponsor" class="mobile-nav-link" style="border-bottom: none;"
-					>{t.nav.sponsor}</a
+				<a href={base === '' ? '#' : base || '/'} class="mobile-nav-link"
+					>{t.nav.home}</a
+				>
+				<a href={`${base}#features`} class="mobile-nav-link">{t.nav.features}</a
+				>
+				<a href={`${base}#dashboard`} class="mobile-nav-link"
+					>{t.nav.dashboard}</a
+				>
+				<a href={`${base}#why`} class="mobile-nav-link">{t.nav.why}</a>
+				<a href={`${base}#faq`} class="mobile-nav-link">{t.nav.faq}</a>
+				<a
+					href={`${base}#sponsor`}
+					class="mobile-nav-link"
+					style="border-bottom: none;">{t.nav.sponsor}</a
 				>
 			</nav>
 

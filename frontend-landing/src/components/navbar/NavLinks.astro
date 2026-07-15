@@ -2,6 +2,8 @@
 /**
  * NavLinks
  * Center navigation anchor links. Receives translated strings as props.
+ * `base` is an empty string on the home page and the lang root (e.g. '/' or '/es/')
+ * on all other pages so anchors resolve correctly from any route.
  */
 interface Props {
 	home: string
@@ -10,17 +12,20 @@ interface Props {
 	why: string
 	faq: string
 	sponsor: string
+	base?: string
 }
 
-const { home, features, dashboard, why, faq, sponsor } = Astro.props
+const { home, features, dashboard, why, faq, sponsor, base = '' } = Astro.props
+
+const isHome = base === ''
 
 const links = [
-	{ href: '#home', label: home },
-	{ href: '#features', label: features },
-	{ href: '#dashboard', label: dashboard },
-	{ href: '#why', label: why },
-	{ href: '#faq', label: faq },
-	{ href: '#sponsor', label: sponsor },
+	{ href: isHome ? '#' : base || '/', label: home },
+	{ href: `${base}#features`, label: features },
+	{ href: `${base}#dashboard`, label: dashboard },
+	{ href: `${base}#why`, label: why },
+	{ href: `${base}#faq`, label: faq },
+	{ href: `${base}#sponsor`, label: sponsor },
 ]
 ---
 

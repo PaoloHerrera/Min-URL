@@ -25,6 +25,18 @@ const descriptions: Record<Lang, string> = {
 
 const title = titles[lang]
 const description = descriptions[lang]
+
+// Detect if we are on the index (home) page so the Navbar can prefix anchor links correctly
+const isHomePage =
+	Astro.url.pathname === '/' ||
+	Astro.url.pathname === '/es/' ||
+	Astro.url.pathname === '/es'
+
+// Check if we are on one of the English error pages to prevent overriding localStorage 'lang'
+// before the client-side redirect script has had a chance to check the stored language preference.
+const isEnglishErrorPage =
+	Astro.url.pathname.replace(/\/$/, '') === '/error' ||
+	Astro.url.pathname.replace(/\/$/, '') === '/link-not-found'
 ---
 
 <!doctype html>
@@ -43,6 +55,13 @@ const description = descriptions[lang]
 					: 'dark')
 			document.documentElement.setAttribute('data-theme', theme)
 		</script>
+		{
+			!isEnglishErrorPage && (
+				<script is:inline define:vars={{ lang }}>
+					localStorage.setItem('lang', lang)
+				</script>
+			)
+		}
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<meta name="generator" content={Astro.generator} />
@@ -78,19 +97,24 @@ const description = descriptions[lang]
 	>
 		<!-- Glowing Background Orbs -->
 		<div
-			class="absolute top-0 left-1/4 w-[500px] h-[500px] rounded-full bg-primary-electric-blue/10 glow-orb -translate-y-1/2 animate-pulse-slow"
+			class="absolute inset-0 overflow-hidden pointer-events-none -z-10"
+			aria-hidden="true"
 		>
-		</div>
-		<div
-			class="absolute top-[800px] right-1/4 w-[600px] h-[600px] rounded-full bg-primary-dark-electric-blue/15 glow-orb animate-pulse-slow"
-			style="animation-delay: 2s;"
-		>
+			<div
+				class="absolute top-0 left-1/4 w-[500px] h-[500px] rounded-full bg-primary-electric-blue/10 glow-orb -translate-y-1/2 animate-pulse-slow"
+			>
+			</div>
+			<div
+				class="absolute top-[800px] right-1/4 w-[600px] h-[600px] rounded-full bg-primary-dark-electric-blue/15 glow-orb animate-pulse-slow"
+				style="animation-delay: 2s;"
+			>
+			</div>
 		</div>
 
-		<Navbar lang={lang} />
+		<Navbar lang={lang} isHomePage={isHomePage} />
 
-		<!-- Main Content Area -->
-		<main class="grow">
+		<!-- Main Content Area — flex flex-col so child grow fills this space -->
+		<main class="grow flex flex-col">
 			<slot />
 		</main>
 
