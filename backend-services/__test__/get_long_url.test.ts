@@ -6,8 +6,6 @@ import { UrlModel } from '../src/adapters/secondary/db/models/Url.model.ts'
 import { SlugModel } from '../src/adapters/secondary/db/models/Slug.model.ts'
 import { sequelize } from '../config/database.js'
 
-const SECRET = process.env.INTERNAL_SECRET
-
 // define public and protected ids
 let publicUrlId: string
 let protectedUrlId: string
@@ -88,7 +86,7 @@ describe('GET /internal/slug-data/:slug', () => {
 	it('Should return the original URL and password false if the slug exists and not be protected by a password', async () => {
 		const response = await request(app)
 			.get('/internal/slug-data/public')
-			.set('Authorization', `Bearer ${SECRET}`)
+			.set('Authorization', `Bearer ${process.env.INTERNAL_SECRET}`)
 
 		// 1. Check response status code and content type.
 		expect(response.statusCode).toBe(200)
@@ -111,7 +109,7 @@ describe('GET /internal/slug-data/:slug', () => {
 	it('Should do not return the originalURL if the slug is protected by a password', async () => {
 		const response = await request(app)
 			.get('/internal/slug-data/protected')
-			.set('Authorization', `Bearer ${SECRET}`)
+			.set('Authorization', `Bearer ${process.env.INTERNAL_SECRETSECRET}`)
 
 		// 1. Check response status code and content type.
 		expect(response.statusCode).toBe(200)
@@ -133,7 +131,7 @@ describe('GET /internal/slug-data/:slug', () => {
 	it('Should return 404 if the slug does not exist', async () => {
 		const response = await request(app)
 			.get('/internal/slug-data/notexist')
-			.set('Authorization', `Bearer ${SECRET}`)
+			.set('Authorization', `Bearer ${process.env.INTERNAL_SECRET}`)
 
 		// 1. Check response status code and content type.
 		expect(response.statusCode).toBe(404)

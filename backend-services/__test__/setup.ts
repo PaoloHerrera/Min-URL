@@ -1,4 +1,10 @@
+import path from 'path'
+import { fileURLToPath } from 'node:url'
 import dotenv from 'dotenv'
 
-// Carga las variables de entorno de pruebas en el proceso de cada test worker de Vitest
-dotenv.config({ path: '.env.test' })
+// Get the current file name and directory name
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
+
+// Load the environment variables from the test environment
+dotenv.config({ path: path.resolve(__dirname, '../.env.test') })

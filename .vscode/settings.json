@@ -47,6 +47,7 @@
 		"i18n",
 		"frontend",
 		"db",
-		"deps"
+		"deps",
+		"fix"
 	]
 }
