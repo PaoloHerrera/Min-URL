@@ -109,7 +109,7 @@ describe('GET /internal/slug-data/:slug', () => {
 	it('Should do not return the originalURL if the slug is protected by a password', async () => {
 		const response = await request(app)
 			.get('/internal/slug-data/protected')
-			.set('Authorization', `Bearer ${process.env.INTERNAL_SECRETSECRET}`)
+			.set('Authorization', `Bearer ${process.env.INTERNAL_SECRET}`)
 
 		// 1. Check response status code and content type.
 		expect(response.statusCode).toBe(200)
