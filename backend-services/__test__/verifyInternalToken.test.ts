@@ -1,4 +1,4 @@
-import { describe, expect, it, vi, beforeEach } from 'vitest'
+import { describe, expect, it, vi, afterEach, beforeEach } from 'vitest'
 import { verifyInternalToken } from '../middleware/verifyInternalToken.ts'
 import type { Request, Response } from 'express'
 
@@ -17,7 +17,11 @@ const makeMocks = (authorization?: string) => ({
 
 describe('verifyInternalToken Middleware', () => {
 	beforeEach(() => {
-		process.env.INTERNAL_SECRET = SECRET
+		vi.stubEnv('INTERNAL_SECRET', SECRET)
+	})
+
+	afterEach(() => {
+		vi.unstubAllEnvs()
 	})
 
 	it('Should call next() if the token is valid', () => {
