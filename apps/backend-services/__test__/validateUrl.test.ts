@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest'
-import { validateUrl } from '../src/adapters/primary/http/middlewares/validateUrl.ts'
+import { validateUrl } from '../src/adapters/primary/http/middlewares/validateUrl.middleware.ts'
 import type { Request, Response } from 'express'
 
 const makeMocks = (url: unknown) => ({

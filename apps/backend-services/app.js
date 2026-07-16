@@ -4,7 +4,7 @@ import dotenv from 'dotenv'
 import express from 'express'
 import session from 'express-session'
 import { setupRedis } from './config/redis.js'
-import { corsMiddleware } from './middleware/cors.js'
+import { corsMiddleware } from './src/adapters/primary/http/middlewares/cors.middleware.js'
 import { routesInternal } from './src/adapters/primary/http/routes/internal.js'
 import { routesShortUrl } from './src/adapters/primary/http/routes/shorturl.js'
 

@@ -1,7 +1,7 @@
 import { Router } from 'express'
 import { urlController } from '../../../../bootstrap.ts'
-import { validateSlug } from '../middlewares/validateSlug.ts'
-import { verifyInternalToken } from '../middlewares/verifyInternalToken.ts'
+import { validateSlug } from '../middlewares/validateSlug.middleware.ts'
+import { verifyInternalToken } from '../middlewares/verifyInternalToken.middleware.ts'
 
 const router = Router()
 

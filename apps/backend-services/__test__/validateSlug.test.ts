@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from 'vitest'
-import { validateSlug } from '../src/adapters/primary/http/middlewares/validateSlug.ts'
+import { validateSlug } from '../src/adapters/primary/http/middlewares/validateSlug.middleware.ts'
 import type { Request, Response } from 'express'
 
 const makeMocks = (slug: string) => ({

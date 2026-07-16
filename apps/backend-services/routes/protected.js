@@ -14,8 +14,8 @@ import {
 import { checkApiKey } from '../middleware/checkApiKey.js'
 import { checkShortUrlAvailable } from '../middleware/checkAvailable.js'
 import { addGeolocation } from '../middleware/geolocationMiddleware.js'
-import { checkForbiddenExtension } from '../src/adapters/primary/http/middlewares/checkForbiddenExtension.js'
-import { validateUrl } from '../src/adapters/primary/http/middlewares/validateUrl.js'
+import { checkForbiddenExtension } from '../src/adapters/primary/http/middlewares/checkForbiddenExtension.middleware.ts'
+import { validateUrl } from '../src/adapters/primary/http/middlewares/validateUrl.middleware.ts'
 
 const protectedRouter = Router()
 
