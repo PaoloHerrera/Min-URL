@@ -1,0 +1,18 @@
+{
+	"compilerOptions": {
+		"target": "ES2022",
+		"module": "NodeNext",
+		"moduleResolution": "NodeNext",
+		"allowJs": true,
+		"checkJs": false,
+		"strict": true,
+		"esModuleInterop": true,
+		"skipLibCheck": true,
+		"forceConsistentCasingInFileNames": true,
+		"outDir": "./dist",
+		"allowImportingTsExtensions": true,
+		"noEmit": true
+	},
+	"include": ["src/**/*", "routes/**/*", "middleware/**/*", "__test__/**/*"],
+	"exclude": ["node_modules", "dist"]
+}
