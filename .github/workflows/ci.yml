@@ -85,9 +85,9 @@ jobs:
       - name: Install dependencies
         run: bun install
 
-      # Initialize Database
-      - name: Initialize Database
-        run: PGPASSWORD=admin psql -h localhost -U admin -d min_url_test -f apps/backend-services/db/init.sql
+      # Initialize Database with Migrations
+      - name: Initialize Database with Migrations
+        run: cd apps/backend-services && bun x sequelize-cli db:migrate
 
       # Build Lint Test
       - name: Build Lint Test
