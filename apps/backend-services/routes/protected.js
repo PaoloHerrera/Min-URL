@@ -1,0 +1,65 @@
+import { Router } from 'express'
+import {
+	checkSlug,
+	checkSlugAvailability,
+	getSlugData,
+	returnSlugAvailability,
+} from '../controllers/urlController.js'
+import {
+	createShortUrl,
+	createShortUrlWithCustomSlug,
+	deleteUserUrl,
+	updateUserUrl,
+} from '../controllers/userController.js'
+import { checkApiKey } from '../middleware/checkApiKey.js'
+import { checkShortUrlAvailable } from '../middleware/checkAvailable.js'
+import { addGeolocation } from '../middleware/geolocationMiddleware.js'
+import { checkForbiddenExtension } from '../src/adapters/primary/http/middlewares/checkForbiddenExtension.js'
+import { validateUrl } from '../src/adapters/primary/http/middlewares/validateUrl.js'
+
+const protectedRouter = Router()
+
+protectedRouter.get('/slug-data/:slug', checkApiKey, getSlugData)
+
+protectedRouter.post(
+	'/check-slug',
+	checkApiKey,
+	checkSlug,
+	checkSlugAvailability,
+	returnSlugAvailability,
+)
+
+protectedRouter.post(
+	'/create-short-url-with-custom-slug',
+	checkApiKey,
+	checkShortUrlAvailable,
+	checkSlug,
+	checkSlugAvailability,
+	validateUrl,
+	checkForbiddenExtension,
+	addGeolocation,
+	createShortUrlWithCustomSlug,
+)
+
+protectedRouter.post(
+	'/create-short-url',
+	checkApiKey,
+	checkShortUrlAvailable,
+	validateUrl,
+	checkForbiddenExtension,
+	addGeolocation,
+	createShortUrl,
+)
+
+protectedRouter.delete('/delete-url/:id', checkApiKey, deleteUserUrl)
+
+protectedRouter.patch(
+	'/update-url/:id',
+	checkApiKey,
+	validateUrl,
+	checkForbiddenExtension,
+	checkSlug,
+	updateUserUrl,
+)
+
+export { protectedRouter }
