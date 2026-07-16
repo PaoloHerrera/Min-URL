@@ -87,7 +87,7 @@ jobs:
 
       # Initialize Database
       - name: Initialize Database
-        run: PGPASSWORD=admin psql -h localhost -U admin -d min_url_test -f backend-services/db/init.sql
+        run: PGPASSWORD=admin psql -h localhost -U admin -d min_url_test -f apps/backend-services/db/init.sql
 
       # Build Lint Test
       - name: Build Lint Test
