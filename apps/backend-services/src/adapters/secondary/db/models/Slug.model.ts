@@ -12,12 +12,12 @@ export class SlugModel extends Model<
 	InferAttributes<SlugModel>,
 	InferCreationAttributes<SlugModel>
 > {
-	public declare id_slugs: CreationOptional<string>
-	public declare url_id: ForeignKey<UrlModel['id_urls']>
-	public declare slug: string
-	public declare created_at: CreationOptional<Date>
-	public declare deleted: CreationOptional<boolean>
-	public declare deleted_at: CreationOptional<Date | null>
+	declare public id_slugs: CreationOptional<string>
+	declare public url_id: ForeignKey<UrlModel['id_urls']>
+	declare public slug: string
+	declare public created_at: CreationOptional<Date>
+	declare public deleted: CreationOptional<boolean>
+	declare public deleted_at: CreationOptional<Date | null>
 }
 
 SlugModel.init(

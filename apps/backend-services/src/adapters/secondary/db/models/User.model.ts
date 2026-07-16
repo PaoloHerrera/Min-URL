@@ -12,20 +12,20 @@ export class UserModel extends Model<
 	InferAttributes<UserModel>,
 	InferCreationAttributes<UserModel>
 > {
-	public declare id_users: CreationOptional<string>
-	public declare google_id: CreationOptional<string | null>
-	public declare github_id: CreationOptional<string | null>
-	public declare email: CreationOptional<string>
-	public declare password_hash: CreationOptional<string | null>
-	public declare display_name: CreationOptional<string | null>
-	public declare given_name: CreationOptional<string | null>
-	public declare family_name: CreationOptional<string | null>
-	public declare avatar: CreationOptional<string | null>
-	public declare credits: CreationOptional<number>
-	public declare deleted: CreationOptional<boolean>
-	public declare deleted_at: CreationOptional<Date | null>
-	public declare created_at: CreationOptional<Date>
-	public declare updated_at: CreationOptional<Date>
+	declare public id_users: CreationOptional<string>
+	declare public google_id: CreationOptional<string | null>
+	declare public github_id: CreationOptional<string | null>
+	declare public email: CreationOptional<string>
+	declare public password_hash: CreationOptional<string | null>
+	declare public display_name: CreationOptional<string | null>
+	declare public given_name: CreationOptional<string | null>
+	declare public family_name: CreationOptional<string | null>
+	declare public avatar: CreationOptional<string | null>
+	declare public credits: CreationOptional<number>
+	declare public deleted: CreationOptional<boolean>
+	declare public deleted_at: CreationOptional<Date | null>
+	declare public created_at: CreationOptional<Date>
+	declare public updated_at: CreationOptional<Date>
 }
 
 UserModel.init(

@@ -10,16 +10,16 @@ export class GeolocationModel extends Model<
 	InferAttributes<GeolocationModel>,
 	InferCreationAttributes<GeolocationModel>
 > {
-	public declare id_geolocations: CreationOptional<string>
-	public declare ip_address: string
-	public declare country: CreationOptional<string | null>
-	public declare region: CreationOptional<string | null>
-	public declare timezone: CreationOptional<string | null>
-	public declare city: CreationOptional<string | null>
-	public declare latitude: CreationOptional<number | null>
-	public declare longitude: CreationOptional<number | null>
-	public declare created_at: CreationOptional<Date>
-	public declare updated_at: CreationOptional<Date>
+	declare public id_geolocations: CreationOptional<string>
+	declare public ip_address: string
+	declare public country: CreationOptional<string | null>
+	declare public region: CreationOptional<string | null>
+	declare public timezone: CreationOptional<string | null>
+	declare public city: CreationOptional<string | null>
+	declare public latitude: CreationOptional<number | null>
+	declare public longitude: CreationOptional<number | null>
+	declare public created_at: CreationOptional<Date>
+	declare public updated_at: CreationOptional<Date>
 }
 
 GeolocationModel.init(

@@ -13,20 +13,20 @@ export class UrlModel extends Model<
 	InferAttributes<UrlModel>,
 	InferCreationAttributes<UrlModel>
 > {
-	public declare id_urls: CreationOptional<string>
-	public declare user_id: CreationOptional<ForeignKey<UserModel['id_users']>>
-	public declare geolocations_id: CreationOptional<
+	declare public id_urls: CreationOptional<string>
+	declare public user_id: CreationOptional<ForeignKey<UserModel['id_users']>>
+	declare public geolocations_id: CreationOptional<
 		ForeignKey<GeolocationModel['id_geolocations']>
 	>
-	public declare title: string
-	public declare long_url: string
-	public declare purpose: 'direct' | 'qr' | 'api'
-	public declare password_hash: CreationOptional<string | null>
-	public declare expiration_date: CreationOptional<Date | null>
-	public declare expired_at: CreationOptional<Date | null>
-	public declare created_at: CreationOptional<Date>
-	public declare updated_at: CreationOptional<Date>
-	public declare deleted_at: CreationOptional<Date | null>
+	declare public title: string
+	declare public long_url: string
+	declare public purpose: 'direct' | 'qr' | 'api'
+	declare public password_hash: CreationOptional<string | null>
+	declare public expiration_date: CreationOptional<Date | null>
+	declare public expired_at: CreationOptional<Date | null>
+	declare public created_at: CreationOptional<Date>
+	declare public updated_at: CreationOptional<Date>
+	declare public deleted_at: CreationOptional<Date | null>
 }
 
 UrlModel.init(
