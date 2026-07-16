@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest'
-import { checkForbiddenExtension } from '../src/adapters/primary/http/middlewares/checkForbiddenExtension.ts'
+import { checkForbiddenExtension } from '../src/adapters/primary/http/middlewares/checkForbiddenExtension.middleware.ts'
 import type { Request, Response } from 'express'
 
 const makeMocks = (url: string) => ({

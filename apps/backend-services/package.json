@@ -39,6 +39,7 @@
 		"zod": "3.23.8"
 	},
 	"devDependencies": {
+		"@types/cors": "^2.8.19",
 		"@types/express": "5.0.6",
 		"@types/geoip-country": "5.0.0",
 		"@types/geoip-lite": "1.4.4",

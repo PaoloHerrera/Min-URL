@@ -46,4 +46,31 @@ describe('POST /direct/shorten', () => {
 		expect(response.body).toHaveProperty('message')
 		expect(typeof response.body.message).toBe('string')
 	})
+
+	describe('CORS integration Tests', () => {
+		it('Should add Access-Control-Allow-Origin header if the origin is allowed', async () => {
+			const validOrigin = 'https://min-url.com'
+			const response = await request(app)
+				.post('/direct/shorten')
+				.set('Origin', validOrigin)
+				.send({
+					originalUrl: 'https://www.google.com',
+					captchaToken: 'fake-token',
+				})
+			expect(response.headers['access-control-allow-origin']).toBe(validOrigin)
+		})
+
+		it('Should NOT add Access-Control-Allow-Origin header if the origin is NOT allowed', async () => {
+			const invalidOrigin = 'https://www.malicious-site.com'
+			const response = await request(app)
+				.post('/direct/shorten')
+				.set('Origin', invalidOrigin)
+				.send({
+					originalUrl: 'https://www.google.com',
+					captchaToken: 'fake-token',
+				})
+
+			expect(response.headers['access-control-allow-origin']).toBeUndefined()
+		})
+	})
 })
