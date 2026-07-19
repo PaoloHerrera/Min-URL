@@ -1,11 +1,11 @@
-import { InvalidPasswordError } from '../../errors/domain.errors.ts'
 import crypto from 'node:crypto'
+import { InvalidPasswordError } from '../../errors/domain.errors.ts'
 import { passwordSchema } from './password.schema.ts'
 
 export class Password {
 	private readonly hashedPassword: Readonly<string>
 
-	private constructor(hashedPassword: string) {
+	private constructor(hashedPassword: Readonly<string>) {
 		this.hashedPassword = hashedPassword
 	}
 
@@ -44,9 +44,5 @@ export class Password {
 	 */
 	static reconstitute(storedHash: string): Password {
 		return new Password(storedHash)
-	}
-
-	toJSON(): { hashedPassword: string } {
-		return { hashedPassword: this.hashedPassword }
 	}
 }

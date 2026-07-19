@@ -8,7 +8,7 @@ export class TargetUrl {
 		this._value = _value
 	}
 
-	get value(): Readonly<string> {
+	get value(): string {
 		return this._value
 	}
 
@@ -27,11 +27,5 @@ export class TargetUrl {
 	 */
 	public static reconstitute(value: string): TargetUrl {
 		return new TargetUrl(value)
-	}
-
-	toJSON(): { value: string } {
-		return {
-			value: this._value,
-		}
 	}
 }

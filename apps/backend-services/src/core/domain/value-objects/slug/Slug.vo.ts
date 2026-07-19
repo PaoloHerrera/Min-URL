@@ -1,9 +1,9 @@
 import { InvalidSlugError } from '../../errors/domain.errors.ts'
 
 export class Slug {
-	private readonly _value: string
+	private readonly _value: Readonly<string>
 
-	private constructor(value: string) {
+	private constructor(value: Readonly<string>) {
 		this._value = value
 	}
 

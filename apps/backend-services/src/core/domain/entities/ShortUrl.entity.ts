@@ -25,78 +25,82 @@ export interface ShortUrlProps {
 }
 
 export class ShortUrl {
-	private readonly props: ShortUrlProps
+	private readonly _id: Readonly<string>
+	private _slug: Slug
+	private readonly _originalUrl: TargetUrl
+	private readonly _ipAddress: IpAddress
+	private _purpose: 'direct' | 'qr' | 'api'
+	private _title: string
+	private _passwordHash: Password | null
+	private readonly _expirationDate: Readonly<Date | null>
+	private _expiredAt: Date | null
+	private readonly _createdAt: Readonly<Date | null>
+	private _updatedAt: Date | null
+	private _deletedAt: Date | null
 
-	private constructor(props: ShortUrlProps) {
-		this.props = props
+	private constructor(props: Readonly<ShortUrlProps>) {
+		this._id = props.id
+		this._slug = props.slug
+		this._originalUrl = props.originalUrl
+		this._ipAddress = props.ipAddress
+		this._purpose = props.purpose
+		this._title = props.title
+		this._passwordHash = props.passwordHash ?? null
+		this._expirationDate = props.expirationDate ?? null
+		this._expiredAt = props.expiredAt ?? null
+		this._createdAt = props.createdAt ?? null
+		this._updatedAt = props.updatedAt ?? null
+		this._deletedAt = props.deletedAt ?? null
 	}
 
 	// Getters
 
 	get id(): string {
-		return this.props.id
+		return this._id
 	}
 
 	get ipAddress(): IpAddress {
-		return this.props.ipAddress
+		return this._ipAddress
 	}
 
 	get slug(): Slug {
-		return this.props.slug
+		return this._slug
 	}
 
 	get title(): string {
-		return this.props.title
+		return this._title
 	}
 
 	get originalUrl(): TargetUrl {
-		return this.props.originalUrl
+		return this._originalUrl
 	}
 
 	get purpose(): 'direct' | 'qr' | 'api' {
-		return this.props.purpose
+		return this._purpose
 	}
 
-	get passwordHash(): Password | null | undefined {
-		return this.props.passwordHash
+	get passwordHash(): Password | null {
+		return this._passwordHash
 	}
 
-	get expirationDate(): Date | null | undefined {
-		return this.props.expirationDate
+	get expirationDate(): Date | null {
+		return this._expirationDate
 	}
 
-	get expiredAt(): Date | null | undefined {
-		return this.props.expiredAt
+	get expiredAt(): Date | null {
+		return this._expiredAt
 	}
 
-	get createdAt(): Date | null | undefined {
-		return this.props.createdAt
+	get createdAt(): Date | null {
+		return this._createdAt
 	}
 
-	get updatedAt(): Date | null | undefined {
-		return this.props.updatedAt
+	get updatedAt(): Date | null {
+		return this._updatedAt
 	}
 
-	get deletedAt(): Date | null | undefined {
-		return this.props.deletedAt
-	}
-
-	//JSON Method
-	toJSON(): ShortUrlProps {
-		return {
-			id: this.props.id,
-			slug: this.props.slug,
-			title: this.props.title,
-			originalUrl: this.props.originalUrl,
-			ipAddress: this.props.ipAddress,
-			purpose: this.props.purpose,
-			passwordHash: this.props.passwordHash,
-			expirationDate: this.props.expirationDate,
-			expiredAt: this.props.expiredAt,
-			createdAt: this.props.createdAt,
-			updatedAt: this.props.updatedAt,
-			deletedAt: this.props.deletedAt,
-		}
+	get deletedAt(): Date | null {
+		return this._deletedAt
 	}
 
 	// Methods
@@ -120,40 +124,40 @@ export class ShortUrl {
 
 	public delete(): void {
 		const now = new Date()
-		this.props.deletedAt = now
-		this.props.updatedAt = now
+		this._deletedAt = now
+		this._updatedAt = now
 	}
 
 	public isDeleted(): boolean {
-		return !!this.props.deletedAt
+		return !!this._deletedAt
 	}
 
 	public restore(): void {
-		this.props.deletedAt = null
-		this.props.updatedAt = new Date()
+		this._deletedAt = null
+		this._updatedAt = new Date()
 	}
 
 	public setExpired(expiredAt: Date): void {
-		this.props.expiredAt = expiredAt
-		this.props.updatedAt = new Date()
+		this._expiredAt = expiredAt
+		this._updatedAt = new Date()
 	}
 
 	public isExpired(): boolean {
-		return !!this.props.expiredAt && this.props.expiredAt < new Date()
+		return !!this._expiredAt && this._expiredAt < new Date()
 	}
 
 	public unsetExpired(): void {
-		this.props.expiredAt = null
-		this.props.updatedAt = new Date()
+		this._expiredAt = null
+		this._updatedAt = new Date()
 	}
 
 	public setPassword(passwordHash: Password): void {
-		this.props.passwordHash = passwordHash
-		this.props.updatedAt = new Date()
+		this._passwordHash = passwordHash
+		this._updatedAt = new Date()
 	}
 
 	public removePassword(): void {
-		this.props.passwordHash = null
-		this.props.updatedAt = new Date()
+		this._passwordHash = null
+		this._updatedAt = new Date()
 	}
 }

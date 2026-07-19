@@ -8,10 +8,13 @@ export interface IpAddressProps {
 }
 
 export class IpAddress {
-	private readonly props: Readonly<IpAddressProps>
+	private readonly props: Readonly<Required<IpAddressProps>>
 
 	private constructor(props: Readonly<IpAddressProps>) {
-		this.props = props
+		this.props = {
+			ipAddress: props.ipAddress,
+			geolocation: props.geolocation ?? null,
+		}
 	}
 
 	// Getters
@@ -19,7 +22,7 @@ export class IpAddress {
 		return this.props.ipAddress
 	}
 
-	get geolocation(): Geolocation | null | undefined {
+	get geolocation(): Geolocation | null {
 		return this.props.geolocation
 	}
 
@@ -63,11 +66,5 @@ export class IpAddress {
 			ipAddress: this.ipAddress,
 			geolocation,
 		})
-	}
-
-	toJSON(): { ipAddress: string } {
-		return {
-			ipAddress: this.ipAddress,
-		}
 	}
 }
