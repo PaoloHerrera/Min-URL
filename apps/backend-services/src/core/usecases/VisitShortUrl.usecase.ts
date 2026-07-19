@@ -1,17 +1,17 @@
-import type { UrlRepository } from '../ports/UrlRepository.interface.js'
+import type { UrlRepository } from '../ports/UrlRepository.interface.ts'
 
-export interface ResolveSlugRedirectInput {
+export interface VisitShortUrlInput {
 	slug: string
 }
 
-export interface ResolveSlugRedirectOutput {
+export interface VisitShortUrlOutput {
 	slug: string
 	password: boolean
 	originalUrl?: string
 	queryAt: string
 }
 
-export class ResolveSlugRedirectUseCase {
+export class VisitShortUrlUseCase {
 	private readonly urlRepository: UrlRepository
 
 	constructor(urlRepository: UrlRepository) {
@@ -19,15 +19,15 @@ export class ResolveSlugRedirectUseCase {
 	}
 
 	async execute(
-		input: ResolveSlugRedirectInput,
-	): Promise<ResolveSlugRedirectOutput | null> {
+		input: VisitShortUrlInput,
+	): Promise<VisitShortUrlOutput | null> {
 		const { slug } = input
 		const urlData = await this.urlRepository.getUrlBySlug(slug)
 		if (!urlData || urlData.isDeleted() || urlData.isExpired()) {
 			return null
 		}
 
-		const output: ResolveSlugRedirectOutput = {
+		const output: VisitShortUrlOutput = {
 			slug: urlData.slug.value,
 			password: !!urlData.passwordHash,
 			queryAt: new Date().toISOString(),

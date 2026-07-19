@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
-import { ResolveSlugRedirectUseCase } from '../../../src/core/usecases/resolveSlugRedirect.usecase.ts'
+import { VisitShortUrlUseCase } from '../../../src/core/usecases/VisitShortUrl.usecase.ts'
 import type { UrlRepository } from '../../../src/core/ports/UrlRepository.interface.ts'
 import { ShortUrl } from '../../../src/core/domain/entities/ShortUrl.entity.ts'
 import { TargetUrl } from '../../../src/core/domain/value-objects/target-url/TargetUrl.vo.ts'
@@ -21,9 +21,9 @@ const baseShortUrlProps = {
 	deletedAt: null,
 }
 
-describe('ResolveSlugRedirectUseCase (Unit Test)', () => {
+describe('VisitShortUrlUseCase (Unit Test)', () => {
 	let mockUrlRepository: UrlRepository
-	let useCase: ResolveSlugRedirectUseCase
+	let useCase: VisitShortUrlUseCase
 
 	beforeEach(() => {
 		mockUrlRepository = {
@@ -31,7 +31,7 @@ describe('ResolveSlugRedirectUseCase (Unit Test)', () => {
 			save: vi.fn(),
 			isSlugAvailable: vi.fn(),
 		}
-		useCase = new ResolveSlugRedirectUseCase(mockUrlRepository)
+		useCase = new VisitShortUrlUseCase(mockUrlRepository)
 	})
 
 	afterEach(() => {
