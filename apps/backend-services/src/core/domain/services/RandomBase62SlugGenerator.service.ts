@@ -1,7 +1,9 @@
+import { SlugGenerationExhaustedError } from '../errors/domain.errors.ts'
 import { randomUUID } from 'node:crypto'
-import { base64ToBase62, generateHash } from '../../../utils/utils.js'
-import type { SlugGenerator } from '../ports/SlugGenerator.interface.js'
-import type { UrlRepository } from '../ports/UrlRepository.interface.js'
+import { base64ToBase62, generateHash } from '../../../../utils/utils.ts'
+import type { TargetUrl } from '../../domain/value-objects/target-url/TargetUrl.vo.ts'
+import type { SlugGenerator } from '../../ports/SlugGenerator.interface.ts'
+import type { UrlRepository } from '../../ports/UrlRepository.interface.ts'
 
 interface SlugConfig {
 	maxLength: number
@@ -22,7 +24,7 @@ export class RandomBase62SlugGenerator implements SlugGenerator {
 		return await this.repository.isSlugAvailable(slug)
 	}
 
-	public async generateUniqueSlug(url: string): Promise<string> {
+	public async generateUniqueSlug(url: TargetUrl): Promise<string> {
 		return await this.generateUniqueSlugRecursive(
 			url,
 			this.config.initialLength,
@@ -30,13 +32,13 @@ export class RandomBase62SlugGenerator implements SlugGenerator {
 	}
 
 	private async generateUniqueSlugRecursive(
-		url: string,
+		url: TargetUrl,
 		length: number,
 	): Promise<string> {
 		let attempts = 0
 
 		while (attempts < this.config.maxAttempts) {
-			const inputForSlug = `${url}-${randomUUID()}`
+			const inputForSlug = `${url.value}-${randomUUID()}`
 			const base62Hash = base64ToBase62(generateHash(inputForSlug))
 			const slug = base62Hash.substring(0, length)
 			// Check availability
@@ -52,6 +54,6 @@ export class RandomBase62SlugGenerator implements SlugGenerator {
 			return this.generateUniqueSlugRecursive(url, length + 1)
 		}
 
-		throw new Error('Error creating Short URL. Please try again later.')
+		throw new SlugGenerationExhaustedError()
 	}
 }
