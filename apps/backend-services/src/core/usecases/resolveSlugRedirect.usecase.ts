@@ -28,14 +28,14 @@ export class ResolveSlugRedirectUseCase {
 		}
 
 		const output: ResolveSlugRedirectOutput = {
-			slug: urlData.slug,
+			slug: urlData.slug.value,
 			password: !!urlData.passwordHash,
 			queryAt: new Date().toISOString(),
 		}
 
 		//if password is true, don't return the originalUrl
 		if (!urlData.passwordHash) {
-			output.originalUrl = urlData.originalUrl
+			output.originalUrl = urlData.originalUrl.value
 		}
 
 		return output
