@@ -1,31 +1,22 @@
+import { InvalidGeolocationError } from '../../errors/domain.errors.ts'
+
 export interface GeolocationProps {
-	ipAddress: string
 	country?: string | null
 	region?: string | null
 	city?: string | null
-	zipCode?: string | null
 	latitude?: number | null
 	longitude?: number | null
 	timezone?: string | null
-	isVpn?: boolean | null
-	isp?: string | null
-	createdAt: Date
-	updatedAt: Date
-	deletedAt?: Date | null
 }
 
 export class Geolocation {
 	private readonly props: Readonly<GeolocationProps>
 
-	constructor(props: GeolocationProps) {
+	private constructor(props: GeolocationProps) {
 		this.props = props
 	}
 
 	// Getters
-	get ipAddress(): string {
-		return this.props.ipAddress
-	}
-
 	get country(): string | null | undefined {
 		return this.props.country
 	}
@@ -36,10 +27,6 @@ export class Geolocation {
 
 	get city(): string | null | undefined {
 		return this.props.city
-	}
-
-	get zipCode(): string | null | undefined {
-		return this.props.zipCode
 	}
 
 	get latitude(): number | null | undefined {
@@ -54,47 +41,49 @@ export class Geolocation {
 		return this.props.timezone
 	}
 
-	get isVpn(): boolean | null | undefined {
-		return this.props.isVpn
-	}
-
-	get isp(): string | null | undefined {
-		return this.props.isp
-	}
-
-	get createdAt(): Date {
-		return this.props.createdAt
-	}
-
-	get updatedAt(): Date {
-		return this.props.updatedAt
-	}
-
-	get deletedAt(): Date | null | undefined {
-		return this.props.deletedAt
-	}
-
 	//JSON Method
 	toJSON(): GeolocationProps {
 		return {
-			ipAddress: this.props.ipAddress,
 			country: this.props.country,
 			region: this.props.region,
 			city: this.props.city,
-			zipCode: this.props.zipCode,
 			latitude: this.props.latitude,
 			longitude: this.props.longitude,
 			timezone: this.props.timezone,
-			isVpn: this.props.isVpn,
-			isp: this.props.isp,
-			createdAt: this.props.createdAt,
-			updatedAt: this.props.updatedAt,
-			deletedAt: this.props.deletedAt,
 		}
 	}
 
 	// Methods
 	public static create(props: GeolocationProps): Geolocation {
+		const geolocation = new Geolocation(props)
+		geolocation.validate()
+		return geolocation
+	}
+
+	/**
+	 * Restores a Geolocation from props already stored in the DB.
+	 * Bypasses lat/lng validation — assumes the stored data is already valid.
+	 */
+	public static reconstitute(props: GeolocationProps): Geolocation {
 		return new Geolocation(props)
+	}
+
+	private validate(): void {
+		if (
+			this.props.latitude === undefined ||
+			this.props.latitude === null ||
+			this.props.latitude < -90 ||
+			this.props.latitude > 90
+		) {
+			throw new InvalidGeolocationError('Invalid latitude')
+		}
+		if (
+			this.props.longitude === undefined ||
+			this.props.longitude === null ||
+			this.props.longitude < -180 ||
+			this.props.longitude > 180
+		) {
+			throw new InvalidGeolocationError('Invalid longitude')
+		}
 	}
 }
