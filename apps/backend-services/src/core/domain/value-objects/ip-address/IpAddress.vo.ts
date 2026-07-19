@@ -24,7 +24,10 @@ export class IpAddress {
 	}
 
 	// Methods
-	static createOrUnknown(value: string): IpAddress {
+	static createOrUnknown(
+		value: string,
+		geolocation?: Geolocation | null,
+	): IpAddress {
 		const parsed = ipSchema.safeParse({ ipAddress: value })
 
 		if (!parsed.success) {
@@ -32,11 +35,11 @@ export class IpAddress {
 		}
 		return new IpAddress({
 			ipAddress: parsed.data.ipAddress,
-			geolocation: null,
+			geolocation: geolocation ?? null,
 		})
 	}
 
-	static create(value: string): IpAddress {
+	static create(value: string, geolocation?: Geolocation | null): IpAddress {
 		const parsed = ipSchema.safeParse({ ipAddress: value })
 
 		if (!parsed.success) {
@@ -44,7 +47,7 @@ export class IpAddress {
 		}
 		return new IpAddress({
 			ipAddress: parsed.data.ipAddress,
-			geolocation: null,
+			geolocation: geolocation ?? null,
 		})
 	}
 
