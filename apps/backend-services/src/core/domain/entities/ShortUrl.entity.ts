@@ -1,28 +1,47 @@
-import type { Geolocation } from '../value-objects/Geolocation.ts'
+import { v7 as uuidv7 } from 'uuid'
+import type { IpAddress } from '../value-objects/ip-address/IpAddress.vo.ts'
+import type { Password } from '../value-objects/password/Password.vo.ts'
+import type { Slug } from '../value-objects/slug/Slug.vo.ts'
+import type { TargetUrl } from '../value-objects/target-url/TargetUrl.vo.ts'
+
+export type CreateShortUrlInput = Omit<
+	ShortUrlProps,
+	'id' | 'createdAt' | 'updatedAt' | 'deletedAt' | 'expiredAt'
+>
 
 export interface ShortUrlProps {
-	slug: string
-	originalUrl: string
+	id: string
+	slug: Slug
+	originalUrl: TargetUrl
+	ipAddress: IpAddress
 	purpose: 'direct' | 'qr' | 'api'
-	title: string
-	passwordHash?: string | null
+	title: string | 'Untitled'
+	passwordHash?: Password | null
 	expirationDate?: Date | null
 	expiredAt?: Date | null
-	geolocation?: Geolocation | null
-	createdAt: Date
-	updatedAt: Date
+	createdAt?: Date | null
+	updatedAt?: Date | null
 	deletedAt?: Date | null
 }
 
 export class ShortUrl {
 	private readonly props: ShortUrlProps
 
-	constructor(props: ShortUrlProps) {
+	private constructor(props: ShortUrlProps) {
 		this.props = props
 	}
 
 	// Getters
-	get slug(): string {
+
+	get id(): string {
+		return this.props.id
+	}
+
+	get ipAddress(): IpAddress {
+		return this.props.ipAddress
+	}
+
+	get slug(): Slug {
 		return this.props.slug
 	}
 
@@ -30,7 +49,7 @@ export class ShortUrl {
 		return this.props.title
 	}
 
-	get originalUrl(): string {
+	get originalUrl(): TargetUrl {
 		return this.props.originalUrl
 	}
 
@@ -38,7 +57,7 @@ export class ShortUrl {
 		return this.props.purpose
 	}
 
-	get passwordHash(): string | null | undefined {
+	get passwordHash(): Password | null | undefined {
 		return this.props.passwordHash
 	}
 
@@ -50,15 +69,11 @@ export class ShortUrl {
 		return this.props.expiredAt
 	}
 
-	get geolocation(): Geolocation | null | undefined {
-		return this.props.geolocation
-	}
-
-	get createdAt(): Date {
+	get createdAt(): Date | null | undefined {
 		return this.props.createdAt
 	}
 
-	get updatedAt(): Date {
+	get updatedAt(): Date | null | undefined {
 		return this.props.updatedAt
 	}
 
@@ -69,14 +84,15 @@ export class ShortUrl {
 	//JSON Method
 	toJSON(): ShortUrlProps {
 		return {
+			id: this.props.id,
 			slug: this.props.slug,
 			title: this.props.title,
 			originalUrl: this.props.originalUrl,
+			ipAddress: this.props.ipAddress,
 			purpose: this.props.purpose,
 			passwordHash: this.props.passwordHash,
 			expirationDate: this.props.expirationDate,
 			expiredAt: this.props.expiredAt,
-			geolocation: this.props.geolocation,
 			createdAt: this.props.createdAt,
 			updatedAt: this.props.updatedAt,
 			deletedAt: this.props.deletedAt,
@@ -84,7 +100,21 @@ export class ShortUrl {
 	}
 
 	// Methods
-	public static create(props: ShortUrlProps): ShortUrl {
+	public static create(input: CreateShortUrlInput): ShortUrl {
+		const now = new Date()
+		return new ShortUrl({
+			...input,
+			id: uuidv7(),
+			createdAt: now,
+			updatedAt: now,
+		})
+	}
+
+	/**
+	 * Restores a ShortUrl from props already stored in the DB.
+	 * Bypasses ID generation — preserves the existing ID from persistence.
+	 */
+	public static reconstitute(props: ShortUrlProps): ShortUrl {
 		return new ShortUrl(props)
 	}
 
@@ -117,7 +147,7 @@ export class ShortUrl {
 		this.props.updatedAt = new Date()
 	}
 
-	public setPassword(passwordHash: string): void {
+	public setPassword(passwordHash: Password): void {
 		this.props.passwordHash = passwordHash
 		this.props.updatedAt = new Date()
 	}
