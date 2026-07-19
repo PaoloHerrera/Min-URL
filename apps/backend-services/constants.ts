@@ -17,3 +17,36 @@ export const CLOUDINARY_VALUES = {
 	apiSecret: process.env.CLOUDINARY_API_SECRET,
 	uploadPreset: 'min-url',
 }
+
+export const FORBIDDEN_EXTENSIONS = [
+	// Archivos ejecutables y scripts de sistema
+	'.exe',
+	'.bat',
+	'.msi',
+	'.sh',
+	'.apk',
+	'.bin',
+	'.cmd',
+	'.vbs',
+	'.ps1',
+	'.psm1',
+	'.psd1',
+	'.scr',
+	'.com',
+	'.jar',
+	'.dll',
+	'.xpi',
+	'.crx',
+
+	// Contenedores e imágenes de disco ejecutables
+	'.dmg',
+	'.iso',
+	'.img',
+
+	// Archivos de configuración y registros de sistema
+	'.inf',
+	'.reg',
+	'.scf',
+	'.lnk',
+	'.class',
+]

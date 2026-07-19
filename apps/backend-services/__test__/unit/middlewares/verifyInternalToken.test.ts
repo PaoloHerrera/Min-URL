@@ -1,5 +1,5 @@
 import { describe, expect, it, vi, afterEach, beforeEach } from 'vitest'
-import { verifyInternalToken } from '../src/adapters/primary/http/middlewares/verifyInternalToken.middleware.ts'
+import { verifyInternalToken } from '../../../src/adapters/primary/http/middlewares/verifyInternalToken.middleware.ts'
 import type { Request, Response } from 'express'
 
 const SECRET = 'super_secret_and_secure_token'
