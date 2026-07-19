@@ -39,7 +39,7 @@ export class IpAddress {
 		})
 	}
 
-	static create(value: string, geolocation?: Geolocation | null): IpAddress {
+	static create(value: string): IpAddress {
 		const parsed = ipSchema.safeParse({ ipAddress: value })
 
 		if (!parsed.success) {
@@ -47,7 +47,6 @@ export class IpAddress {
 		}
 		return new IpAddress({
 			ipAddress: parsed.data.ipAddress,
-			geolocation: geolocation ?? null,
 		})
 	}
 
@@ -57,6 +56,13 @@ export class IpAddress {
 	 */
 	static reconstitute(props: IpAddressProps): IpAddress {
 		return new IpAddress(props)
+	}
+
+	public withGeolocation(geolocation: Geolocation): IpAddress {
+		return new IpAddress({
+			ipAddress: this.ipAddress,
+			geolocation,
+		})
 	}
 
 	toJSON(): { ipAddress: string } {

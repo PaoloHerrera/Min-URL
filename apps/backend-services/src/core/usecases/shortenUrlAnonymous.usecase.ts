@@ -1,24 +1,24 @@
+import { ShortUrl } from '../domain/entities/ShortUrl.entity.ts'
+import type { CreateShortUrlInput } from '../domain/entities/ShortUrl.entity.ts'
 import {
 	CaptchaVerificationError,
 	ForbiddenExtensionError,
 } from '../domain/errors/domain.errors.ts'
-import { ShortUrl } from '../domain/entities/ShortUrl.entity.ts'
-import type { CreateShortUrlInput } from '../domain/entities/ShortUrl.entity.ts'
-import { TargetUrl } from '../domain/value-objects/target-url/TargetUrl.vo.ts'
-import type { CaptchaServices } from '../ports/CaptchaServices.interface.ts'
-import type { SlugGenerator } from '../ports/SlugGenerator.interface.ts'
-import type { UrlRepository } from '../ports/UrlRepository.interface.ts'
-
-import type { ForbiddenExtensions } from '../ports/ForbiddenExtensions.interface.ts'
-
 import { IpAddress } from '../domain/value-objects/ip-address/IpAddress.vo.ts'
 import { Slug } from '../domain/value-objects/slug/Slug.vo.ts'
+import { TargetUrl } from '../domain/value-objects/target-url/TargetUrl.vo.ts'
+import type { CaptchaServices } from '../ports/CaptchaServices.interface.ts'
+import type { ForbiddenExtensions } from '../ports/ForbiddenExtensions.interface.ts'
+import type { IpGeolocationResolver } from '../ports/IpGeolocationResolver.interface.ts'
+import type { SlugGenerator } from '../ports/SlugGenerator.interface.ts'
+import type { UrlRepository } from '../ports/UrlRepository.interface.ts'
 
 interface ShortenUrlAnonymousUseCaseProps {
 	urlRepository: UrlRepository
 	captchaServices: CaptchaServices
 	slugGenerator: SlugGenerator
 	forbiddenExtensions: ForbiddenExtensions
+	ipGeolocationResolver: IpGeolocationResolver
 }
 
 interface ShortenUrlInput {
@@ -55,12 +55,17 @@ export class ShortenUrlAnonymousUseCase {
 		//4. Generate a unique slug
 		const slug = await this.props.slugGenerator.generateUniqueSlug(targetUrl)
 
-		//5. Save anonimous url in the repository
+		//5. Create a ipAddress value object
+		const baseIpAddress = IpAddress.createOrUnknown(clientIp)
+		const geolocation = this.props.ipGeolocationResolver.resolve(baseIpAddress)
+		const ipAddress = baseIpAddress.withGeolocation(geolocation)
+
+		//6. Save anonimous url in the repository
 		const dataToSave: CreateShortUrlInput = {
 			slug: Slug.create(slug),
 			originalUrl: targetUrl,
 			title: 'Anonymous link',
-			ipAddress: IpAddress.createOrUnknown(clientIp),
+			ipAddress: ipAddress,
 			purpose: 'direct',
 			passwordHash: null,
 		}
@@ -68,7 +73,7 @@ export class ShortenUrlAnonymousUseCase {
 		const url = ShortUrl.create(dataToSave)
 		await this.props.urlRepository.save(url)
 
-		//6. Return the short URL
+		//7. Return the short URL
 		return url
 	}
 }

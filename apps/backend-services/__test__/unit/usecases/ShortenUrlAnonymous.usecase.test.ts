@@ -4,7 +4,9 @@ import type { UrlRepository } from '../../../src/core/ports/UrlRepository.interf
 import type { CaptchaServices } from '../../../src/core/ports/CaptchaServices.interface.ts'
 import type { SlugGenerator } from '../../../src/core/ports/SlugGenerator.interface.ts'
 import type { ForbiddenExtensions } from '../../../src/core/ports/ForbiddenExtensions.interface.ts'
+import type { IpGeolocationResolver } from '../../../src/core/ports/IpGeolocationResolver.interface.ts'
 import { ShortUrl } from '../../../src/core/domain/entities/ShortUrl.entity.ts'
+import { Geolocation } from '../../../src/core/domain/value-objects/geolocation/Geolocation.vo.ts'
 
 import {
 	CaptchaVerificationError,
@@ -17,6 +19,7 @@ describe('ShortenUrlAnonymousUseCase', () => {
 	let mockCaptchaServices: CaptchaServices
 	let mockSlugGenerator: SlugGenerator
 	let mockForbiddenExtensions: ForbiddenExtensions
+	let mockIpGeolocationResolver: IpGeolocationResolver
 	let useCase: ShortenUrlAnonymousUseCase
 
 	const validInput = {
@@ -44,11 +47,24 @@ describe('ShortenUrlAnonymousUseCase', () => {
 			check: vi.fn().mockReturnValue(false),
 		}
 
+		mockIpGeolocationResolver = {
+			resolve: vi.fn().mockReturnValue(
+				Geolocation.create({
+					country: 'US',
+					region: 'CA',
+					city: 'San Francisco',
+					latitude: 37.7749,
+					longitude: -122.4194,
+				}),
+			),
+		}
+
 		useCase = new ShortenUrlAnonymousUseCase({
 			urlRepository: mockUrlRepository,
 			captchaServices: mockCaptchaServices,
 			slugGenerator: mockSlugGenerator,
 			forbiddenExtensions: mockForbiddenExtensions,
+			ipGeolocationResolver: mockIpGeolocationResolver,
 		})
 	})
 

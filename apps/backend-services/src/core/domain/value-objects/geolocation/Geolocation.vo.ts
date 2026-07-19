@@ -70,18 +70,16 @@ export class Geolocation {
 
 	private validate(): void {
 		if (
-			this.props.latitude === undefined ||
-			this.props.latitude === null ||
-			this.props.latitude < -90 ||
-			this.props.latitude > 90
+			this.props.latitude !== undefined &&
+			this.props.latitude !== null &&
+			(this.props.latitude < -90 || this.props.latitude > 90)
 		) {
 			throw new InvalidGeolocationError('Invalid latitude')
 		}
 		if (
-			this.props.longitude === undefined ||
-			this.props.longitude === null ||
-			this.props.longitude < -180 ||
-			this.props.longitude > 180
+			this.props.longitude !== undefined &&
+			this.props.longitude !== null &&
+			(this.props.longitude < -180 || this.props.longitude > 180)
 		) {
 			throw new InvalidGeolocationError('Invalid longitude')
 		}
