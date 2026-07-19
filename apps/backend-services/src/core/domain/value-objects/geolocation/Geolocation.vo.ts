@@ -10,47 +10,42 @@ export interface GeolocationProps {
 }
 
 export class Geolocation {
-	private readonly props: Readonly<GeolocationProps>
+	private props: Readonly<Required<GeolocationProps>>
 
-	private constructor(props: GeolocationProps) {
-		this.props = props
+	private constructor(props: Readonly<GeolocationProps>) {
+		this.props = {
+			country: props.country ?? null,
+			region: props.region ?? null,
+			city: props.city ?? null,
+			latitude: props.latitude ?? null,
+			longitude: props.longitude ?? null,
+			timezone: props.timezone ?? null,
+		}
 	}
 
 	// Getters
-	get country(): string | null | undefined {
+	get country(): string | null {
 		return this.props.country
 	}
 
-	get region(): string | null | undefined {
+	get region(): string | null {
 		return this.props.region
 	}
 
-	get city(): string | null | undefined {
+	get city(): string | null {
 		return this.props.city
 	}
 
-	get latitude(): number | null | undefined {
+	get latitude(): number | null {
 		return this.props.latitude
 	}
 
-	get longitude(): number | null | undefined {
+	get longitude(): number | null {
 		return this.props.longitude
 	}
 
-	get timezone(): string | null | undefined {
+	get timezone(): string | null {
 		return this.props.timezone
-	}
-
-	//JSON Method
-	toJSON(): GeolocationProps {
-		return {
-			country: this.props.country,
-			region: this.props.region,
-			city: this.props.city,
-			latitude: this.props.latitude,
-			longitude: this.props.longitude,
-			timezone: this.props.timezone,
-		}
 	}
 
 	// Methods
@@ -69,18 +64,23 @@ export class Geolocation {
 	}
 
 	private validate(): void {
-		if (
-			this.props.latitude !== undefined &&
-			this.props.latitude !== null &&
-			(this.props.latitude < -90 || this.props.latitude > 90)
-		) {
+		const hasLat = this.props.latitude !== null
+		const hasLng = this.props.longitude !== null
+		const latitude = this.props.latitude ?? 0
+		const longitude = this.props.longitude ?? 0
+
+		// Invariant
+		if (hasLat !== hasLng) {
+			throw new InvalidGeolocationError(
+				'Latitude and Longitude must both be provided together or both be empty.',
+			)
+		}
+
+		if (hasLat && (latitude < -90 || latitude > 90)) {
 			throw new InvalidGeolocationError('Invalid latitude')
 		}
-		if (
-			this.props.longitude !== undefined &&
-			this.props.longitude !== null &&
-			(this.props.longitude < -180 || this.props.longitude > 180)
-		) {
+
+		if (hasLng && (longitude < -180 || longitude > 180)) {
 			throw new InvalidGeolocationError('Invalid longitude')
 		}
 	}
