@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
-import { IpAddress } from '../../../../src/core/domain/value-objects/ip-address/IpAddress.vo.ts'
-import { InvalidIpAddressError } from '../../../../src/core/domain/errors/domain.errors.ts'
+import { IpAddress } from '@/core/domain/value-objects/ip-address/IpAddress.vo.ts'
+import { InvalidIpAddressError } from '@/core/domain/errors/domain.errors.ts'
 
 describe('IpAddress Value Object', () => {
 	it.each([

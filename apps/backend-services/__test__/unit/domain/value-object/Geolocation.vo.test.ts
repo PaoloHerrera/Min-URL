@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest'
-import { Geolocation } from '../../../../src/core/domain/value-objects/geolocation/Geolocation.vo.ts'
-import { InvalidGeolocationError } from '../../../../src/core/domain/errors/domain.errors.ts'
+import { Geolocation } from '@/core/domain/value-objects/geolocation/Geolocation.vo.ts'
+import { InvalidGeolocationError } from '@/core/domain/errors/domain.errors.ts'
 
 describe('Geolocation Value Object (Unit Test)', () => {
 	it('Should successfully create Geolocation for a valid geolocation', () => {

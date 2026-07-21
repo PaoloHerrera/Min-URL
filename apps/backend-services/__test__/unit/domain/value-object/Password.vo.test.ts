@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
-import { Password } from '../../../../src/core/domain/value-objects/password/Password.vo.ts'
-import { InvalidPasswordError } from '../../../../src/core/domain/errors/domain.errors.ts'
+import { Password } from '@/core/domain/value-objects/password/Password.vo.ts'
+import { InvalidPasswordError } from '@/core/domain/errors/domain.errors.ts'
 
 describe('Password Value Object', () => {
 	it.each([

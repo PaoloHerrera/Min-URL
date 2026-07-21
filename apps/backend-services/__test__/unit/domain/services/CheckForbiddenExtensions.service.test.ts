@@ -1,10 +1,10 @@
 import { describe, expect, it } from 'vitest'
-import { CheckForbiddenExtension } from '../../../../src/core/domain/services/CheckForbiddenExtensions.service.ts'
-import { FORBIDDEN_EXTENSIONS } from '../../../../constants.ts'
-import { TargetUrl } from '../../../../src/core/domain/value-objects/target-url/TargetUrl.vo.ts'
+import { CheckForbiddenExtensions } from '@/core/domain/services/CheckForbiddenExtensions.service.ts'
+import { FORBIDDEN_EXTENSIONS } from '@/config/constants.ts'
+import { TargetUrl } from '@/core/domain/value-objects/target-url/TargetUrl.vo.ts'
 
 describe('CheckForbiddenExtension Domain Service', () => {
-	const service = new CheckForbiddenExtension(FORBIDDEN_EXTENSIONS)
+	const service = new CheckForbiddenExtensions(FORBIDDEN_EXTENSIONS)
 
 	it('should return false for secure, standard URLs without files', () => {
 		expect(service.check(TargetUrl.create('https://www.google.com'))).toBe(

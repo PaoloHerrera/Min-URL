@@ -1,12 +1,12 @@
 import { describe, expect, it, vi, beforeEach } from 'vitest'
-import { ShortenUrlAnonymousUseCase } from '../../../src/core/usecases/ShortenUrlAnonymous.usecase.ts'
-import type { UrlRepository } from '../../../src/core/ports/UrlRepository.interface.ts'
-import type { CaptchaServices } from '../../../src/core/ports/CaptchaServices.interface.ts'
-import type { SlugGenerator } from '../../../src/core/ports/SlugGenerator.interface.ts'
-import type { ForbiddenExtensions } from '../../../src/core/ports/ForbiddenExtensions.interface.ts'
-import type { IpGeolocationResolver } from '../../../src/core/ports/IpGeolocationResolver.interface.ts'
-import { ShortUrl } from '../../../src/core/domain/entities/ShortUrl.entity.ts'
-import { Geolocation } from '../../../src/core/domain/value-objects/geolocation/Geolocation.vo.ts'
+import { ShortenUrlAnonymous } from '@/core/usecases/ShortenUrlAnonymous.usecase.ts'
+import type { ShortUrlRepository } from '@/core/ports/ShortUrlRepository.interface.ts'
+import type { CaptchaServices } from '@/core/ports/CaptchaServices.interface.ts'
+import type { SlugGenerator } from '@/core/ports/SlugGenerator.interface.ts'
+import type { ForbiddenExtensions } from '@/core/ports/ForbiddenExtensions.interface.ts'
+import type { IpGeolocationResolver } from '@/core/ports/IpGeolocationResolver.interface.ts'
+import { ShortUrl } from '@/core/domain/entities/ShortUrl.entity.ts'
+import { Geolocation } from '@/core/domain/value-objects/geolocation/Geolocation.vo.ts'
 
 import {
 	CaptchaVerificationError,
@@ -15,12 +15,12 @@ import {
 } from '../../../src/core/domain/errors/domain.errors.ts'
 
 describe('ShortenUrlAnonymousUseCase', () => {
-	let mockUrlRepository: UrlRepository
+	let mockShortUrlRepository: ShortUrlRepository
 	let mockCaptchaServices: CaptchaServices
 	let mockSlugGenerator: SlugGenerator
 	let mockForbiddenExtensions: ForbiddenExtensions
 	let mockIpGeolocationResolver: IpGeolocationResolver
-	let useCase: ShortenUrlAnonymousUseCase
+	let useCase: ShortenUrlAnonymous
 
 	const validInput = {
 		originalUrl: 'https://google.com',
@@ -29,7 +29,7 @@ describe('ShortenUrlAnonymousUseCase', () => {
 	}
 
 	beforeEach(() => {
-		mockUrlRepository = {
+		mockShortUrlRepository = {
 			save: vi.fn().mockResolvedValue(undefined),
 			isSlugAvailable: vi.fn().mockResolvedValue(true),
 			getUrlBySlug: vi.fn().mockResolvedValue(null),
@@ -59,8 +59,8 @@ describe('ShortenUrlAnonymousUseCase', () => {
 			),
 		}
 
-		useCase = new ShortenUrlAnonymousUseCase({
-			urlRepository: mockUrlRepository,
+		useCase = new ShortenUrlAnonymous({
+			shortUrlRepository: mockShortUrlRepository,
 			captchaServices: mockCaptchaServices,
 			slugGenerator: mockSlugGenerator,
 			forbiddenExtensions: mockForbiddenExtensions,
@@ -73,7 +73,9 @@ describe('ShortenUrlAnonymousUseCase', () => {
 
 		expect(mockCaptchaServices.verify).toHaveBeenCalledWith('valid-token')
 		expect(mockSlugGenerator.generateUniqueSlug).toHaveBeenCalled()
-		expect(mockUrlRepository.save).toHaveBeenCalledWith(expect.any(ShortUrl))
+		expect(mockShortUrlRepository.save).toHaveBeenCalledWith(
+			expect.any(ShortUrl),
+		)
 		expect(result.originalUrl.value).toBe('https://google.com')
 		expect(result.ipAddress.ipAddress).toBe('127.0.0.1')
 		expect(result.slug.value).toBe('xyz123')

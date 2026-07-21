@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest'
-import { Slug } from '../../../../src/core/domain/value-objects/slug/Slug.vo.ts'
-import { InvalidSlugError } from '../../../../src/core/domain/errors/domain.errors.ts'
+import { Slug } from '@/core/domain/value-objects/slug/Slug.vo.ts'
+import { InvalidSlugError } from '@/core/domain/errors/domain.errors.ts'
 
 describe('Slug Value Object (Unit Test)', () => {
 	it.each([

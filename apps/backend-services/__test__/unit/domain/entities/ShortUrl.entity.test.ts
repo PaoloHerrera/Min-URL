@@ -1,8 +1,8 @@
 import { describe, it, expect } from 'vitest'
-import { ShortUrl } from '../../../../src/core/domain/entities/ShortUrl.entity.ts'
-import { TargetUrl } from '../../../../src/core/domain/value-objects/target-url/TargetUrl.vo.ts'
-import { Slug } from '../../../../src/core/domain/value-objects/slug/Slug.vo.ts'
-import { IpAddress } from '../../../../src/core/domain/value-objects/ip-address/IpAddress.vo.ts'
+import { ShortUrl } from '@/core/domain/entities/ShortUrl.entity.ts'
+import { TargetUrl } from '@/core/domain/value-objects/target-url/TargetUrl.vo.ts'
+import { Slug } from '@/core/domain/value-objects/slug/Slug.vo.ts'
+import { IpAddress } from '@/core/domain/value-objects/ip-address/IpAddress.vo.ts'
 
 describe('ShortUrl Entity (Unit Test)', () => {
 	it('Should create ShortUrl entity successfully without password', () => {

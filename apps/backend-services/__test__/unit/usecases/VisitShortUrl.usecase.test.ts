@@ -1,11 +1,16 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
-import { VisitShortUrlUseCase } from '../../../src/core/usecases/VisitShortUrl.usecase.ts'
-import type { UrlRepository } from '../../../src/core/ports/UrlRepository.interface.ts'
-import { ShortUrl } from '../../../src/core/domain/entities/ShortUrl.entity.ts'
-import { TargetUrl } from '../../../src/core/domain/value-objects/target-url/TargetUrl.vo.ts'
-import { Slug } from '../../../src/core/domain/value-objects/slug/Slug.vo.ts'
-import { IpAddress } from '../../../src/core/domain/value-objects/ip-address/IpAddress.vo.ts'
-import { Password } from '../../../src/core/domain/value-objects/password/Password.vo.ts'
+import { VisitShortUrl } from '@/core/usecases/VisitShortUrl.usecase.ts'
+import type { ShortUrlRepository } from '@/core/ports/ShortUrlRepository.interface.ts'
+import { ShortUrl } from '@/core/domain/entities/ShortUrl.entity.ts'
+import { TargetUrl } from '@/core/domain/value-objects/target-url/TargetUrl.vo.ts'
+import { Slug } from '@/core/domain/value-objects/slug/Slug.vo.ts'
+import { IpAddress } from '@/core/domain/value-objects/ip-address/IpAddress.vo.ts'
+import { Password } from '@/core/domain/value-objects/password/Password.vo.ts'
+import {
+	SlugNotFoundError,
+	SlugIsExpiredError,
+	SlugIsDeletedError,
+} from '@/core/domain/errors/domain.errors.ts'
 
 // Shared base for reconstituting ShortUrl fixtures from the DB
 const baseShortUrlProps = {
@@ -22,8 +27,8 @@ const baseShortUrlProps = {
 }
 
 describe('VisitShortUrlUseCase (Unit Test)', () => {
-	let mockUrlRepository: UrlRepository
-	let useCase: VisitShortUrlUseCase
+	let mockUrlRepository: ShortUrlRepository
+	let useCase: VisitShortUrl
 
 	beforeEach(() => {
 		mockUrlRepository = {
@@ -31,7 +36,7 @@ describe('VisitShortUrlUseCase (Unit Test)', () => {
 			save: vi.fn(),
 			isSlugAvailable: vi.fn(),
 		}
-		useCase = new VisitShortUrlUseCase(mockUrlRepository)
+		useCase = new VisitShortUrl(mockUrlRepository)
 	})
 
 	afterEach(() => {
@@ -52,10 +57,10 @@ describe('VisitShortUrlUseCase (Unit Test)', () => {
 		const result = await useCase.execute({ slug: 'google' })
 
 		expect(result).not.toBeNull()
-		expect(result?.originalUrl).toBe('https://www.google.com')
-		expect(result?.slug).toBe('google')
-		expect(result?.password).toBe(false)
-		expect(result?.queryAt).toBeDefined()
+		expect(result.originalUrl).toBe('https://www.google.com')
+		expect(result.slug).toBe('google')
+		expect(result.password).toBe(false)
+		expect(result.queryAt).toBeDefined()
 	})
 
 	it('Should return password:true and omit originalUrl if slug is password-protected', async () => {
@@ -73,21 +78,21 @@ describe('VisitShortUrlUseCase (Unit Test)', () => {
 		const result = await useCase.execute({ slug: 'private' })
 
 		expect(result).not.toBeNull()
-		expect(result?.originalUrl).toBeUndefined()
-		expect(result?.slug).toBe('private')
-		expect(result?.password).toBe(true)
-		expect(result?.queryAt).toBeDefined()
+		expect(result.originalUrl).toBeUndefined()
+		expect(result.slug).toBe('private')
+		expect(result.password).toBe(true)
+		expect(result.queryAt).toBeDefined()
 	})
 
-	it('Should return null if slug does not exist', async () => {
+	it('Should throw SlugNotFoundError if slug does not exist', async () => {
 		vi.mocked(mockUrlRepository.getUrlBySlug).mockResolvedValue(null)
 
-		const result = await useCase.execute({ slug: 'notexists' })
-
-		expect(result).toBeNull()
+		await expect(useCase.execute({ slug: 'notexists' })).rejects.toThrow(
+			SlugNotFoundError,
+		)
 	})
 
-	it('Should return null if slug is expired', async () => {
+	it('Should throw SlugIsExpiredError if slug is expired', async () => {
 		vi.mocked(mockUrlRepository.getUrlBySlug).mockResolvedValue(
 			ShortUrl.reconstitute({
 				...baseShortUrlProps,
@@ -99,12 +104,12 @@ describe('VisitShortUrlUseCase (Unit Test)', () => {
 			}),
 		)
 
-		const result = await useCase.execute({ slug: 'expire' })
-
-		expect(result).toBeNull()
+		await expect(useCase.execute({ slug: 'expire' })).rejects.toThrow(
+			SlugIsExpiredError,
+		)
 	})
 
-	it('Should return null if slug is deleted', async () => {
+	it('Should throw SlugIsDeletedError if slug is deleted', async () => {
 		vi.mocked(mockUrlRepository.getUrlBySlug).mockResolvedValue(
 			ShortUrl.reconstitute({
 				...baseShortUrlProps,
@@ -116,8 +121,8 @@ describe('VisitShortUrlUseCase (Unit Test)', () => {
 			}),
 		)
 
-		const result = await useCase.execute({ slug: 'delete' })
-
-		expect(result).toBeNull()
+		await expect(useCase.execute({ slug: 'delete' })).rejects.toThrow(
+			SlugIsDeletedError,
+		)
 	})
 })

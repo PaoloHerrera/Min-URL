@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
-import { TargetUrl } from '../../../../src/core/domain/value-objects/target-url/TargetUrl.vo.ts'
-import { InvalidUrlError } from '../../../../src/core/domain/errors/domain.errors.ts'
+import { TargetUrl } from '@/core/domain/value-objects/target-url/TargetUrl.vo.ts'
+import { InvalidUrlError } from '@/core/domain/errors/domain.errors.ts'
 
 describe('TargetUrl Value Object', () => {
 	it('Should successfully create TargetUrl for a valid URL', () => {
