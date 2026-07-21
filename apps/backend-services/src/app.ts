@@ -1,12 +1,13 @@
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
-import { corsMiddleware } from '@/adapters/primary/http/middlewares/cors.middleware.ts'
-import { routesInternal } from '@/adapters/primary/http/routes/internal.route.ts'
-import { routesShortUrl } from '@/adapters/primary/http/routes/shorturl.route.ts'
+import { corsMiddleware } from '@/adapters/primary/http/middlewares/cors.middleware'
+import { routesInternal } from '@/adapters/primary/http/routes/internal.route'
+import { routesShortUrl } from '@/adapters/primary/http/routes/shorturl.route'
 import dotenv from 'dotenv'
 import express, { type Request, type Response } from 'express'
-
-import { errorHandler } from '@/adapters/primary/http/middlewares/errorHandler.middleware.ts'
+import { errorHandler } from '@/adapters/primary/http/middlewares/errorHandler.middleware'
+import { swaggerDocument } from './swagger'
+import swaggerUi from 'swagger-ui-express'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
@@ -36,6 +37,14 @@ app.get('/', (req: Request, res: Response) => {
 app.get('/favicon.ico', (_req: Request, res: Response) => {
 	res.status(204).end()
 })
+
+// Swagger UI
+if (
+	process.env.NODE_ENV !== 'production' ||
+	process.env.ENABLE_SWAGGER === 'true'
+) {
+	app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument))
+}
 
 // Errores centralizados
 app.use(errorHandler)

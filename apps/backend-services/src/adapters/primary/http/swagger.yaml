@@ -1,0 +1,147 @@
+openapi: 3.0.0
+info:
+  title: Min-URL API Documentation
+  version: 1.0.0
+  description: Core microservice API for the Min-URL URL shortener (backend-services). Handles URL shortening, validation, and internal slug redirection queries.
+
+servers:
+  - url: http://localhost:3001
+    description: Local Development Server
+
+paths:
+  /direct/shorten:
+    post:
+      summary: Shorten a URL anonymously
+      description: Receives an original URL, validates Turnstile captcha token and forbidden extensions, and returns the generated short URL and slug.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ShortenRequest'
+      responses:
+        '200':
+          description: Shortened URL created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ShortenResponse'
+        '400':
+          description: Invalid request (Malformed URL, forbidden file extension, or failed captcha verification)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '503':
+          description: Service Unavailable (Unique slug generation attempts exhausted)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /internal/slug-data/{slug}:
+    get:
+      summary: Retrieve slug redirection metadata (Internal Use)
+      description: Protected internal endpoint for the redirector service to retrieve target URL and slug flags.
+      security:
+        - InternalTokenAuth: []
+      parameters:
+        - name: slug
+          in: path
+          required: true
+          description: The unique slug identifier to query
+          schema:
+            type: string
+            example: google
+      responses:
+        '200':
+          description: Redirection metadata retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SlugDataResponse'
+        '401':
+          description: Unauthorized (Missing or invalid internal bearer secret)
+        '404':
+          description: Slug not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '410':
+          description: Slug has been deleted or expired
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+components:
+  securitySchemes:
+    InternalTokenAuth:
+      type: http
+      scheme: bearer
+      description: Enter the INTERNAL_SECRET configured in your environment variables for internal service calls.
+
+  schemas:
+    ShortenRequest:
+      type: object
+      required:
+        - originalUrl
+      properties:
+        originalUrl:
+          type: string
+          format: uri
+          example: https://www.google.com
+        captchaToken:
+          type: string
+          description: Optional Turnstile human verification token
+          example: 1x00000000000000000000AA
+        turnstileToken:
+          type: string
+          description: Alternative alias for Turnstile token
+          example: 1x00000000000000000000AA
+
+    ShortenResponse:
+      type: object
+      properties:
+        originalUrl:
+          type: string
+          example: https://www.google.com
+        shortUrl:
+          type: string
+          example: https://murl.cl/xyz123
+        slug:
+          type: string
+          example: xyz123
+        createdAt:
+          type: string
+          format: date-time
+          example: 2026-07-21T06:00:00.000Z
+
+    SlugDataResponse:
+      type: object
+      properties:
+        slug:
+          type: string
+          example: google
+        password:
+          type: boolean
+          example: false
+        originalUrl:
+          type: string
+          example: https://www.google.com
+          description: Destination target URL. Omitted if redirection is password-protected.
+        queryAt:
+          type: string
+          format: date-time
+          example: 2026-07-21T06:05:00.000Z
+
+    ErrorResponse:
+      type: object
+      properties:
+        code:
+          type: string
+          example: INVALID_URL
+        message:
+          type: string
+          example: 'Invalid URL: https://invalid-url'
