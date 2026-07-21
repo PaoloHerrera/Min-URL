@@ -1,4 +1,6 @@
 export class DomainError extends Error {
+	readonly code: string = 'BAD_REQUEST'
+
 	constructor(message: string) {
 		super(message)
 		this.name = this.constructor.name
@@ -59,5 +61,26 @@ export class SlugGenerationExhaustedError extends DomainError {
 	readonly code = 'SLUG_GENERATION_EXHAUSTED'
 	constructor() {
 		super('Error creating Short URL. Please try again later.')
+	}
+}
+
+export class SlugNotFoundError extends DomainError {
+	readonly code = 'SLUG_NOT_FOUND'
+	constructor(slug: string) {
+		super(`Slug not found: ${slug}`)
+	}
+}
+
+export class SlugIsExpiredError extends DomainError {
+	readonly code = 'SLUG_IS_EXPIRED'
+	constructor(slug: string) {
+		super(`Slug is expired: ${slug}`)
+	}
+}
+
+export class SlugIsDeletedError extends DomainError {
+	readonly code = 'SLUG_IS_DELETED'
+	constructor(slug: string) {
+		super(`Slug is deleted: ${slug}`)
 	}
 }

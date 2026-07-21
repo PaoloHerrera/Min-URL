@@ -1,4 +1,10 @@
-import type { UrlRepository } from '../ports/UrlRepository.interface.ts'
+import type { ShortUrlRepository } from '../ports/ShortUrlRepository.interface.ts'
+
+import {
+	SlugIsDeletedError,
+	SlugIsExpiredError,
+	SlugNotFoundError,
+} from '@/core/domain/errors/domain.errors.ts'
 
 export interface VisitShortUrlInput {
 	slug: string
@@ -11,31 +17,38 @@ export interface VisitShortUrlOutput {
 	queryAt: string
 }
 
-export class VisitShortUrlUseCase {
-	private readonly urlRepository: UrlRepository
+export class VisitShortUrl {
+	private readonly shortUrlRepository: ShortUrlRepository
 
-	constructor(urlRepository: UrlRepository) {
-		this.urlRepository = urlRepository
+	constructor(shortUrlRepository: ShortUrlRepository) {
+		this.shortUrlRepository = shortUrlRepository
 	}
 
-	async execute(
-		input: VisitShortUrlInput,
-	): Promise<VisitShortUrlOutput | null> {
+	async execute(input: VisitShortUrlInput): Promise<VisitShortUrlOutput> {
 		const { slug } = input
-		const urlData = await this.urlRepository.getUrlBySlug(slug)
-		if (!urlData || urlData.isDeleted() || urlData.isExpired()) {
-			return null
+		const shortUrlData = await this.shortUrlRepository.getUrlBySlug(slug)
+
+		if (!shortUrlData) {
+			throw new SlugNotFoundError(slug)
+		}
+
+		if (shortUrlData.isDeleted()) {
+			throw new SlugIsDeletedError(slug)
+		}
+
+		if (shortUrlData.isExpired()) {
+			throw new SlugIsExpiredError(slug)
 		}
 
 		const output: VisitShortUrlOutput = {
-			slug: urlData.slug.value,
-			password: !!urlData.passwordHash,
+			slug: shortUrlData.slug.value,
+			password: !!shortUrlData.passwordHash,
 			queryAt: new Date().toISOString(),
 		}
 
 		//if password is true, don't return the originalUrl
-		if (!urlData.passwordHash) {
-			output.originalUrl = urlData.originalUrl.value
+		if (!shortUrlData.passwordHash) {
+			output.originalUrl = shortUrlData.originalUrl.value
 		}
 
 		return output
