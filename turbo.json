@@ -11,12 +11,8 @@
 		"test": {
 			"env": [
 				"PORT",
-				"DB_NAME",
-				"DB_NAME_TEST",
-				"DB_USER",
-				"DB_PASS",
-				"DB_HOST",
-				"DB_PORT",
+				"DATABASE_URL",
+				"ADMIN_URL",
 				"API_KEY",
 				"FRONTEND_URL",
 				"BACKEND_API_URL",
