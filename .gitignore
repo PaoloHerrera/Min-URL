@@ -1,16 +1,13 @@
 node_modules
 dist
 .turbo
+.vscode
 .env
 .env.development
 .env.production
 .env.test
 build/
 .astro/
-personal_notes
-
-# Temporally
-docs/*
 
 # Playwright
 /test-results/
