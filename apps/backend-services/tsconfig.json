@@ -1,18 +1,21 @@
 {
 	"compilerOptions": {
-		"target": "ES2022",
-		"module": "NodeNext",
-		"moduleResolution": "NodeNext",
+		"target": "ESNext",
+		"module": "ESNext",
+		"moduleResolution": "bundler",
 		"allowJs": true,
 		"checkJs": false,
 		"strict": true,
 		"esModuleInterop": true,
 		"skipLibCheck": true,
 		"forceConsistentCasingInFileNames": true,
-		"outDir": "./dist",
 		"allowImportingTsExtensions": true,
-		"noEmit": true
+		"noEmit": true,
+		"paths": {
+			"@/*": ["./src/*"],
+			"@root/*": ["./*"]
+		}
 	},
-	"include": ["src/**/*", "routes/**/*", "middleware/**/*", "__test__/**/*"],
+	"include": ["src/**/*", "__test__/**/*"],
 	"exclude": ["node_modules", "dist"]
 }
