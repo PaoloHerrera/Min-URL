@@ -1,7 +1,7 @@
 import type { TargetUrl } from '../../domain/value-objects/target-url/TargetUrl.vo.ts'
 import type { ForbiddenExtensions } from '../../ports/ForbiddenExtensions.interface.ts'
 
-export class CheckForbiddenExtension implements ForbiddenExtensions {
+export class CheckForbiddenExtensions implements ForbiddenExtensions {
 	private readonly forbiddenExtensions: string[]
 
 	constructor(forbiddenExtensions: string[]) {

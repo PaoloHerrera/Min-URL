@@ -10,31 +10,31 @@ import { TargetUrl } from '../domain/value-objects/target-url/TargetUrl.vo.ts'
 import type { CaptchaServices } from '../ports/CaptchaServices.interface.ts'
 import type { ForbiddenExtensions } from '../ports/ForbiddenExtensions.interface.ts'
 import type { IpGeolocationResolver } from '../ports/IpGeolocationResolver.interface.ts'
+import type { ShortUrlRepository } from '../ports/ShortUrlRepository.interface.ts'
 import type { SlugGenerator } from '../ports/SlugGenerator.interface.ts'
-import type { UrlRepository } from '../ports/UrlRepository.interface.ts'
 
-interface ShortenUrlAnonymousUseCaseProps {
-	urlRepository: UrlRepository
+interface ShortenUrlAnonymousProps {
+	shortUrlRepository: ShortUrlRepository
 	captchaServices: CaptchaServices
 	slugGenerator: SlugGenerator
 	forbiddenExtensions: ForbiddenExtensions
 	ipGeolocationResolver: IpGeolocationResolver
 }
 
-interface ShortenUrlInput {
+interface ShortenUrlAnonymousInput {
 	originalUrl: string
 	captchaToken: string
 	clientIp: string
 }
 
-export class ShortenUrlAnonymousUseCase {
-	private readonly props: ShortenUrlAnonymousUseCaseProps
+export class ShortenUrlAnonymous {
+	private readonly props: ShortenUrlAnonymousProps
 
-	constructor(props: ShortenUrlAnonymousUseCaseProps) {
+	constructor(props: ShortenUrlAnonymousProps) {
 		this.props = props
 	}
 
-	async execute(input: ShortenUrlInput): Promise<ShortUrl> {
+	async execute(input: ShortenUrlAnonymousInput): Promise<ShortUrl> {
 		const { originalUrl, captchaToken, clientIp } = input
 
 		//1. Verify if the user is a bot
@@ -70,10 +70,10 @@ export class ShortenUrlAnonymousUseCase {
 			passwordHash: null,
 		}
 
-		const url = ShortUrl.create(dataToSave)
-		await this.props.urlRepository.save(url)
+		const shorturl = ShortUrl.create(dataToSave)
+		await this.props.shortUrlRepository.save(shorturl)
 
 		//7. Return the short URL
-		return url
+		return shorturl
 	}
 }

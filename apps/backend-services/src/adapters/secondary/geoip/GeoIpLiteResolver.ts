@@ -1,8 +1,8 @@
+import { Geolocation } from '@/core/domain/value-objects/geolocation/Geolocation.vo.ts'
+import type { IpAddress } from '@/core/domain/value-objects/ip-address/IpAddress.vo.ts'
+import type { IpGeolocationResolver } from '@/core/ports/IpGeolocationResolver.interface.ts'
 import geoipCountry from 'geoip-country'
 import geoip from 'geoip-lite'
-import { Geolocation } from '../../../core/domain/value-objects/geolocation/Geolocation.vo.ts'
-import type { IpAddress } from '../../../core/domain/value-objects/ip-address/IpAddress.vo.ts'
-import type { IpGeolocationResolver } from '../../../core/ports/IpGeolocationResolver.interface.ts'
 
 export class GeoIpLiteResolver implements IpGeolocationResolver {
 	public resolve(ipAddress: IpAddress): Geolocation {

@@ -1,5 +1,5 @@
+import type { CaptchaServices } from '@/core/ports/CaptchaServices.interface.ts'
 import axios from 'axios'
-import type { CaptchaServices } from '../../../core/ports/CaptchaServices.interface.ts'
 
 export class TurnstileCaptchaService implements CaptchaServices {
 	private readonly secretKey: string
@@ -16,10 +16,12 @@ export class TurnstileCaptchaService implements CaptchaServices {
 					secret: this.secretKey,
 					response: token,
 				},
+				{ timeout: 5000 },
 			)
 			return response.data.success
-		} catch (_error: unknown) {
-			return false
+		} catch (error) {
+			console.error('Turnstile Captcha API communication failure:', error)
+			throw error
 		}
 	}
 }

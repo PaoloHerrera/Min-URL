@@ -1,9 +1,9 @@
 import { SlugGenerationExhaustedError } from '../errors/domain.errors.ts'
 import { randomUUID } from 'node:crypto'
-import { base64ToBase62, generateHash } from '../../../../utils/utils.ts'
+import { base64ToBase62, generateHash } from './base62.utils.ts'
 import type { TargetUrl } from '../../domain/value-objects/target-url/TargetUrl.vo.ts'
 import type { SlugGenerator } from '../../ports/SlugGenerator.interface.ts'
-import type { UrlRepository } from '../../ports/UrlRepository.interface.ts'
+import type { ShortUrlRepository } from '../../ports/ShortUrlRepository.interface.ts'
 
 interface SlugConfig {
 	maxLength: number
@@ -12,10 +12,10 @@ interface SlugConfig {
 }
 
 export class RandomBase62SlugGenerator implements SlugGenerator {
-	private readonly repository: UrlRepository
+	private readonly repository: ShortUrlRepository
 	private readonly config: SlugConfig
 
-	constructor(repository: UrlRepository, config: SlugConfig) {
+	constructor(repository: ShortUrlRepository, config: SlugConfig) {
 		this.repository = repository
 		this.config = config
 	}
