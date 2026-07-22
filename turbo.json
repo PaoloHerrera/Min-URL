@@ -8,6 +8,10 @@
 		"lint": {
 			"outputs": []
 		},
+		"lintfix": {
+			"cache": false,
+			"outputs": []
+		},
 		"test": {
 			"env": [
 				"PORT",
@@ -34,6 +38,10 @@
 			"outputs": []
 		},
 		"typecheck": {
+			"outputs": []
+		},
+		"format": {
+			"cache": false,
 			"outputs": []
 		},
 		"format:check": {

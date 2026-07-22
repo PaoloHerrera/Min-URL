@@ -42,7 +42,9 @@ export class AuthController {
 			return res.status(401).json({ message: 'Authentication failed' })
 		}
 
-		const { accessToken, refreshToken } = await this.authService.login(req.user)
+		const { accessToken, refreshToken } = await this.authService.login(
+			req.user as unknown as { idUsers: number; displayName: string },
+		)
 
 		return res
 			.cookie(ACCESS_TOKEN_COOKIE_NAME, accessToken, {

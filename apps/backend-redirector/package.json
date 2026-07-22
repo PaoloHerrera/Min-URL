@@ -5,6 +5,11 @@
 	"scripts": {
 		"dev": "bun --watch src/index.ts",
 		"start": "bun src/index.ts",
+		"typecheck": "tsc --noEmit",
+		"lint": "biome lint .",
+		"lintfix": "biome lint --fix",
+		"format": "prettier --write \"src/**/*.{js,ts,css,json}\"",
+		"format:check": "prettier --check \"src/**/*.{js,ts,css,json}\"",
 		"test": "vitest"
 	},
 	"dependencies": {
@@ -14,7 +19,9 @@
 	},
 	"devDependencies": {
 		"@types/node": "26.1.1",
+		"@types/supertest": "7.2.1",
 		"supertest": "7.2.2",
+		"typescript": "6.0.3",
 		"vitest": "4.1.10"
 	}
 }

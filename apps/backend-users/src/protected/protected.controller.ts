@@ -25,7 +25,7 @@ interface AuthenticatedUser {
 
 @Controller('protected')
 export class ProtectedController {
-	@Inject(ProtectedService) private protectedService: ProtectedService
+	@Inject(ProtectedService) private protectedService!: ProtectedService
 
 	@Get('dashboard-stats')
 	@UseGuards(AuthGuard('jwt'))
