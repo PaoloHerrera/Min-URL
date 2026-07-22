@@ -1,13 +1,13 @@
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
-import { corsMiddleware } from '@/adapters/primary/http/middlewares/cors.middleware'
-import { routesInternal } from '@/adapters/primary/http/routes/internal.route'
-import { routesShortUrl } from '@/adapters/primary/http/routes/shorturl.route'
+import { corsMiddleware } from '@/adapters/primary/http/middlewares/cors.middleware.ts'
+import { errorHandler } from '@/adapters/primary/http/middlewares/errorHandler.middleware.ts'
+import { routesInternal } from '@/adapters/primary/http/routes/internal.route.ts'
+import { routesShortUrl } from '@/adapters/primary/http/routes/shorturl.route.ts'
 import dotenv from 'dotenv'
 import express, { type Request, type Response } from 'express'
-import { errorHandler } from '@/adapters/primary/http/middlewares/errorHandler.middleware'
-import { swaggerDocument } from './swagger'
 import swaggerUi from 'swagger-ui-express'
+import { swaggerDocument } from './swagger.ts'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
