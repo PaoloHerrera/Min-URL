@@ -42,7 +42,7 @@ El proyecto se estructura en **4 capítulos** de implementación, donde cada cap
 | 11  | TS strict                   | ✅     | `strict: true` en backend-services y configuración de NodeNext/bundler ESM                                                |
 | 12  | Documentación               | ✅     | README, ADRs, Mermaid diagrams, Swagger/OpenAPI 3.0 (YAML) en `/api-docs` en backend-services                             |
 | 13  | Dockerfiles                 | ⏳     | Multi-stage para los 3 servicios                                                                                          |
-| 14  | docker-compose              | ✅     | 3 servicios + PostgreSQL + Redis (PostgreSQL dockerizado corriendo en local/test)                                         |
+| 14  | docker-compose              | ✅     | 3 servicios + PostgreSQL (PostgreSQL dockerizado corriendo en local/test)                                                 |
 
 #### Estructura de Carpetas Ejecutada (`backend-services/src/`)
 
