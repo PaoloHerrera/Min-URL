@@ -3,17 +3,18 @@
 		"target": "ESNext",
 		"module": "ESNext",
 		"moduleResolution": "bundler",
-		"emitDecoratorMetadata": true,
-		"experimentalDecorators": true,
+		"allowJs": true,
+		"checkJs": false,
+		"strict": true,
 		"esModuleInterop": true,
 		"skipLibCheck": true,
 		"forceConsistentCasingInFileNames": true,
+		"allowImportingTsExtensions": true,
 		"noEmit": true,
-		"types": ["node"],
 		"paths": {
 			"@/*": ["./src/*"]
 		}
 	},
-	"include": ["src/**/*"],
+	"include": ["src/**/*", "__test__/**/*"],
 	"exclude": ["node_modules", "dist"]
 }

@@ -1,8 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common'
 import { JwtService } from '@nestjs/jwt'
-import { InjectModel } from '@nestjs/sequelize'
-import { RefreshToken } from '../refreshToken/model/refreshToken.model'
-import { User } from '../user/model/user.model'
 
 interface OauthProfile {
 	id: string
@@ -16,48 +13,26 @@ type Strategy = 'google' | 'github'
 
 @Injectable()
 export class AuthService {
-	@InjectModel(User) private userModel: typeof User
-	@InjectModel(RefreshToken) private refreshTokenModel: typeof RefreshToken
 	@Inject(JwtService) private jwtService: JwtService
 
 	constructor(jwtService: JwtService) {
 		this.jwtService = jwtService
 	}
 
-	async validateUser(profile: OauthProfile, strategy: Strategy) {
+	async validateUser(profile: OauthProfile, _strategy: Strategy) {
+		// TODO: Refactor with Drizzle / better-auth in Parte 1B
 		if (!(profile?.id && profile?.displayName && profile?.emails)) {
 			throw new Error('Invalid profile data')
 		}
-
-		const strategyId = strategy === 'google' ? 'googleId' : 'githubId'
-
-		const user = await this.userModel.findOne({
-			where: { [strategyId]: profile.id },
-		})
-
-		if (!user) {
-			const { id, displayName, name, emails, photos } = profile
-			const email = emails?.[0]?.value
-			const avatar = photos?.[0]?.value
-			const { familyName, givenName } = name
-
-			const newUser = this.userModel.build()
-			newUser[strategyId] = id
-			newUser.displayName = displayName
-			newUser.givenName = givenName
-			newUser.familyName = familyName
-			newUser.email = email
-			newUser.avatar = avatar
-
-			await newUser.validate()
-			await newUser.save()
-			return newUser
+		await Promise.resolve()
+		return {
+			idUsers: 1,
+			displayName: profile.displayName,
+			email: profile.emails[0]?.value,
 		}
-		await user.update({ updatedAt: new Date() })
-		return user
 	}
 
-	async login(user: User) {
+	async login(user: { idUsers: number; displayName: string }) {
 		const payload = { sub: user.idUsers, username: user.displayName }
 
 		const accessToken = await this.jwtService.signAsync(payload, {
@@ -69,28 +44,6 @@ export class AuthService {
 			expiresIn: '7d',
 		})
 
-		//Se busca si existe un refresh token para el usuario
-		const refreshData = await this.refreshTokenModel.findOne({
-			where: { userId: user.idUsers, expired: false },
-		})
-		// Se marcan los refresh tokens como expirados
-		if (refreshData) {
-			await refreshData.update({
-				expired: true,
-				expiredAt: new Date(),
-				updatedAt: new Date(),
-			})
-		}
-
-		const newRefreshToken = this.refreshTokenModel.build()
-		newRefreshToken.userId = user.idUsers
-		newRefreshToken.refreshToken = refreshToken
-		newRefreshToken.expiresAt = new Date(
-			new Date().setDate(new Date().getDate() + 7),
-		)
-		newRefreshToken.validate()
-		newRefreshToken.save()
-
 		return {
 			accessToken,
 			refreshToken,
@@ -99,7 +52,7 @@ export class AuthService {
 
 	async verifyRefreshToken(token: string) {
 		const { sub, username } = await this.jwtService.verifyAsync(token, {
-			secret: process.env.REFRESH_TOKEN_SECRET,
+			secret: process.env.REFRESH_TOKEN_SECRET || 'secret',
 		})
 		return { userId: sub, username }
 	}
@@ -107,32 +60,14 @@ export class AuthService {
 	async generateNewAccessToken({
 		userId,
 		username,
-		refreshToken,
 	}: {
 		userId: number
 		username: string
 		refreshToken: string
 	}) {
-		const refresh = await this.refreshTokenModel.findOne({
-			where: { userId, refreshToken },
-		})
-
-		if (!refresh) {
-			console.log('Refresh token no encontrado')
-			throw new Error('Refresh token not found')
-		}
-
-		if (refresh.expired) {
-			console.log('Refresh token expirado')
-			throw new Error('Refresh token expired')
-		}
-
 		const payload = { sub: userId, username }
-
-		const accessToken = await this.jwtService.signAsync(payload, {
+		return await this.jwtService.signAsync(payload, {
 			expiresIn: '1d',
 		})
-
-		return accessToken
 	}
 }

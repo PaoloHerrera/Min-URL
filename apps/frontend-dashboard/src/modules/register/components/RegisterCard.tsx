@@ -16,7 +16,10 @@ export const RegisterCard = ({ information }: RegisterCardProps) => {
 						<h2 className="card-title text-4xl">
 							{' '}
 							{information.title}{' '}
-							<span className="text-brand-200"> {information.titleSufix}</span>{' '}
+							<span className="text-brand-200">
+								{' '}
+								{information.titleSufix}
+							</span>{' '}
 						</h2>
 						<p className="text-xs"> {information.description} </p>
 					</div>

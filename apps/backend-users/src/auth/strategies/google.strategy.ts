@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common'
 import { PassportStrategy } from '@nestjs/passport'
 import { Strategy } from 'passport-google-oauth20'
-import type { User } from '../../user/model/user.model'
 import type { AuthService } from '../auth.service'
 
 interface OauthProfile {
@@ -29,7 +28,7 @@ export class GoogleStrategy extends PassportStrategy(Strategy) {
 		_accessToken: string,
 		_refreshToken: string,
 		profile: OauthProfile,
-		done: (error: Error | null, user?: User | null) => void,
+		done: (error: Error | null, user?: unknown) => void,
 	) {
 		try {
 			const user = await this.authService.validateUser(profile, 'google')

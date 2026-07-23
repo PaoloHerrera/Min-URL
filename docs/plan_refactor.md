@@ -26,23 +26,23 @@ El proyecto se estructura en **4 capítulos** de implementación, donde cada cap
 
 **Reglas:** Sin Redis, sin auth, sin click tracking. Solo redirect + shorten funcional.
 
-| #   | Paso                           | Estado | Descripción                                                                                                               |
-| --- | ------------------------------ | ------ | ------------------------------------------------------------------------------------------------------------------------- |
-| 0   | Monorepo Restructure           | ✅     | Crear carpeta `/apps/`, mover los 5 servicios allí, actualizar root `package.json` (`apps/*`, `packages/*`) y CI paths    |
-| 1   | [POSTPUESTO] Shared contracts  | ⏸️     | Mover al final. Crear `/packages/contracts` con tipos, schemas Zod y errores compartidos.                                 |
-| 2   | CU1 hexagonal & Drizzle        | ✅     | Reorganizar carpetas en `src/`, migrar `app.js`, `index.js` y middlewares a TS, e integrar Drizzle ORM.                   |
-| 3   | CU2 hexagonal                  | ✅     | `ResolveSlugRedirectUseCase` → controller → ruta pública `/internal/slug-data/:slug`                                      |
-| 4   | [POSTPUESTO] Consumo contracts | ⏸️     | Mover al final. Actualizar `backend-redirector` para consumir `@min-url/contracts`.                                       |
-| 5   | [POSTPUESTO] Consumo contracts | ⏸️     | Mover al final. Actualizar `frontend-landing` para consumir `@min-url/contracts`.                                         |
-| 6   | Tests unitarios                | ✅     | Contratos + schemas (Todos los unitarios de core/middlewares están verdes)                                                |
-| 7   | Tests integración CU1          | ✅     | POST /direct/shorten con Turnstile mockeado y validación de entrada Zod                                                   |
-| 8   | Tests integración CU2          | ✅     | GET /internal/slug-data/:slug — success, 404, password, expired, deleted (REST Semántico)                                 |
-| 9   | E2E Playwright                 | ⏳     | Shorten + redirect end-to-end                                                                                             |
-| 10  | Eliminar legacy                | ✅     | Eliminar carpetas legacy y archivos sueltos en la raíz (`routes/`, `controllers/`, `services/`, `middleware/`, `config/`) |
-| 11  | TS strict                      | ✅     | `strict: true` en backend-services y configuración de NodeNext/bundler ESM                                                |
-| 12  | Documentación                  | ⏳     | README, ADRs, Mermaid diagrams, Swagger/OpenAPI con `@nestjs/swagger` en backend-services                                 |
-| 13  | Dockerfiles                    | ⏳     | Multi-stage para los 3 servicios                                                                                          |
-| 14  | docker-compose                 | ✅     | 3 servicios + PostgreSQL + Redis (PostgreSQL dockerizado corriendo en local/test)                                         |
+| #   | Paso                        | Estado | Descripción                                                                                                               |
+| --- | --------------------------- | ------ | ------------------------------------------------------------------------------------------------------------------------- |
+| 0   | Monorepo Restructure        | ✅     | Crear carpeta `/apps/`, mover los 5 servicios allí, actualizar root `package.json` (`apps/*`, `packages/*`) y CI paths    |
+| 1   | Shared contracts            | 🚀     | Crear `/packages/contracts` con tipos DTO, respuestas, códigos de error y schemas Zod compartidos.                        |
+| 2   | CU1 hexagonal & Drizzle     | ✅     | Reorganizar carpetas en `src/`, migrar `app.js`, `index.js` y middlewares a TS, e integrar Drizzle ORM.                   |
+| 3   | CU2 hexagonal               | ✅     | `VisitShortUrl` → controller → ruta pública `/internal/slug-data/:slug`                                                   |
+| 4   | Refactor backend-redirector | ⏳     | Aplicar Alt 1 (Thin Handler + RedirectionService) consumiendo `@min-url/contracts` y dando soporte a REST HTTP 410.       |
+| 5   | Consumo frontend-landing    | ⏳     | Actualizar `frontend-landing` para consumir `@min-url/contracts` y conectar al backend.                                   |
+| 6   | Tests unitarios             | ✅     | Contratos + schemas (Todos los unitarios de core/middlewares están verdes)                                                |
+| 7   | Tests integración CU1       | ✅     | POST /direct/shorten con Turnstile mockeado y validación de entrada Zod                                                   |
+| 8   | Tests integración CU2       | ✅     | GET /internal/slug-data/:slug — success, 404, password, expired, deleted (REST Semántico)                                 |
+| 9   | E2E Playwright              | ⏳     | Shorten + redirect end-to-end                                                                                             |
+| 10  | Eliminar legacy             | ✅     | Eliminar carpetas legacy y archivos sueltos en la raíz (`routes/`, `controllers/`, `services/`, `middleware/`, `config/`) |
+| 11  | TS strict                   | ✅     | `strict: true` en backend-services y configuración de NodeNext/bundler ESM                                                |
+| 12  | Documentación               | ✅     | README, ADRs, Mermaid diagrams, Swagger/OpenAPI 3.0 (YAML) en `/api-docs` en backend-services                             |
+| 13  | Dockerfiles                 | ⏳     | Multi-stage para los 3 servicios                                                                                          |
+| 14  | docker-compose              | ✅     | 3 servicios + PostgreSQL (PostgreSQL dockerizado corriendo en local/test)                                                 |
 
 #### Estructura de Carpetas Ejecutada (`backend-services/src/`)
 
