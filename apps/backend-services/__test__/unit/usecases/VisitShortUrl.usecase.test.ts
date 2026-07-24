@@ -57,13 +57,12 @@ describe('VisitShortUrlUseCase (Unit Test)', () => {
 		const result = await useCase.execute({ slug: 'google' })
 
 		expect(result).not.toBeNull()
-		expect(result.originalUrl).toBe('https://www.google.com')
-		expect(result.slug).toBe('google')
-		expect(result.password).toBe(false)
-		expect(result.queryAt).toBeDefined()
+		expect(result.originalUrl.value).toBe('https://www.google.com')
+		expect(result.slug.value).toBe('google')
+		expect(result.passwordHash).toBeNull()
 	})
 
-	it('Should return password:true and omit originalUrl if slug is password-protected', async () => {
+	it('Should return ShortUrl entity with passwordHash if slug is password-protected', async () => {
 		vi.mocked(mockUrlRepository.getUrlBySlug).mockResolvedValue(
 			ShortUrl.reconstitute({
 				...baseShortUrlProps,
@@ -78,10 +77,9 @@ describe('VisitShortUrlUseCase (Unit Test)', () => {
 		const result = await useCase.execute({ slug: 'private' })
 
 		expect(result).not.toBeNull()
-		expect(result.originalUrl).toBeUndefined()
-		expect(result.slug).toBe('private')
-		expect(result.password).toBe(true)
-		expect(result.queryAt).toBeDefined()
+		expect(result.originalUrl.value).toBe('https://www.private-site.com')
+		expect(result.slug.value).toBe('private')
+		expect(result.passwordHash).not.toBeNull()
 	})
 
 	it('Should throw SlugNotFoundError if slug does not exist', async () => {

@@ -1,3 +1,4 @@
+import { API_ERROR_CODES } from '@min-url/contracts/errors'
 import {
 	DomainError,
 	SlugGenerationExhaustedError,
@@ -5,6 +6,7 @@ import {
 	SlugIsExpiredError,
 	SlugNotFoundError,
 } from '@/core/domain/errors/domain.errors.ts'
+import type { ErrorResponsePayload } from '@min-url/contracts/dto'
 import type { NextFunction, Request, Response } from 'express'
 
 export const errorHandler = (
@@ -14,11 +16,13 @@ export const errorHandler = (
 	_next: NextFunction,
 ): void => {
 	if (error instanceof DomainError) {
+		const payload: ErrorResponsePayload = {
+			code: error.code || API_ERROR_CODES.badRequest,
+			message: error.message,
+		}
+
 		if (error instanceof SlugNotFoundError) {
-			res.status(404).json({
-				code: error.code,
-				message: error.message,
-			})
+			res.status(404).json(payload)
 			return
 		}
 
@@ -26,31 +30,23 @@ export const errorHandler = (
 			error instanceof SlugIsDeletedError ||
 			error instanceof SlugIsExpiredError
 		) {
-			res.status(410).json({
-				code: error.code,
-				message: error.message,
-			})
+			res.status(410).json(payload)
 			return
 		}
 
 		if (error instanceof SlugGenerationExhaustedError) {
-			res.status(503).json({
-				code: error.code,
-				message: error.message,
-			})
+			res.status(503).json(payload)
 			return
 		}
 
-		res.status(400).json({
-			code: error.code || 'BAD_REQUEST',
-			message: error.message,
-		})
+		res.status(400).json(payload)
 		return
 	}
 
 	console.error('Unhandled Server Error:', error)
-	res.status(500).json({
-		error: 'Internal Server Error',
-		message: error.message,
-	})
+	const internalPayload: ErrorResponsePayload = {
+		code: API_ERROR_CODES.internalServerError,
+		message: 'An unexpected internal server error occurred.',
+	}
+	res.status(500).json(internalPayload)
 }
