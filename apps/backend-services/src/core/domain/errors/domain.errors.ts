@@ -1,3 +1,5 @@
+import { SLUG_ERROR_CODES } from '@min-url/contracts/errors'
+
 export class DomainError extends Error {
 	readonly code: string = 'BAD_REQUEST'
 
@@ -9,7 +11,7 @@ export class DomainError extends Error {
 }
 
 export class InvalidUrlError extends DomainError {
-	readonly code = 'INVALID_URL'
+	readonly code = SLUG_ERROR_CODES.invalidUrl
 	constructor(url: string) {
 		super(`Invalid URL: ${url}`)
 	}
@@ -58,28 +60,28 @@ export class CaptchaVerificationError extends DomainError {
 }
 
 export class SlugGenerationExhaustedError extends DomainError {
-	readonly code = 'SLUG_GENERATION_EXHAUSTED'
+	readonly code = SLUG_ERROR_CODES.slugGenerationExhausted
 	constructor() {
 		super('Error creating Short URL. Please try again later.')
 	}
 }
 
 export class SlugNotFoundError extends DomainError {
-	readonly code = 'SLUG_NOT_FOUND'
+	readonly code = SLUG_ERROR_CODES.slugNotFound
 	constructor(slug: string) {
 		super(`Slug not found: ${slug}`)
 	}
 }
 
 export class SlugIsExpiredError extends DomainError {
-	readonly code = 'SLUG_IS_EXPIRED'
+	readonly code = SLUG_ERROR_CODES.slugIsExpired
 	constructor(slug: string) {
 		super(`Slug is expired: ${slug}`)
 	}
 }
 
 export class SlugIsDeletedError extends DomainError {
-	readonly code = 'SLUG_IS_DELETED'
+	readonly code = SLUG_ERROR_CODES.slugIsDeleted
 	constructor(slug: string) {
 		super(`Slug is deleted: ${slug}`)
 	}

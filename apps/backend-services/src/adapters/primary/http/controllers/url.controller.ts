@@ -1,5 +1,10 @@
 import type { ShortenUrlAnonymous } from '@/core/usecases/ShortenUrlAnonymous.usecase.ts'
 import type { VisitShortUrl } from '@/core/usecases/VisitShortUrl.usecase.ts'
+import type {
+	ShortenAnonymousRequest,
+	ShortenAnonymousResponse,
+	SlugDataResponse,
+} from '@min-url/contracts/dto'
 import type { Request, Response } from 'express'
 
 export class UrlController {
@@ -18,7 +23,11 @@ export class UrlController {
 		req: Request,
 		res: Response,
 	): Promise<void> => {
-		const { originalUrl, captchaToken, turnstileToken } = req.body
+		const {
+			originalUrl,
+			captchaToken,
+			turnstileToken,
+		}: ShortenAnonymousRequest = req.body
 
 		const clientIp =
 			req.body.ip ||
@@ -28,16 +37,17 @@ export class UrlController {
 
 		const shortUrl = await this.shortenUrlAnonymousUseCase.execute({
 			originalUrl,
-			captchaToken: captchaToken || turnstileToken,
+			captchaToken: captchaToken ?? turnstileToken ?? '',
 			clientIp,
 		})
 
-		res.status(200).json({
+		const response: ShortenAnonymousResponse = {
 			originalUrl: shortUrl.originalUrl.value,
 			shortUrl: `${process.env.REDIRECTOR_URL || 'https://murl.cl'}/${shortUrl.slug.value}`,
 			slug: shortUrl.slug.value,
-			createdAt: shortUrl.createdAt,
-		})
+			createdAt: shortUrl.createdAt.toISOString(),
+		}
+		res.status(200).json(response)
 	}
 
 	public resolveRedirect = async (
@@ -45,8 +55,20 @@ export class UrlController {
 		res: Response,
 	): Promise<void> => {
 		const { slug } = req.params
-		const output = await this.visitShortUrlUseCase.execute({ slug })
+		const shortUrl = await this.visitShortUrlUseCase.execute({
+			slug,
+		})
 
-		res.status(200).json(output)
+		const response: SlugDataResponse = {
+			slug: shortUrl.slug.value,
+			password: !!shortUrl.passwordHash,
+			queryAt: new Date().toISOString(),
+		}
+
+		if (!shortUrl.passwordHash) {
+			response.originalUrl = shortUrl.originalUrl.value
+		}
+
+		res.status(200).json(response)
 	}
 }

@@ -1,3 +1,4 @@
+import { slugRegex } from '@min-url/contracts/schemas'
 import { InvalidSlugError } from '../../errors/domain.errors.ts'
 
 export class Slug {
@@ -26,9 +27,6 @@ export class Slug {
 	}
 
 	private validate(): void {
-		const minLength = 6
-		const maxLength = 12
-		const slugRegex = new RegExp(`^[a-zA-Z0-9]{${minLength},${maxLength}}$`)
 		if (!slugRegex.test(this.value)) {
 			throw new InvalidSlugError(this.value)
 		}

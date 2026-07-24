@@ -100,7 +100,7 @@ describe('errorHandler (Unit Test)', () => {
 		const response = await request(app).get('/test')
 		expect(response.status).toBe(500)
 		expect(response.body).toEqual({
-			error: 'Internal Server Error',
+			code: 'INTERNAL_SERVER_ERROR',
 			message: 'Something blew up',
 		})
 

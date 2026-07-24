@@ -19,8 +19,8 @@ export interface ShortUrlProps {
 	passwordHash?: Password | null
 	expirationDate?: Date | null
 	expiredAt?: Date | null
-	createdAt?: Date | null
-	updatedAt?: Date | null
+	createdAt: Date
+	updatedAt: Date
 	deletedAt?: Date | null
 }
 
@@ -34,8 +34,8 @@ export class ShortUrl {
 	private _passwordHash: Password | null
 	private readonly _expirationDate: Readonly<Date | null>
 	private _expiredAt: Date | null
-	private readonly _createdAt: Readonly<Date | null>
-	private _updatedAt: Date | null
+	private readonly _createdAt: Readonly<Date>
+	private _updatedAt: Date
 	private _deletedAt: Date | null
 
 	private constructor(props: Readonly<ShortUrlProps>) {
@@ -48,8 +48,8 @@ export class ShortUrl {
 		this._passwordHash = props.passwordHash ?? null
 		this._expirationDate = props.expirationDate ?? null
 		this._expiredAt = props.expiredAt ?? null
-		this._createdAt = props.createdAt ?? null
-		this._updatedAt = props.updatedAt ?? null
+		this._createdAt = props.createdAt
+		this._updatedAt = props.updatedAt
 		this._deletedAt = props.deletedAt ?? null
 	}
 
@@ -91,11 +91,11 @@ export class ShortUrl {
 		return this._expiredAt
 	}
 
-	get createdAt(): Date | null {
+	get createdAt(): Date {
 		return this._createdAt
 	}
 
-	get updatedAt(): Date | null {
+	get updatedAt(): Date {
 		return this._updatedAt
 	}
 

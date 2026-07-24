@@ -1,3 +1,4 @@
+import type { ShortUrl } from '@/core/domain/entities/ShortUrl.entity.ts'
 import type { ShortUrlRepository } from '../ports/ShortUrlRepository.interface.ts'
 
 import {
@@ -10,13 +11,6 @@ export interface VisitShortUrlInput {
 	slug: string
 }
 
-export interface VisitShortUrlOutput {
-	slug: string
-	password: boolean
-	originalUrl?: string
-	queryAt: string
-}
-
 export class VisitShortUrl {
 	private readonly shortUrlRepository: ShortUrlRepository
 
@@ -24,7 +18,7 @@ export class VisitShortUrl {
 		this.shortUrlRepository = shortUrlRepository
 	}
 
-	async execute(input: VisitShortUrlInput): Promise<VisitShortUrlOutput> {
+	async execute(input: VisitShortUrlInput): Promise<ShortUrl> {
 		const { slug } = input
 		const shortUrlData = await this.shortUrlRepository.getUrlBySlug(slug)
 
@@ -40,17 +34,6 @@ export class VisitShortUrl {
 			throw new SlugIsExpiredError(slug)
 		}
 
-		const output: VisitShortUrlOutput = {
-			slug: shortUrlData.slug.value,
-			password: !!shortUrlData.passwordHash,
-			queryAt: new Date().toISOString(),
-		}
-
-		//if password is true, don't return the originalUrl
-		if (!shortUrlData.passwordHash) {
-			output.originalUrl = shortUrlData.originalUrl.value
-		}
-
-		return output
+		return shortUrlData
 	}
 }
