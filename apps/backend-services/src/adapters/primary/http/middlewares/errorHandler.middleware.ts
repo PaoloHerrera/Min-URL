@@ -1,4 +1,4 @@
-import type { ErrorResponsePayload } from '@min-url/contracts/dto'
+import { API_ERROR_CODES } from '@min-url/contracts/errors'
 import {
 	DomainError,
 	SlugGenerationExhaustedError,
@@ -6,6 +6,7 @@ import {
 	SlugIsExpiredError,
 	SlugNotFoundError,
 } from '@/core/domain/errors/domain.errors.ts'
+import type { ErrorResponsePayload } from '@min-url/contracts/dto'
 import type { NextFunction, Request, Response } from 'express'
 
 export const errorHandler = (
@@ -16,7 +17,7 @@ export const errorHandler = (
 ): void => {
 	if (error instanceof DomainError) {
 		const payload: ErrorResponsePayload = {
-			code: error.code || 'BAD_REQUEST',
+			code: error.code || API_ERROR_CODES.badRequest,
 			message: error.message,
 		}
 
@@ -44,8 +45,8 @@ export const errorHandler = (
 
 	console.error('Unhandled Server Error:', error)
 	const internalPayload: ErrorResponsePayload = {
-		code: 'INTERNAL_SERVER_ERROR',
-		message: error.message,
+		code: API_ERROR_CODES.internalServerError,
+		message: 'An unexpected internal server error occurred.',
 	}
 	res.status(500).json(internalPayload)
 }

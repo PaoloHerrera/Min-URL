@@ -1,7 +1,7 @@
-import { SLUG_ERROR_CODES } from '@min-url/contracts/errors'
+import { API_ERROR_CODES, SLUG_ERROR_CODES } from '@min-url/contracts/errors'
 
 export class DomainError extends Error {
-	readonly code: string = 'BAD_REQUEST'
+	readonly code: string = API_ERROR_CODES.badRequest
 
 	constructor(message: string) {
 		super(message)
@@ -11,14 +11,14 @@ export class DomainError extends Error {
 }
 
 export class InvalidUrlError extends DomainError {
-	readonly code = SLUG_ERROR_CODES.invalidUrl
+	readonly code = API_ERROR_CODES.invalidUrl
 	constructor(url: string) {
 		super(`Invalid URL: ${url}`)
 	}
 }
 
 export class InvalidSlugError extends DomainError {
-	readonly code = 'INVALID_SLUG'
+	readonly code = SLUG_ERROR_CODES.invalidSlug
 	constructor(slug: string) {
 		super(`Invalid slug: ${slug}`)
 	}

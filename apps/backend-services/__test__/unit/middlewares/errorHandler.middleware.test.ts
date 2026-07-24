@@ -101,7 +101,7 @@ describe('errorHandler (Unit Test)', () => {
 		expect(response.status).toBe(500)
 		expect(response.body).toEqual({
 			code: 'INTERNAL_SERVER_ERROR',
-			message: 'Something blew up',
+			message: 'An unexpected internal server error occurred.',
 		})
 
 		consoleSpy.mockRestore()
