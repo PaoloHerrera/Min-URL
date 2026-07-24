@@ -55,6 +55,17 @@ export class Geolocation {
 		return geolocation
 	}
 
+	public static createUnknown(): Geolocation {
+		return new Geolocation({
+			country: 'unknown',
+			region: 'unknown',
+			timezone: null,
+			city: 'unknown',
+			latitude: null,
+			longitude: null,
+		})
+	}
+
 	/**
 	 * Restores a Geolocation from props already stored in the DB.
 	 * Bypasses lat/lng validation — assumes the stored data is already valid.

@@ -1,30 +1,25 @@
 import { Geolocation } from '@/core/domain/value-objects/geolocation/Geolocation.vo.ts'
 import type { IpAddress } from '@/core/domain/value-objects/ip-address/IpAddress.vo.ts'
-import type { IpGeolocationResolver } from '@/core/ports/IpGeolocationResolver.interface.ts'
+import type { IpGeolocationResolverPort } from '@/core/ports/outbound/IpGeolocationResolverPort.interface.ts'
 import geoip from 'geoip-lite'
 
-export class GeoIpLiteResolver implements IpGeolocationResolver {
-	public resolve(ipAddress: IpAddress): Geolocation {
+export class GeoIpLiteResolver implements IpGeolocationResolverPort {
+	public resolve(ipAddress: IpAddress): Promise<Geolocation | null> {
 		const geo = geoip.lookup(ipAddress.ipAddress)
 
-		return Geolocation.create({
-			country: geo?.country || 'unknown',
-			region: geo?.region || 'unknown',
-			timezone: geo?.timezone || null,
-			city: geo?.city || 'unknown',
-			latitude: geo?.ll?.[0] ?? null,
-			longitude: geo?.ll?.[1] ?? null,
-		})
-	}
+		if (!geo) {
+			return Promise.resolve(Geolocation.createUnknown())
+		}
 
-	public createUnknownGeolocation(): Geolocation {
-		return Geolocation.create({
-			country: 'unknown',
-			region: 'unknown',
-			timezone: null,
-			city: 'unknown',
-			latitude: null,
-			longitude: null,
-		})
+		return Promise.resolve(
+			Geolocation.create({
+				country: geo.country || 'unknown',
+				region: geo.region || 'unknown',
+				timezone: geo.timezone || null,
+				city: geo.city || 'unknown',
+				latitude: geo.ll?.[0] ?? null,
+				longitude: geo.ll?.[1] ?? null,
+			}),
+		)
 	}
 }
