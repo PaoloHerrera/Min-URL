@@ -1,12 +1,12 @@
 import { describe, expect, it, vi } from 'vitest'
 import { RandomBase62SlugGenerator } from '@/core/domain/services/RandomBase62SlugGenerator.service.ts'
-import type { ShortUrlRepository } from '@/core/ports/ShortUrlRepository.interface.ts'
+import type { ShortUrlRepositoryPort } from '@/core/ports/outbound/ShortUrlRepositoryPort.interface.ts'
 import { TargetUrl } from '@/core/domain/value-objects/target-url/TargetUrl.vo.ts'
 
 import { SlugGenerationExhaustedError } from '@/core/domain/errors/domain.errors.ts'
 
 describe('GenerateUniqueSlugUseCase', () => {
-	let mockUrlRepository: ShortUrlRepository
+	let mockUrlRepository: ShortUrlRepositoryPort
 
 	it('Should generate an unique slug with minimal length', async () => {
 		//1. ARRANGE: Mock reposotory (SlugGenerator's port)

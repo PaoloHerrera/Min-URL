@@ -1,5 +1,9 @@
+import type {
+	VisitShortUrlInput,
+	VisitShortUrlPort,
+} from '@/core/ports/inbound/VisitShortUrlPort.interface.ts'
 import type { ShortUrl } from '@/core/domain/entities/ShortUrl.entity.ts'
-import type { ShortUrlRepository } from '../ports/ShortUrlRepository.interface.ts'
+import type { ShortUrlRepositoryPort } from '../ports/outbound/ShortUrlRepositoryPort.interface.ts'
 
 import {
 	SlugIsDeletedError,
@@ -7,14 +11,10 @@ import {
 	SlugNotFoundError,
 } from '@/core/domain/errors/domain.errors.ts'
 
-export interface VisitShortUrlInput {
-	slug: string
-}
+export class VisitShortUrl implements VisitShortUrlPort {
+	private readonly shortUrlRepository: ShortUrlRepositoryPort
 
-export class VisitShortUrl {
-	private readonly shortUrlRepository: ShortUrlRepository
-
-	constructor(shortUrlRepository: ShortUrlRepository) {
+	constructor(shortUrlRepository: ShortUrlRepositoryPort) {
 		this.shortUrlRepository = shortUrlRepository
 	}
 

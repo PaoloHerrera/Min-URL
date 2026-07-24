@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import { VisitShortUrl } from '@/core/usecases/VisitShortUrl.usecase.ts'
-import type { ShortUrlRepository } from '@/core/ports/ShortUrlRepository.interface.ts'
+import type { ShortUrlRepositoryPort } from '@/core/ports/outbound/ShortUrlRepositoryPort.interface.ts'
 import { ShortUrl } from '@/core/domain/entities/ShortUrl.entity.ts'
 import { TargetUrl } from '@/core/domain/value-objects/target-url/TargetUrl.vo.ts'
 import { Slug } from '@/core/domain/value-objects/slug/Slug.vo.ts'
@@ -27,7 +27,7 @@ const baseShortUrlProps = {
 }
 
 describe('VisitShortUrlUseCase (Unit Test)', () => {
-	let mockUrlRepository: ShortUrlRepository
+	let mockUrlRepository: ShortUrlRepositoryPort
 	let useCase: VisitShortUrl
 
 	beforeEach(() => {

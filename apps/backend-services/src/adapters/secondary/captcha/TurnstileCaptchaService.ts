@@ -1,7 +1,7 @@
-import type { CaptchaServices } from '@/core/ports/CaptchaServices.interface.ts'
+import type { CaptchaServicePort } from '@/core/ports/outbound/CaptchaServicePort.interface.ts'
 import axios from 'axios'
 
-export class TurnstileCaptchaService implements CaptchaServices {
+export class TurnstileCaptchaService implements CaptchaServicePort {
 	private readonly secretKey: string
 
 	constructor() {

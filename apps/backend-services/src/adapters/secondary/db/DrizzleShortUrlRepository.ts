@@ -5,10 +5,10 @@ import {
 } from '@/adapters/secondary/db/mappers/short-url.mapper.ts'
 import { shortUrls } from '@/adapters/secondary/db/schema/short-urls.schema.ts'
 import type { ShortUrl } from '@/core/domain/entities/ShortUrl.entity.ts'
-import type { ShortUrlRepository } from '@/core/ports/ShortUrlRepository.interface.ts'
+import type { ShortUrlRepositoryPort } from '@/core/ports/outbound/ShortUrlRepositoryPort.interface.ts'
 import { count, eq } from 'drizzle-orm'
 
-export class DrizzleShortUrlRepository implements ShortUrlRepository {
+export class DrizzleShortUrlRepository implements ShortUrlRepositoryPort {
 	async isSlugAvailable(slug: string): Promise<boolean> {
 		const [result] = await db
 			.select({ count: count() })
