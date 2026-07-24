@@ -4,7 +4,7 @@ export const slugDataResponseSchema = z.object({
 	slug: z.string(),
 	password: z.boolean(),
 	originalUrl: z.url().optional(),
-	queryAt: z.string(),
+	queryAt: z.iso.datetime(),
 })
 
 export const errorResponseSchema = z.object({
@@ -22,7 +22,7 @@ export const shortenAnonymousResponseSchema = z.object({
 	originalUrl: z.url(),
 	shortUrl: z.url(),
 	slug: z.string(),
-	createdAt: z.string(),
+	createdAt: z.iso.datetime(),
 })
 
 export const slugRegex = /^[a-zA-Z0-9]{6,12}$/
