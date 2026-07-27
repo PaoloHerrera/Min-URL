@@ -45,6 +45,10 @@ export class InvalidGeolocationError extends DomainError {
 	}
 }
 
+export class InvalidVisitError extends DomainError {
+	readonly code = 'INVALID_VISIT'
+}
+
 export class ForbiddenExtensionError extends DomainError {
 	readonly code = 'FORBIDDEN_EXTENSION'
 	constructor(url: string) {
