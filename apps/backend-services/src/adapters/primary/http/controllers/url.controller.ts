@@ -6,6 +6,7 @@ import type {
 	SlugDataResponse,
 } from '@min-url/contracts/dto'
 import type { Request, Response } from 'express'
+import { extractClientIp } from '../utils/extractClientIp.ts'
 
 export class UrlController {
 	private readonly shortenUrlAnonymousPort: ShortenUrlAnonymousPort
@@ -55,8 +56,18 @@ export class UrlController {
 		res: Response,
 	): Promise<void> => {
 		const { slug } = req.params
+		const ipAddress = extractClientIp(
+			req.headers['x-forwarded-for'],
+			req.socket.remoteAddress,
+		)
+		const userAgent = req.get('user-agent')
+		const referer = req.get('referer') || req.get('referrer')
+
 		const shortUrl = await this.visitShortUrlPort.execute({
 			slug,
+			ipAddress,
+			userAgent,
+			referer,
 		})
 
 		const response: SlugDataResponse = {

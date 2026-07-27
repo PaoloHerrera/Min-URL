@@ -1,5 +1,12 @@
 import type { GeolocationProps } from '@/core/domain/value-objects/geolocation/Geolocation.vo.ts'
-import { jsonb, pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-core'
+import {
+	integer,
+	jsonb,
+	pgTable,
+	text,
+	timestamp,
+	uuid,
+} from 'drizzle-orm/pg-core'
 
 export const shortUrls = pgTable('short_urls', {
 	id: uuid('id').defaultRandom().primaryKey(),
@@ -9,6 +16,7 @@ export const shortUrls = pgTable('short_urls', {
 	purpose: text('purpose', { enum: ['direct', 'qr', 'api'] })
 		.default('direct')
 		.notNull(),
+	clicksCount: integer('clicks_count').default(0).notNull(),
 	passwordHash: text('password_hash'),
 	ipAddress: text('ip_address').notNull(),
 	geolocation: jsonb('geolocation').$type<GeolocationProps>(),

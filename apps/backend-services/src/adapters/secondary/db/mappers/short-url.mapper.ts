@@ -17,6 +17,7 @@ export const toDomain = (row: ShortUrlRow): ShortUrl => {
 		originalUrl: TargetUrl.reconstitute(row.originalUrl),
 		title: row.title,
 		purpose: row.purpose,
+		clicksCount: row.clicksCount,
 		ipAddress: IpAddress.reconstitute({
 			ipAddress: row.ipAddress,
 			geolocation: row.geolocation
@@ -41,6 +42,7 @@ export const toPersistence = (entity: ShortUrl): ShortUrlInsert => {
 		originalUrl: entity.originalUrl.value,
 		title: entity.title,
 		purpose: entity.purpose,
+		clicksCount: entity.clicksCount,
 		ipAddress: entity.ipAddress.ipAddress,
 		geolocation: entity.ipAddress.geolocation
 			? {
