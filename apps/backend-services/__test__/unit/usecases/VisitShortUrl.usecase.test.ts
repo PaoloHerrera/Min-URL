@@ -35,9 +35,8 @@ describe('VisitShortUrlUseCase (Unit Test)', () => {
 	beforeEach(() => {
 		mockUrlRepository = {
 			getUrlBySlug: vi.fn(),
-			save: vi.fn(),
 			isSlugAvailable: vi.fn(),
-		}
+		} as unknown as ShortUrlRepositoryPort
 		mockVisitRepository = {
 			save: vi.fn(),
 		}
@@ -72,7 +71,7 @@ describe('VisitShortUrlUseCase (Unit Test)', () => {
 		expect(result.slug.value).toBe('google')
 		expect(result.passwordHash).toBeNull()
 
-		// Verify Visit entity persistence
+		// Verify Visit entity persistence with correct shortUrlId
 		expect(mockVisitRepository.save).toHaveBeenCalledTimes(1)
 		const savedVisit = vi.mocked(mockVisitRepository.save).mock.calls[0][0]
 		expect(savedVisit.shortUrlId).toBe('test-id-1')
@@ -81,10 +80,9 @@ describe('VisitShortUrlUseCase (Unit Test)', () => {
 		expect(savedVisit.userAgent.os).toBe('iOS')
 		expect(savedVisit.referer.domain).toBe('t.co')
 
-		// Verify ShortUrl clicksCount increment persistence
-		expect(mockUrlRepository.save).toHaveBeenCalledTimes(1)
-		const savedShortUrl = vi.mocked(mockUrlRepository.save).mock.calls[0][0]
-		expect(savedShortUrl.clicksCount).toBe(1)
+		// The atomic clicks_count increment happens inside DrizzleVisitRepository.save()
+		// via a DB transaction — not via shortUrlRepository.save().
+		expect(mockUrlRepository.save).not.toBeDefined()
 	})
 
 	it('Should return ShortUrl entity with passwordHash and save Visit event if slug is password-protected', async () => {

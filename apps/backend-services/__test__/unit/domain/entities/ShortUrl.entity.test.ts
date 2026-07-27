@@ -53,20 +53,4 @@ describe('ShortUrl Entity (Unit Test)', () => {
 		expect(shortUrl.passwordHash).not.toBeNull()
 		expect(shortUrl.passwordHash?.hash).toBe('fakesalt:fakehash')
 	})
-
-	it('Should increment clicksCount when recordClick is called', () => {
-		const shortUrl = ShortUrl.create({
-			slug: Slug.create('clicktest'),
-			originalUrl: TargetUrl.create('https://www.google.com'),
-			ipAddress: IpAddress.create('127.0.0.1'),
-			title: 'Click Test',
-			purpose: 'direct',
-		})
-
-		expect(shortUrl.clicksCount).toBe(0)
-		shortUrl.recordClick()
-		expect(shortUrl.clicksCount).toBe(1)
-		shortUrl.recordClick()
-		expect(shortUrl.clicksCount).toBe(2)
-	})
 })

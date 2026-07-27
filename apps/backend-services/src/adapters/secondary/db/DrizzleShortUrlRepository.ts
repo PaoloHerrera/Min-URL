@@ -19,10 +19,13 @@ export class DrizzleShortUrlRepository implements ShortUrlRepositoryPort {
 
 	async save(shortUrl: ShortUrl): Promise<void> {
 		const data = toPersistence(shortUrl)
+		// clicksCount is excluded from updates — it is maintained atomically
+		// by DrizzleVisitRepository.save() via clicks_count = clicks_count + 1.
+		const { clicksCount: _omit, ...updateData } = data
 		await db
 			.insert(shortUrls)
 			.values(data)
-			.onConflictDoUpdate({ target: shortUrls.id, set: data })
+			.onConflictDoUpdate({ target: shortUrls.id, set: updateData })
 	}
 
 	async getUrlBySlug(slug: string): Promise<ShortUrl | null> {

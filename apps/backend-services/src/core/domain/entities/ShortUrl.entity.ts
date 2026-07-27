@@ -32,7 +32,7 @@ export class ShortUrl {
 	private readonly _ipAddress: IpAddress
 	private _purpose: 'direct' | 'qr' | 'api'
 	private _title: string
-	private _clicksCount: number
+	private readonly _clicksCount: number
 	private _passwordHash: Password | null
 	private readonly _expirationDate: Readonly<Date | null>
 	private _expiredAt: Date | null
@@ -128,11 +128,6 @@ export class ShortUrl {
 	 */
 	public static reconstitute(props: ShortUrlProps): ShortUrl {
 		return new ShortUrl(props)
-	}
-
-	public recordClick(): void {
-		this._clicksCount++
-		this._updatedAt = new Date()
 	}
 
 	public delete(): void {

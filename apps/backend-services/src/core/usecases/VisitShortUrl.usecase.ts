@@ -44,7 +44,6 @@ export class VisitShortUrl implements VisitShortUrlPort {
 			throw new SlugIsExpiredError(slug)
 		}
 
-		// Record analytics visit event and increment clicksCount
 		const visit = Visit.create({
 			shortUrlId: shortUrlData.id,
 			ipAddress: IpAddress.createOrUnknown(ipAddress ?? 'unknown'),
@@ -52,12 +51,9 @@ export class VisitShortUrl implements VisitShortUrlPort {
 			referer: Referer.create(referer),
 		})
 
-		shortUrlData.recordClick()
-
-		await Promise.all([
-			this.visitRepository.save(visit),
-			this.shortUrlRepository.save(shortUrlData),
-		])
+		// Record analytics visit event — atomic clicks_count increment is
+		// handled inside visitRepository.save() via a DB transaction.
+		await this.visitRepository.save(visit)
 
 		return shortUrlData
 	}
