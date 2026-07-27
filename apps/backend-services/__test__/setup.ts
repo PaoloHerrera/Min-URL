@@ -24,7 +24,14 @@ export async function setup() {
 		await client.end()
 	}
 
-	execSync('bunx drizzle-kit migrate', {
+	// 1. Run core migrations
+	execSync('bunx drizzle-kit migrate --config=drizzle.config.ts', {
+		env: { ...process.env, DATABASE_URL: process.env.DATABASE_URL! },
+		stdio: 'pipe',
+	})
+
+	// 2. Run analytics migrations
+	execSync('bunx drizzle-kit migrate --config=drizzle.analytics.config.ts', {
 		env: { ...process.env, DATABASE_URL: process.env.DATABASE_URL! },
 		stdio: 'pipe',
 	})

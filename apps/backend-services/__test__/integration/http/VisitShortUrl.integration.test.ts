@@ -8,6 +8,8 @@ import { TargetUrl } from '@/core/domain/value-objects/target-url/TargetUrl.vo.t
 import { Slug } from '@/core/domain/value-objects/slug/Slug.vo.ts'
 import { IpAddress } from '@/core/domain/value-objects/ip-address/IpAddress.vo.ts'
 import { Password } from '@/core/domain/value-objects/password/Password.vo.ts'
+import { db } from '@/adapters/secondary/db/connection.ts'
+import { sql } from 'drizzle-orm'
 
 const repo = new DrizzleShortUrlRepository()
 
@@ -115,6 +117,12 @@ describe('GET /internal/slug-data/:slug', () => {
 		const response = await request(app)
 			.get('/internal/slug-data/public')
 			.set('Authorization', `Bearer ${process.env.INTERNAL_SECRET}`)
+			.set(
+				'User-Agent',
+				'Mozilla/5.0 (iPhone; CPU iPhone OS 17_1_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.1 Mobile/15E148 Safari/604.1',
+			)
+			.set('Referer', 'https://t.co/abc')
+			.set('X-Forwarded-For', '203.0.113.195')
 
 		// 1. Check response status code and content type.
 		expect(response.statusCode).toBe(200)
@@ -131,12 +139,33 @@ describe('GET /internal/slug-data/:slug', () => {
 			expect(parseResult.data.originalUrl).toBe('https://www.google.com')
 			expect(parseResult.data.password).toBe(false)
 		}
+
+		// 3. Check DB visit record persistence
+		const visitRows = await db.execute(
+			sql`SELECT * FROM visits WHERE short_url_id = '00000000-0000-0000-0000-000000000001'`,
+		)
+		expect(visitRows.rows.length).toBe(1)
+		const visitRow = visitRows.rows[0]
+		expect(visitRow.ip_address).toBe('203.0.113.195')
+		expect(visitRow.browser).toBe('Safari')
+		expect(visitRow.os).toBe('iOS')
+		expect(visitRow.device).toBe('mobile')
+		expect(visitRow.referer).toBe('https://t.co/abc')
+		expect(visitRow.referer_domain).toBe('t.co')
+
+		// 4. Check DB short_urls clicks_count increment
+		const shortUrlRows = await db.execute(
+			sql`SELECT clicks_count FROM short_urls WHERE id = '00000000-0000-0000-0000-000000000001'`,
+		)
+		expect(shortUrlRows.rows[0].clicks_count).toBe(1)
 	})
 
-	it('Should do not return the originalURL if the slug is protected by a password', async () => {
+	it('Should do not return the originalURL if the slug is protected by a password but still record the Visit', async () => {
 		const response = await request(app)
 			.get('/internal/slug-data/protected')
 			.set('Authorization', `Bearer ${process.env.INTERNAL_SECRET}`)
+			.set('User-Agent', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)')
+			.set('X-Forwarded-For', '198.51.100.42')
 
 		// 1. Check response status code and content type.
 		expect(response.statusCode).toBe(200)
@@ -153,9 +182,15 @@ describe('GET /internal/slug-data/:slug', () => {
 			expect(parseResult.data.originalUrl).toBeUndefined()
 			expect(parseResult.data.createdAt).toBeUndefined()
 		}
+
+		// 3. Check DB visit record persistence for protected link
+		const visitRows = await db.execute(
+			sql`SELECT * FROM visits WHERE short_url_id = '00000000-0000-0000-0000-000000000002'`,
+		)
+		expect(visitRows.rows.length).toBe(1)
 	})
 
-	it('Should return 404 if the slug does not exist', async () => {
+	it('Should return 404 if the slug does not exist and NOT record a Visit', async () => {
 		const response = await request(app)
 			.get('/internal/slug-data/notexist')
 			.set('Authorization', `Bearer ${process.env.INTERNAL_SECRET}`)
@@ -167,7 +202,7 @@ describe('GET /internal/slug-data/:slug', () => {
 		expect(response.body.code).toBe('SLUG_NOT_FOUND')
 	})
 
-	it('Should return 410 if the slug is expired', async () => {
+	it('Should return 410 if the slug is expired and NOT record a Visit', async () => {
 		const response = await request(app)
 			.get('/internal/slug-data/expired')
 			.set('Authorization', `Bearer ${process.env.INTERNAL_SECRET}`)
@@ -177,9 +212,14 @@ describe('GET /internal/slug-data/:slug', () => {
 			'application/json; charset=utf-8',
 		)
 		expect(response.body.code).toBe('SLUG_IS_EXPIRED')
+
+		const visitRows = await db.execute(
+			sql`SELECT * FROM visits WHERE short_url_id = '00000000-0000-0000-0000-000000000003'`,
+		)
+		expect(visitRows.rows.length).toBe(0)
 	})
 
-	it('Should return 410 if the slug is deleted', async () => {
+	it('Should return 410 if the slug is deleted and NOT record a Visit', async () => {
 		const response = await request(app)
 			.get('/internal/slug-data/deleted')
 			.set('Authorization', `Bearer ${process.env.INTERNAL_SECRET}`)
@@ -189,6 +229,11 @@ describe('GET /internal/slug-data/:slug', () => {
 			'application/json; charset=utf-8',
 		)
 		expect(response.body.code).toBe('SLUG_IS_DELETED')
+
+		const visitRows = await db.execute(
+			sql`SELECT * FROM visits WHERE short_url_id = '00000000-0000-0000-0000-000000000004'`,
+		)
+		expect(visitRows.rows.length).toBe(0)
 	})
 
 	it('Should return 401 if the secret is missing', async () => {
