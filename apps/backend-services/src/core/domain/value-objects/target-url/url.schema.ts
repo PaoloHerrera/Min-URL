@@ -4,6 +4,7 @@ export const urlSchema = z.object({
 	url: z
 		.string()
 		.trim()
+		.max(2048, 'URL must not exceed 2048 characters')
 		.transform((val) => {
 			let formatted = val
 			if (

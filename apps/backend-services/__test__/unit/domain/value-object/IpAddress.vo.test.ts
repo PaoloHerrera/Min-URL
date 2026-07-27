@@ -29,4 +29,17 @@ describe('IpAddress Value Object', () => {
 		const ipAddress = IpAddress.createOrUnknown('invalid-ip')
 		expect(ipAddress.ipAddress).toBe('unknown')
 	})
+
+	it('Should throw InvalidIpAddressError when IP string exceeds 45 characters', () => {
+		// 46-char string that passes basic format checks but is too long
+		const longIp = '2001:db8::1%' + 'z'.repeat(34) // 12 + 34 = 46 chars
+		expect(longIp.length).toBeGreaterThan(45)
+		expect(() => IpAddress.create(longIp)).toThrow(InvalidIpAddressError)
+	})
+
+	it('Should return unknown for oversized IP string in createOrUnknown', () => {
+		const longIp = '2001:db8::1%' + 'z'.repeat(34)
+		const ipAddress = IpAddress.createOrUnknown(longIp)
+		expect(ipAddress.ipAddress).toBe('unknown')
+	})
 })
