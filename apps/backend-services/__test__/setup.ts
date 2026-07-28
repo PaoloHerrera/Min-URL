@@ -15,8 +15,20 @@ let migrated = false
 export async function setup() {
 	if (migrated) return
 
-	const TEST_URL = process.env.DATABASE_URL!
-	const ADMIN_URL = process.env.ADMIN_URL!
+	const TEST_URL = process.env.DATABASE_URL
+	const ADMIN_URL = process.env.ADMIN_URL
+
+	if (!TEST_URL) {
+		throw new Error(
+			'[TEST SETUP] DATABASE_URL is not defined in .env.test. Please configure it before running integration tests.',
+		)
+	}
+
+	if (!ADMIN_URL) {
+		throw new Error(
+			'[TEST SETUP] ADMIN_URL is not defined in .env.test. Please configure it before running integration tests.',
+		)
+	}
 
 	// 1. Recreate test database
 	const admin = new pg.Client({ connectionString: ADMIN_URL })
