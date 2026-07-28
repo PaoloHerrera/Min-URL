@@ -66,11 +66,13 @@ sequenceDiagram
 
 ---
 
-## 📐 2. Caso de Uso: Redirección de URL Corta y Tracking Analítico Asíncrono
+## 📐 2. Caso de Uso: Redirección de URL Corta y Tracking Analítico (MVP Síncrono — ADR-006)
 
 ### Descripción
 
-El flujo más crítico en términos de rendimiento. Al recibir una petición a un enlace corto, el sistema redirige al usuario final a velocidad extrema mientras procesa el registro analítico (geolocalización, metadatos) en segundo plano sin bloquear la navegación.
+El flujo más crítico en términos de rendimiento. `backend-redirector` (Fastify) resuelve el slug contra `backend-services` mediante un endpoint interno protegido (`GET /internal/slug-data/:slug`) y responde con `302 Found`, registrando la visita y acumulando el contador de clics de forma síncrona en PostgreSQL (ver **ADR-006**).
+
+> **Evolución planificada (Capítulo 2):** Se medirá el costo de este enfoque síncrono bajo carga masiva con K6 para justificar cuantitativamente la migración asíncrona mediante Redis Streams.
 
 ### Flujo Técnico:
 

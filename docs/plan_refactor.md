@@ -1,7 +1,7 @@
 # Plan de Refactor — Min-URL
 
-> Última actualización: 2026-07-15
-> Estado: Aprobado — Pendiente de implementación
+> Última actualización: 2026-07-28
+> Estado: Aprobado — En implementación
 
 ---
 
@@ -26,23 +26,23 @@ El proyecto se estructura en **4 capítulos** de implementación, donde cada cap
 
 **Reglas:** Sin Redis, sin auth. Incluye Click Tracking y Geolocalización de forma síncrona directa a PostgreSQL (enfoque inicial ingenuo / Naive DB Sync Tracking, para benchmarking posterior en Capítulos 2 y 3).
 
-| #   | Paso                        | Estado | Descripción                                                                                                                                                  |
-| --- | --------------------------- | ------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| 0   | Monorepo Restructure        | ✅     | Crear carpeta `/apps/`, mover los 5 servicios allí, actualizar root `package.json` (`apps/*`, `packages/*`) y CI paths                                       |
-| 1   | Shared contracts            | ✅     | Crear `/packages/contracts` con tipos DTO, respuestas, códigos de error y schemas Zod compartidos.                                                           |
-| 2   | CU1 hexagonal & Drizzle     | ✅     | Reorganizar carpetas en `src/`, migrar `app.js`, `index.js` y middlewares a TS, e integrar Drizzle ORM.                                                      |
-| 3   | CU2 hexagonal & Tracking    | ⏳     | `VisitShortUrl` → resuelve IP/Geolocalización y registra analítica (`visits` table, `clicksCount`) síncronamente en PostgreSQL → `/internal/slug-data/:slug` |
-| 4   | Refactor backend-redirector | ⏳     | Aplicar Alt 1 (Thin Handler + RedirectionService) consumiendo `@min-url/contracts` y dando soporte a REST HTTP 410.                                          |
-| 5   | Consumo frontend-landing    | ⏳     | Actualizar `frontend-landing` para consumir `@min-url/contracts` y conectar al backend.                                                                      |
-| 6   | Tests unitarios             | ✅     | Contratos + schemas (Todos los unitarios de core/middlewares están verdes)                                                                                   |
-| 7   | Tests integración CU1       | ✅     | POST /direct/shorten con Turnstile mockeado y validación de entrada Zod                                                                                      |
-| 8   | Tests integración CU2       | ✅     | GET /internal/slug-data/:slug — success, 404, password, expired, deleted (REST Semántico)                                                                    |
-| 9   | E2E Playwright              | ⏳     | Shorten + redirect end-to-end                                                                                                                                |
-| 10  | Eliminar legacy             | ✅     | Eliminar carpetas legacy y archivos sueltos en la raíz (`routes/`, `controllers/`, `services/`, `middleware/`, `config/`)                                    |
-| 11  | TS strict                   | ✅     | `strict: true` en backend-services y configuración de NodeNext/bundler ESM                                                                                   |
-| 12  | Documentación               | ✅     | README, ADRs, Mermaid diagrams, Swagger/OpenAPI 3.0 (YAML) en `/api-docs` en backend-services                                                                |
-| 13  | Dockerfiles                 | ⏳     | Multi-stage para los 3 servicios                                                                                                                             |
-| 14  | docker-compose              | ✅     | 3 servicios + PostgreSQL (PostgreSQL dockerizado corriendo en local/test)                                                                                    |
+| #   | Paso                        | Estado | Descripción                                                                                                                               |
+| --- | --------------------------- | ------ | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| 0   | Monorepo Restructure        | ✅     | Crear carpeta `/apps/`, mover los 5 servicios allí, actualizar root `package.json` (`apps/*`, `packages/*`) y CI paths                    |
+| 1   | Shared contracts            | ✅     | Crear `/packages/contracts` con tipos DTO, respuestas, códigos de error y schemas Zod compartidos.                                        |
+| 2   | CU1 hexagonal & Drizzle     | ✅     | Reorganizar carpetas en `src/`, migrar `app.js`, `index.js` y middlewares a TS, e integrar Drizzle ORM.                                   |
+| 3   | CU2 hexagonal & Tracking    | ✅     | `VisitShortUrl` → resuelve IP/Geolocalización y registra analítica (`visits` table, `clicksCount`) síncronamente en PostgreSQL (ADR-006). |
+| 4   | Refactor backend-redirector | ⏳     | Aplicar Alt 1 (Thin Handler + RedirectionService) consumiendo `@min-url/contracts` y dando soporte a REST HTTP 410.                       |
+| 5   | Consumo frontend-landing    | ⏳     | Actualizar `frontend-landing` para consumir `@min-url/contracts` y conectar al backend.                                                   |
+| 6   | Tests unitarios             | ✅     | Contratos + schemas (Todos los unitarios de core/middlewares están verdes)                                                                |
+| 7   | Tests integración CU1       | ✅     | POST /direct/shorten con Turnstile mockeado y validación de entrada Zod                                                                   |
+| 8   | Tests integración CU2       | ✅     | GET /internal/slug-data/:slug — success, 404, password, expired, deleted (REST Semántico)                                                 |
+| 9   | E2E Playwright              | ⏳     | Shorten + redirect end-to-end                                                                                                             |
+| 10  | Eliminar legacy             | ✅     | Eliminar carpetas legacy y archivos sueltos en la raíz (`routes/`, `controllers/`, `services/`, `middleware/`, `config/`)                 |
+| 11  | TS strict                   | ✅     | `strict: true` en backend-services y configuración de NodeNext/bundler ESM                                                                |
+| 12  | Documentación               | ✅     | README, ADRs, Mermaid diagrams, Swagger/OpenAPI 3.0 (YAML) en `/api-docs` en backend-services                                             |
+| 13  | Dockerfiles                 | ⏳     | Multi-stage para los 3 servicios                                                                                                          |
+| 14  | docker-compose              | ✅     | 3 servicios + PostgreSQL (PostgreSQL dockerizado corriendo en local/test)                                                                 |
 
 #### Estructura de Carpetas Ejecutada (`backend-services/src/`)
 
