@@ -39,4 +39,11 @@ describe('TargetUrl Value Object', () => {
 			expect(() => TargetUrl.create(url as any)).toThrow(InvalidUrlError)
 		},
 	)
+
+	it('Should throw InvalidUrlError when URL exceeds 2048 characters', () => {
+		// 'https://example.com/' = 20 chars + 2030 'a' = 2050 chars total
+		const longUrl = 'https://example.com/' + 'a'.repeat(2030)
+		expect(longUrl.length).toBeGreaterThan(2048)
+		expect(() => TargetUrl.create(longUrl)).toThrow(InvalidUrlError)
+	})
 })

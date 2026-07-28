@@ -16,3 +16,6 @@ build/
 /blob-report/
 /playwright/.cache/
 /playwright/.auth/
+
+# Notas personales (carrera, CV, estrategia) — contenido privado fuera del repo público
+personal_notes/

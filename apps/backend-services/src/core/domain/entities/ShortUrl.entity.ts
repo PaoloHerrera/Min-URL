@@ -6,7 +6,7 @@ import type { TargetUrl } from '../value-objects/target-url/TargetUrl.vo.ts'
 
 export type CreateShortUrlInput = Omit<
 	ShortUrlProps,
-	'id' | 'createdAt' | 'updatedAt' | 'deletedAt' | 'expiredAt'
+	'id' | 'createdAt' | 'updatedAt' | 'deletedAt' | 'expiredAt' | 'clicksCount'
 >
 
 export interface ShortUrlProps {
@@ -16,6 +16,7 @@ export interface ShortUrlProps {
 	ipAddress: IpAddress
 	purpose: 'direct' | 'qr' | 'api'
 	title: string | 'Untitled'
+	clicksCount?: number
 	passwordHash?: Password | null
 	expirationDate?: Date | null
 	expiredAt?: Date | null
@@ -31,6 +32,7 @@ export class ShortUrl {
 	private readonly _ipAddress: IpAddress
 	private _purpose: 'direct' | 'qr' | 'api'
 	private _title: string
+	private readonly _clicksCount: number
 	private _passwordHash: Password | null
 	private readonly _expirationDate: Readonly<Date | null>
 	private _expiredAt: Date | null
@@ -45,6 +47,7 @@ export class ShortUrl {
 		this._ipAddress = props.ipAddress
 		this._purpose = props.purpose
 		this._title = props.title
+		this._clicksCount = props.clicksCount ?? 0
 		this._passwordHash = props.passwordHash ?? null
 		this._expirationDate = props.expirationDate ?? null
 		this._expiredAt = props.expiredAt ?? null
@@ -79,6 +82,10 @@ export class ShortUrl {
 		return this._purpose
 	}
 
+	get clicksCount(): number {
+		return this._clicksCount
+	}
+
 	get passwordHash(): Password | null {
 		return this._passwordHash
 	}
@@ -109,6 +116,7 @@ export class ShortUrl {
 		return new ShortUrl({
 			...input,
 			id: uuidv7(),
+			clicksCount: 0,
 			createdAt: now,
 			updatedAt: now,
 		})

@@ -1,3 +1,3 @@
-export interface CaptchaServices {
+export interface CaptchaServicePort {
 	verify(token: string): Promise<boolean>
 }

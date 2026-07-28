@@ -46,4 +46,18 @@ describe('POST /direct/shorten', () => {
 		expect(response.body).toHaveProperty('message')
 		expect(typeof response.body.message).toBe('string')
 	})
+
+	it('Should return 400 when originalUrl exceeds 2048 characters', async () => {
+		// 'https://example.com/' = 20 chars + 2030 'a' = 2050 chars total
+		const longUrl = 'https://example.com/' + 'a'.repeat(2030)
+		const response = await request(app).post('/direct/shorten').send({
+			originalUrl: longUrl,
+			captchaToken: 'fake-token',
+		})
+
+		expect(response.status).toBe(400)
+		expect(response.body).toHaveProperty('message')
+		expect(typeof response.body.message).toBe('string')
+		expect(response.body.message).toContain('2048')
+	})
 })

@@ -4,6 +4,7 @@ CREATE TABLE "short_urls" (
 	"original_url" text NOT NULL,
 	"title" text DEFAULT 'Untitled' NOT NULL,
 	"purpose" text DEFAULT 'direct' NOT NULL,
+	"clicks_count" integer DEFAULT 0 NOT NULL,
 	"password_hash" text,
 	"ip_address" text NOT NULL,
 	"geolocation" jsonb,

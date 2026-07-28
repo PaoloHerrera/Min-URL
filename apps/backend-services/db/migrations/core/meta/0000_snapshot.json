@@ -1,5 +1,5 @@
 {
-	"id": "5143ce99-31ac-4e80-9bc6-88b30c3c8b23",
+	"id": "d32dcefd-4b94-48a8-8fa8-64d589fcb1ed",
 	"prevId": "00000000-0000-0000-0000-000000000000",
 	"version": "7",
 	"dialect": "postgresql",
@@ -40,6 +40,13 @@
 					"primaryKey": false,
 					"notNull": true,
 					"default": "'direct'"
+				},
+				"clicks_count": {
+					"name": "clicks_count",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": true,
+					"default": 0
 				},
 				"password_hash": {
 					"name": "password_hash",

@@ -45,4 +45,14 @@ describe('Geolocation Value Object (Unit Test)', () => {
 			}),
 		).toThrow(InvalidGeolocationError)
 	})
+
+	it('Should create unknown Geolocation object via createUnknown() factory', () => {
+		const geo = Geolocation.createUnknown()
+		expect(geo.country).toBe('unknown')
+		expect(geo.region).toBe('unknown')
+		expect(geo.city).toBe('unknown')
+		expect(geo.timezone).toBeNull()
+		expect(geo.latitude).toBeNull()
+		expect(geo.longitude).toBeNull()
+	})
 })

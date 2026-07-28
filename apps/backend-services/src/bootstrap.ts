@@ -1,6 +1,7 @@
 import { UrlController } from '@/adapters/primary/http/controllers/url.controller.ts'
 import { TurnstileCaptchaService } from '@/adapters/secondary/captcha/TurnstileCaptchaService.ts'
 import { DrizzleShortUrlRepository } from '@/adapters/secondary/db/DrizzleShortUrlRepository.ts'
+import { DrizzleVisitRepository } from '@/adapters/secondary/db/DrizzleVisitRepository.ts'
 import { GeoIpLiteResolver } from '@/adapters/secondary/geoip/GeoIpLiteResolver.ts'
 import { FORBIDDEN_EXTENSIONS, SHORTURL_VALUES } from '@/config/constants.ts'
 import { CheckForbiddenExtensions } from '@/core/domain/services/CheckForbiddenExtensions.service.ts'
@@ -10,6 +11,7 @@ import { VisitShortUrl } from '@/core/usecases/VisitShortUrl.usecase.ts'
 
 // 1. Instanciar Adaptadores Secundarios (Infraestructura)
 const shortUrlRepository = new DrizzleShortUrlRepository()
+const visitRepository = new DrizzleVisitRepository()
 const captchaServices = new TurnstileCaptchaService()
 
 // 2. Instanciar Servicios del Core / Dominio
@@ -30,7 +32,10 @@ const shortenUrlAnonymousUseCase = new ShortenUrlAnonymous({
 	ipGeolocationResolver,
 })
 
-const visitShortUrlUseCase = new VisitShortUrl(shortUrlRepository)
+const visitShortUrlUseCase = new VisitShortUrl(
+	shortUrlRepository,
+	visitRepository,
+)
 
 // 4. Instanciar e Inyectar el Adaptador Primario (HTTP / Controller)
 export const urlController = new UrlController(

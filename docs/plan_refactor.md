@@ -29,7 +29,7 @@ El proyecto se estructura en **4 capítulos** de implementación, donde cada cap
 | #   | Paso                        | Estado | Descripción                                                                                                                                                  |
 | --- | --------------------------- | ------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | 0   | Monorepo Restructure        | ✅     | Crear carpeta `/apps/`, mover los 5 servicios allí, actualizar root `package.json` (`apps/*`, `packages/*`) y CI paths                                       |
-| 1   | Shared contracts            | 🚀     | Crear `/packages/contracts` con tipos DTO, respuestas, códigos de error y schemas Zod compartidos.                                                           |
+| 1   | Shared contracts            | ✅     | Crear `/packages/contracts` con tipos DTO, respuestas, códigos de error y schemas Zod compartidos.                                                           |
 | 2   | CU1 hexagonal & Drizzle     | ✅     | Reorganizar carpetas en `src/`, migrar `app.js`, `index.js` y middlewares a TS, e integrar Drizzle ORM.                                                      |
 | 3   | CU2 hexagonal & Tracking    | ⏳     | `VisitShortUrl` → resuelve IP/Geolocalización y registra analítica (`visits` table, `clicksCount`) síncronamente en PostgreSQL → `/internal/slug-data/:slug` |
 | 4   | Refactor backend-redirector | ⏳     | Aplicar Alt 1 (Thin Handler + RedirectionService) consumiendo `@min-url/contracts` y dando soporte a REST HTTP 410.                                          |

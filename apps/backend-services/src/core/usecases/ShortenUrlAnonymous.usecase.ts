@@ -1,3 +1,7 @@
+import type {
+	ShortenUrlAnonymousInput,
+	ShortenUrlAnonymousPort,
+} from '@/core/ports/inbound/ShortenUrlAnonymousPort.interface.ts'
 import { ShortUrl } from '../domain/entities/ShortUrl.entity.ts'
 import type { CreateShortUrlInput } from '../domain/entities/ShortUrl.entity.ts'
 import {
@@ -7,27 +11,21 @@ import {
 import { IpAddress } from '../domain/value-objects/ip-address/IpAddress.vo.ts'
 import { Slug } from '../domain/value-objects/slug/Slug.vo.ts'
 import { TargetUrl } from '../domain/value-objects/target-url/TargetUrl.vo.ts'
-import type { CaptchaServices } from '../ports/CaptchaServices.interface.ts'
-import type { ForbiddenExtensions } from '../ports/ForbiddenExtensions.interface.ts'
-import type { IpGeolocationResolver } from '../ports/IpGeolocationResolver.interface.ts'
-import type { ShortUrlRepository } from '../ports/ShortUrlRepository.interface.ts'
-import type { SlugGenerator } from '../ports/SlugGenerator.interface.ts'
+import type { CaptchaServicePort } from '../ports/outbound/CaptchaServicePort.interface.ts'
+import type { ForbiddenExtensionsPort } from '../ports/outbound/ForbiddenExtensionsPort.interface.ts'
+import type { IpGeolocationResolverPort } from '../ports/outbound/IpGeolocationResolverPort.interface.ts'
+import type { ShortUrlRepositoryPort } from '../ports/outbound/ShortUrlRepositoryPort.interface.ts'
+import type { SlugGeneratorPort } from '../ports/outbound/SlugGeneratorPort.interface.ts'
 
 interface ShortenUrlAnonymousProps {
-	shortUrlRepository: ShortUrlRepository
-	captchaServices: CaptchaServices
-	slugGenerator: SlugGenerator
-	forbiddenExtensions: ForbiddenExtensions
-	ipGeolocationResolver: IpGeolocationResolver
+	shortUrlRepository: ShortUrlRepositoryPort
+	captchaServices: CaptchaServicePort
+	slugGenerator: SlugGeneratorPort
+	forbiddenExtensions: ForbiddenExtensionsPort
+	ipGeolocationResolver: IpGeolocationResolverPort
 }
 
-interface ShortenUrlAnonymousInput {
-	originalUrl: string
-	captchaToken: string
-	clientIp: string
-}
-
-export class ShortenUrlAnonymous {
+export class ShortenUrlAnonymous implements ShortenUrlAnonymousPort {
 	private readonly props: ShortenUrlAnonymousProps
 
 	constructor(props: ShortenUrlAnonymousProps) {
@@ -37,43 +35,38 @@ export class ShortenUrlAnonymous {
 	async execute(input: ShortenUrlAnonymousInput): Promise<ShortUrl> {
 		const { originalUrl, captchaToken, clientIp } = input
 
-		//1. Verify if the user is a bot
-		const isHuman = await this.props.captchaServices.verify(captchaToken)
-
-		if (!isHuman) {
+		const isCaptchaValid = await this.props.captchaServices.verify(captchaToken)
+		if (!isCaptchaValid) {
 			throw new CaptchaVerificationError()
 		}
 
-		//3. Create a targetUrl value object
-		const targetUrl = TargetUrl.create(originalUrl)
+		const targetUrlVo = TargetUrl.create(originalUrl)
 
-		//3.1 Verify if the URL contains forbidden extensions
-		if (this.props.forbiddenExtensions.check(targetUrl)) {
-			throw new ForbiddenExtensionError(originalUrl)
+		const isForbidden = this.props.forbiddenExtensions.check(targetUrlVo)
+		if (isForbidden) {
+			throw new ForbiddenExtensionError(targetUrlVo.value)
 		}
 
-		//4. Generate a unique slug
-		const slug = await this.props.slugGenerator.generateUniqueSlug(targetUrl)
+		const generatedSlug =
+			await this.props.slugGenerator.generateUniqueSlug(targetUrlVo)
+		const slugVo = Slug.create(generatedSlug)
 
-		//5. Create a ipAddress value object
-		const baseIpAddress = IpAddress.createOrUnknown(clientIp)
-		const geolocation = this.props.ipGeolocationResolver.resolve(baseIpAddress)
-		const ipAddress = baseIpAddress.withGeolocation(geolocation)
+		const initialIpVo = IpAddress.createOrUnknown(clientIp)
+		const userLocation =
+			await this.props.ipGeolocationResolver.resolve(initialIpVo)
+		const ipAddressVo = IpAddress.createOrUnknown(clientIp, userLocation)
 
-		//6. Save anonimous url in the repository
-		const dataToSave: CreateShortUrlInput = {
-			slug: Slug.create(slug),
-			originalUrl: targetUrl,
-			title: 'Anonymous link',
-			ipAddress: ipAddress,
+		const createShortUrlInput: CreateShortUrlInput = {
+			originalUrl: targetUrlVo,
+			slug: slugVo,
+			ipAddress: ipAddressVo,
 			purpose: 'direct',
-			passwordHash: null,
+			title: 'Untitled',
 		}
 
-		const shorturl = ShortUrl.create(dataToSave)
-		await this.props.shortUrlRepository.save(shorturl)
+		const shortUrlEntity = ShortUrl.create(createShortUrlInput)
+		await this.props.shortUrlRepository.save(shortUrlEntity)
 
-		//7. Return the short URL
-		return shorturl
+		return shortUrlEntity
 	}
 }

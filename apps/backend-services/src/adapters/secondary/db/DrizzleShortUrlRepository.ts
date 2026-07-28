@@ -5,10 +5,10 @@ import {
 } from '@/adapters/secondary/db/mappers/short-url.mapper.ts'
 import { shortUrls } from '@/adapters/secondary/db/schema/short-urls.schema.ts'
 import type { ShortUrl } from '@/core/domain/entities/ShortUrl.entity.ts'
-import type { ShortUrlRepository } from '@/core/ports/ShortUrlRepository.interface.ts'
+import type { ShortUrlRepositoryPort } from '@/core/ports/outbound/ShortUrlRepositoryPort.interface.ts'
 import { count, eq } from 'drizzle-orm'
 
-export class DrizzleShortUrlRepository implements ShortUrlRepository {
+export class DrizzleShortUrlRepository implements ShortUrlRepositoryPort {
 	async isSlugAvailable(slug: string): Promise<boolean> {
 		const [result] = await db
 			.select({ count: count() })
@@ -19,10 +19,13 @@ export class DrizzleShortUrlRepository implements ShortUrlRepository {
 
 	async save(shortUrl: ShortUrl): Promise<void> {
 		const data = toPersistence(shortUrl)
+		// clicksCount is excluded from updates — it is maintained atomically
+		// by DrizzleVisitRepository.save() via clicks_count = clicks_count + 1.
+		const { clicksCount: _omit, ...updateData } = data
 		await db
 			.insert(shortUrls)
 			.values(data)
-			.onConflictDoUpdate({ target: shortUrls.id, set: data })
+			.onConflictDoUpdate({ target: shortUrls.id, set: updateData })
 	}
 
 	async getUrlBySlug(slug: string): Promise<ShortUrl | null> {

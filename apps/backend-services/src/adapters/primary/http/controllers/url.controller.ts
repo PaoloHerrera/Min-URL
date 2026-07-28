@@ -1,22 +1,23 @@
-import type { ShortenUrlAnonymous } from '@/core/usecases/ShortenUrlAnonymous.usecase.ts'
-import type { VisitShortUrl } from '@/core/usecases/VisitShortUrl.usecase.ts'
+import type { ShortenUrlAnonymousPort } from '@/core/ports/inbound/ShortenUrlAnonymousPort.interface.ts'
+import type { VisitShortUrlPort } from '@/core/ports/inbound/VisitShortUrlPort.interface.ts'
 import type {
 	ShortenAnonymousRequest,
 	ShortenAnonymousResponse,
 	SlugDataResponse,
 } from '@min-url/contracts/dto'
 import type { Request, Response } from 'express'
+import { extractClientIp } from '../utils/extractClientIp.ts'
 
 export class UrlController {
-	private readonly shortenUrlAnonymousUseCase: ShortenUrlAnonymous
-	private readonly visitShortUrlUseCase: VisitShortUrl
+	private readonly shortenUrlAnonymousPort: ShortenUrlAnonymousPort
+	private readonly visitShortUrlPort: VisitShortUrlPort
 
 	constructor(
-		shortenUrlAnonymousUseCase: ShortenUrlAnonymous,
-		visitShortUrlUseCase: VisitShortUrl,
+		shortenUrlAnonymousPort: ShortenUrlAnonymousPort,
+		visitShortUrlPort: VisitShortUrlPort,
 	) {
-		this.shortenUrlAnonymousUseCase = shortenUrlAnonymousUseCase
-		this.visitShortUrlUseCase = visitShortUrlUseCase
+		this.shortenUrlAnonymousPort = shortenUrlAnonymousPort
+		this.visitShortUrlPort = visitShortUrlPort
 	}
 
 	public createAnonymous = async (
@@ -35,7 +36,7 @@ export class UrlController {
 			req.socket.remoteAddress ||
 			'unknown'
 
-		const shortUrl = await this.shortenUrlAnonymousUseCase.execute({
+		const shortUrl = await this.shortenUrlAnonymousPort.execute({
 			originalUrl,
 			captchaToken: captchaToken ?? turnstileToken ?? '',
 			clientIp,
@@ -55,8 +56,18 @@ export class UrlController {
 		res: Response,
 	): Promise<void> => {
 		const { slug } = req.params
-		const shortUrl = await this.visitShortUrlUseCase.execute({
+		const ipAddress = extractClientIp(
+			req.headers['x-forwarded-for'],
+			req.socket.remoteAddress,
+		)
+		const userAgent = req.get('user-agent')
+		const referer = req.get('referer') || req.get('referrer')
+
+		const shortUrl = await this.visitShortUrlPort.execute({
 			slug,
+			ipAddress,
+			userAgent,
+			referer,
 		})
 
 		const response: SlugDataResponse = {

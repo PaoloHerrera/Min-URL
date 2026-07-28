@@ -7,11 +7,7 @@ const __dirname = path.dirname(__filename)
 
 export default defineConfig({
 	test: {
-		globalSetup: ['./__test__/setup.ts'],
-		extensions: ['ts'],
-		env: {
-			DATABASE_URL: 'postgres://admin:admin@localhost:5432/min_url_test',
-		},
+		include: ['__test__/unit/**/*.test.ts'],
 	},
 	resolve: {
 		alias: {
