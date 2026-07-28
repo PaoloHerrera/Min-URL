@@ -4,7 +4,7 @@
 
 # 🔗 Min-URL
 
-**A modern, full-stack URL shortener & QR Code generator with real-time analytics**
+**A modern, full-stack URL shortener with real-time analytics**
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](./LICENSE)
 [![Node.js](https://img.shields.io/badge/Node.js-%3E=20-green.svg)](https://nodejs.org)
@@ -20,24 +20,23 @@
 
 ## ✨ Features
 
-- 🔗 **URL Shortener** — Generate short links with random or custom slugs
-- 📷 **QR Code Generator** — Create QR codes with custom foreground/background colors
+- 🔗 **URL Shortener** — Generate short links with Base62 cryptographic slugs (6-12 chars)
 - 📊 **Analytics Dashboard** — Real-time stats: total clicks, today's activity, geographic distribution, device breakdown
-- 🌍 **Geolocation Tracking** — Offline IP-to-location mapping (no external API required)
-- ⚡ **Async Click Tracking** — Non-blocking redirect flow via Redis Pub/Sub
-- 🔐 **Google OAuth 2.0** — Secure authentication with JWT (httpOnly cookies)
-- 🌐 **i18n** — English and Spanish support
-- 🌙 **Dark Mode** — Fully themed with light/dark mode toggle
-- 🚦 **Rate Limiting** — Per-user URL quotas and per-IP throttling
-- 🔒 **Password-protected URLs** — Schema-level support (UI in progress)
+- 🌍 **Geolocation Tracking** — Offline IP-to-location mapping using `geoip-lite`
+- ⚡ **Synchronous Click Tracking (MVP)** — Atomic $O(1)$ visit persistence in PostgreSQL (ADR-006)
+- 🔐 **Google OAuth 2.0 & JWT** — Authentication with httpOnly cookies (backend-users)
+- 🌐 **i18n** — English public interface and Spanish internal docs
+- 🌙 **Dark Mode** — Modern UI with dark/light themes
+- 🚦 **Rate Limiting & Security** — Cloudflare Turnstile anti-bot verification, strict URL limits (max 2048 chars)
+- 🔒 **Password-protected URLs** — Domain-level support for protected links
 
 ---
 
 ## 🏗 Architecture
 
-Min-URL is a **Turborepo monorepo** composed of five independent packages:
+Min-URL is a **Turborepo monorepo** composed of applications and shared packages:
 
-```
+```text
 ┌──────────────────────────────────────────────────────────────────┐
 │                         END USER                                 │
 └────────────┬───────────────────────────┬─────────────────────────┘
@@ -45,7 +44,7 @@ Min-URL is a **Turborepo monorepo** composed of five independent packages:
              ▼                           ▼
    ┌──────────────────┐       ┌─────────────────────┐
    │ frontend-landing │       │  frontend-dashboard  │
-   │  (React + Vite)  │       │  (React + Vite + RQ) │
+   │ (Astro 7+React19)│       │  (React 19 + Vite)   │
    │  Public website  │       │  Analytics dashboard │
    └────────┬─────────┘       └──────────┬───────────┘
             │                            │ JWT (httpOnly cookie)
@@ -56,40 +55,37 @@ Min-URL is a **Turborepo monorepo** composed of five independent packages:
             │                 │  · Google OAuth 2.0  │
             │                 │  · JWT auth          │
             │                 │  · Dashboard data    │
-            │                 │  · Proxy → services  │
             │                 └──────────┬───────────┘
-            │                            │ X-API-Key
+            │                            │ Authorization Bearer
             │                            ▼
             │                 ┌─────────────────────┐
-            ▼                 │   backend-services  │◄── Redis Sub
-   ┌──────────────────┐       │   (Express.js)      │
-   │backend-redirector│       │  · URL/QR CRUD      │
-   │   (Remix SSR)    │       │  · Slug generation  │
-   │  · Redirects     │       │  · Geo middleware    │
-   │  · Click events  │       │  · Click storage     │
-   └────────┬─────────┘       └──────────┬───────────┘
-            │                            │
-            │  Redis Pub                 ▼
-            └──────────────► ┌─────────────────────┐
-                             │        Redis        │
-                             │    (Pub/Sub)        │
-                             └──────────┬───────────┘
-                                        │
-                             ┌──────────▼──────────┐
-                             │     PostgreSQL 16    │
-                             │  users, urls,        │
-                             │  short_urls, qr_codes│
-                             │  clicks, geolocations│
-                             └─────────────────────┘
+            ▼                 │   backend-services  │
+   ┌──────────────────┐       │   (Express 5 + TS)  │
+   │backend-redirector│       │  · Hexagonal + DDD  │
+   │   (Fastify 5)    │       │  · URL shortening   │
+   │  · Thin handler  ├──────►│  · Visit tracking   │
+   │  · HTTP 302/410  │       │  · Geolocation      │
+   └──────────────────┘       └──────────┬───────────┘
+                                         │ Drizzle ORM
+                                         ▼
+                              ┌─────────────────────┐
+                              │     PostgreSQL 16   │
+                              │  short_urls, visits │
+                              └─────────────────────┘
 ```
 
-### Redirect Flow (click tracking)
+### Redirect Flow (Synchronous Click Tracking — ADR-006)
 
-1. User visits `your-domain.com/SLUG` → **backend-redirector** (Remix SSR)
-2. Loader fetches slug metadata from **backend-services** via API Key
-3. If no password: **publish click event to Redis** → immediate HTTP 302 redirect
-4. **backend-services** (Redis subscriber) asynchronously writes Click + ClickDetail + Geolocation to Postgres
-5. ✅ Zero blocking on the redirect path
+1. User visits `http://localhost:3002/:slug` → **backend-redirector** (Fastify 5).
+2. Handler makes an internal call to **backend-services** (`GET /internal/slug-data/:slug`) passing `Authorization: Bearer <INTERNAL_SECRET>`.
+3. **backend-services** executes `VisitShortUrl.usecase`:
+   - Validates link status (active, password, expired, deleted).
+   - Resolves IP geolocation offline (`geoip-lite`) and parses User-Agent metadata.
+   - **Atomically inserts visit event and increments `clicks_count`** in PostgreSQL using a single Drizzle DB transaction.
+4. **backend-redirector** receives response:
+   - Active link → HTTP `302 Found` to `originalUrl`.
+   - Password-protected → HTTP `302 Found` to `/password-protected`.
+   - Expired / Deleted → HTTP `410 Gone`.
 
 ---
 
@@ -97,90 +93,69 @@ Min-URL is a **Turborepo monorepo** composed of five independent packages:
 
 ### Backend
 
-| Package | Framework | Role |
-|---|---|---|
-| `backend-users` | NestJS 11 | Authentication, user management, dashboard data aggregation |
-| `backend-services` | Express 4 | URL/QR CRUD, slug generation, click processing |
-| `backend-redirector` | Remix 2 | SSR redirect engine, click event publishing |
+| Application          | Framework      | Role                                         | Architecture                 |
+| -------------------- | -------------- | -------------------------------------------- | ---------------------------- |
+| `backend-services`   | Express 5 + TS | Core shortening & click tracking engine      | Hexagonal Architecture + DDD |
+| `backend-redirector` | Fastify 5 + TS | High-performance thin redirect engine        | Thin Adapter                 |
+| `backend-users`      | NestJS 11      | Auth & user management (legacy → rebuilding) | Modular Monolith             |
 
 ### Frontend
 
-| Package | Framework | Role |
-|---|---|---|
-| `frontend-dashboard` | React 19 + Vite 6 | Analytics dashboard SPA |
-| `frontend-landing` | React 19 + Vite 6 | Public landing page |
+| Application          | Framework                                | Role                    |
+| -------------------- | ---------------------------------------- | ----------------------- |
+| `frontend-landing`   | Astro 7 + React 19 Islands + Tailwind v4 | Public landing page     |
+| `frontend-dashboard` | React 19 + Vite + TanStack Query         | Analytics dashboard SPA |
+
+### Shared Packages
+
+| Package              | Role                                                                     |
+| -------------------- | ------------------------------------------------------------------------ |
+| `@min-url/contracts` | Zod schemas, DTOs, `httpUrlSchema`, error codes, shared analytics tuples |
 
 ### Infrastructure
 
-| Technology | Role |
-|---|---|
-| **PostgreSQL 16** | Primary relational database |
-| **Redis** | Pub/Sub for async click processing |
-| **Docker Compose** | Local development infrastructure |
-| **Sequelize 6** | ORM (shared across Node.js services) |
+| Technology         | Role                                                |
+| ------------------ | --------------------------------------------------- |
+| **PostgreSQL 16**  | Relational database (short_urls & visits)           |
+| **Drizzle ORM**    | Type-safe SQL-first ORM with partitioned migrations |
+| **Docker Compose** | Local dev infrastructure (PostgreSQL 16 + Redis)    |
 
 ### Key Libraries
 
-- **Auth**: `passport-google-oauth20`, `@nestjs/jwt`, `passport-jwt`
-- **Validation**: `zod`, `validator`, `express-rate-limit`, `@nestjs/throttler`
-- **Analytics**: `geoip-lite`, `ua-parser-js`, `isbot`
-- **Frontend**: TanStack Query v5, Zustand 5, Recharts, Radix UI, Framer Motion, Tailwind CSS v4
-- **QR**: `qrcode` (server-side), `react-qr-code` (preview)
-- **Tooling**: Turborepo, Bun, Biome (lint + format)
+- **Validation**: `@min-url/contracts`, `zod`
+- **Captcha**: Cloudflare Turnstile (`@challenges.cloudflare.com`)
+- **Analytics**: `geoip-lite` (offline geolocation)
+- **Tooling**: Turborepo 2.x, Bun 1.x, Biome (linting), Prettier (formatting), Vitest, Playwright
 
 ---
 
 ## 📁 Project Structure
 
-```
+```text
 min-url/
-├── backend-redirector/      # Remix SSR — URL redirect engine
-│   └── app/
-│       ├── routes/
-│       │   ├── $slug.tsx    # Dynamic redirect + click tracking
-│       │   └── _index.tsx   # Root redirect
-│       ├── config/redis.ts  # Redis publisher
-│       └── utils/           # Device detection, IP utils
+├── apps/
+│   ├── backend-services/     # Express 5 + TS — Hexagonal + DDD Core
+│   │   ├── src/
+│   │   │   ├── core/         # Domain (Entities, VOs, Domain Services, Ports, UseCases)
+│   │   │   └── adapters/     # Primary (HTTP Controllers/Routes) & Secondary (Drizzle DB, GeoIP)
+│   │   └── db/migrations/    # Partitioned Drizzle migrations (/core & /analytics)
+│   │
+│   ├── backend-redirector/   # Fastify 5 + TS — Thin Redirect Engine
+│   │
+│   ├── backend-users/        # NestJS 11 — Auth & User Management (legacy)
+│   │
+│   ├── frontend-landing/     # Astro 7 + React 19 Islands + Tailwind v4
+│   │
+│   └── frontend-dashboard/   # React 19 + Vite — Dashboard SPA (legacy)
 │
-├── backend-services/        # Express.js — Core API
-│   ├── controllers/         # UrlController, UserController
-│   ├── middleware/          # Auth, validation, geo, rate limit
-│   ├── models/              # Sequelize models (7 tables)
-│   ├── services/            # Business logic, SlugGenerator
-│   ├── config/              # DB + Redis setup
-│   └── index.js             # Entry point
+├── packages/
+│   └── contracts/            # @min-url/contracts — Zod schemas, DTOs, error codes
 │
-├── backend-users/           # NestJS 11 — Auth & user API
-│   └── src/
-│       ├── auth/            # Google OAuth, JWT strategies
-│       ├── protected/       # Dashboard data, URL proxy
-│       ├── user/            # User model
-│       ├── refreshToken/    # Token rotation
-│       └── dashboard/       # WebSocket gateway (WIP)
-│
-├── frontend-dashboard/      # React SPA — Analytics dashboard
-│   └── src/
-│       ├── modules/
-│       │   ├── core/        # Hooks, services, i18n, design system
-│       │   ├── dashboard/   # KPIs, charts, top links
-│       │   ├── link/        # Links management page
-│       │   ├── qrcodes/     # QR codes management page
-│       │   ├── createNew/   # Create link/QR dialogs
-│       │   ├── navbar/      # Top navigation
-│       │   └── sidebar/     # Usage stats sidebar
-│       ├── stores/          # Zustand global state
-│       └── types.d.ts       # Shared TypeScript types
-│
-├── frontend-landing/        # React SPA — Public landing page
-│   └── src/modules/home/
-│
-├── db/
-│   ├── init.sql             # Full schema + indexes + views
-│   └── docker-compose.yml   # Postgres 16 + Redis
-│
-├── turbo.json               # Turborepo pipeline config
-├── biome.json               # Linting + formatting config
-└── package.json             # Workspace root
+├── tests/                    # Playwright E2E integration tests
+├── docs/                     # Internal documentation in Spanish (plan, ADRs, audit)
+├── .github/                  # CI workflows & PR template
+├── turbo.json                # Turborepo pipeline configuration
+└── package.json              # Monorepo root configuration
 ```
 
 ---
@@ -196,132 +171,75 @@ min-url/
 ### 1. Clone & Install
 
 ```bash
-git clone https://github.com/your-username/min-url.git
+git clone https://github.com/PaoloHerrera/min-url.git
 cd min-url
 bun install
 ```
 
 ### 2. Start the Database
 
+### 2. Start Infrastructure (PostgreSQL 16 & Redis)
+
 ```bash
-cd db
+# From the monorepo root
 docker compose up -d
 ```
 
 This spins up:
-- **PostgreSQL 16** on port `5432` (auto-initialized with `init.sql`)
+
+- **PostgreSQL 16** on port `5432` (`min_url` database)
 - **Redis** on port `6379`
 
-### 3. Configure Environment Variables
+### 3. Run Database Migrations
 
-Each service has its own `.env` file. Copy the examples and fill in your values:
-
-**`backend-users/.env`**
-```env
-PORT=3001
-DB_HOST=localhost
-DB_PORT=5432
-DB_USER=admin
-DB_PASS=admin
-DB_NAME=Min-URL
-JWT_SECRET=your_jwt_secret
-JWT_REFRESH_SECRET=your_refresh_secret
-GOOGLE_CLIENT_ID=your_google_client_id
-GOOGLE_CLIENT_SECRET=your_google_client_secret
-GOOGLE_CALLBACK_URL=http://localhost:3001/auth/google/callback
-DASHBOARD_URL=http://localhost:5173
-LOGIN_URL=http://localhost:5173/login
-API_URL=http://localhost:3000
-API_KEY=your_internal_api_key
-REDIRECTOR_URL=http://localhost:5174
+```bash
+# Apply core & analytics Drizzle ORM migrations
+cd apps/backend-services && bun run db:migrate
 ```
 
-**`backend-services/.env`**
-```env
-PORT=3000
-DB_HOST=localhost
-DB_PORT=5432
-DB_USER=admin
-DB_PASS=admin
-DB_NAME=Min-URL
-REDIS_URL=localhost
-REDIS_PORT=6379
-SESSION_SECRET=your_session_secret
-API_KEY=your_internal_api_key
-REDIRECTOR_URL=http://localhost:5174
-CLOUDINARY_CLOUD_NAME=your_cloud_name
-CLOUDINARY_API_KEY=your_api_key
-CLOUDINARY_API_SECRET=your_api_secret
-```
-
-**`backend-redirector/.env.development`**
-```env
-VITE_API_URL=http://localhost:3000
-VITE_API_KEY=your_internal_api_key
-VITE_LOCAL_IP=127.0.0.1
-REDIS_URL=localhost
-REDIS_PORT=6379
-```
-
-**`frontend-dashboard/.env.development`**
-```env
-VITE_API_URL=http://localhost:3001
-```
-
-### 4. Run All Services
+### 4. Start All Services
 
 ```bash
 # From the monorepo root
 bun run dev
 ```
 
-Turborepo will start all five packages concurrently:
+Turborepo will start the applications concurrently:
 
-| Service | URL |
-|---|---|
-| `frontend-dashboard` | http://localhost:5173 |
-| `backend-users` | http://localhost:3001 |
-| `backend-services` | http://localhost:3000 |
-| `backend-redirector` | http://localhost:5174 |
-| `frontend-landing` | http://localhost:5175 |
-
-### 5. Google OAuth Setup
-
-1. Go to [Google Cloud Console](https://console.cloud.google.com)
-2. Create OAuth 2.0 credentials
-3. Add `http://localhost:3001/auth/google/callback` as an authorized redirect URI
-4. Copy your Client ID and Client Secret to `backend-users/.env`
+| Service              | Port   | Default URL           | Role                                      |
+| -------------------- | ------ | --------------------- | ----------------------------------------- |
+| `frontend-landing`   | `4321` | http://localhost:4321 | Public Astro landing page                 |
+| `backend-services`   | `3001` | http://localhost:3001 | Express 5 core API (Hexagonal + DDD)      |
+| `backend-redirector` | `3002` | http://localhost:3002 | Fastify 5 redirect engine                 |
+| `backend-users`      | `3000` | http://localhost:3000 | NestJS auth service (legacy → rebuilding) |
+| `frontend-dashboard` | `5173` | http://localhost:5173 | React 19 analytics dashboard (legacy)     |
 
 ---
 
-## 🗄 Database Schema
+## 🗄 Database Schema & Migrations
 
-The database uses a `"Min-URL"` schema in PostgreSQL with the following tables:
+PostgreSQL 16 persistence is managed via **Drizzle ORM** with partitioned migrations (ADR-004):
 
+```text
+db/migrations/
+├── core/         # short_urls table (slug, original_url, clicks_count, limits)
+└── analytics/    # visits table (short_url_id, IP, UA, Referer, Geolocation)
 ```
-users ──────────────────────────────────────────────┐
-  └── refresh_tokens                                 │
-  └── urls ──────────────────────────────────────┐   │
-        ├── short_urls                           │   │
-        ├── qr_codes                             │   │
-        └── clicks ──────────────────────────┐  │   │
-              └── clicks_details ──────────┐ │  │   │
-                    └── geolocations ◄─────┘ │  │   │
-                                             └──┘   │
-                                                    └─ (FK user_id)
-```
-
-**6 pre-built SQL views** power the analytics dashboard:
-- `dashboard_cards_view` — KPI aggregates per user
-- `dashboard_last_7_days_clicks_view` — Daily click trends
-- `dashboard_countries_view` — Geographic distribution
-- `dashboard_devices_view` — Device breakdown
-- `dashboard_top_links_view` — Most clicked short URLs
-- `dashboard_top_qr_codes_view` — Most scanned QR codes
 
 ---
 
-## 🧑‍💻 Development
+## 🧑‍💻 Development Commands
+
+```bash
+# Run unit & integration tests across all packages
+bun run test
+
+# Run strict TypeScript typechecking
+bun run typecheck
+
+# Run Biome linter across workspace
+bun run lint
+```
 
 ### Run individual services
 
