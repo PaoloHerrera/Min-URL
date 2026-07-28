@@ -44,21 +44,36 @@ export async function setup() {
 	// Using the programmatic API avoids drizzle-kit CLI auto-loading .env,
 	// which would override DATABASE_URL with the dev database URL.
 	const corePool = new pg.Pool({ connectionString: TEST_URL })
-	const coreDb = drizzle(corePool)
-	await migrate(coreDb, {
-		migrationsFolder: path.resolve(__dirname, '../db/migrations/core'),
-		migrationsTable: 'drizzle_migrations_core',
-	})
-	await corePool.end()
+	try {
+		const coreDb = drizzle(corePool)
+		await migrate(coreDb, {
+			migrationsFolder: path.resolve(__dirname, '../db/migrations/core'),
+			migrationsTable: 'drizzle_migrations_core',
+		})
+	} catch (error) {
+		console.error('[TEST SETUP ERROR] Failed to apply core migrations:', error)
+		throw error
+	} finally {
+		await corePool.end()
+	}
 
 	// 3. Apply analytics migrations (visits) directly via drizzle migrator.
 	const analyticsPool = new pg.Pool({ connectionString: TEST_URL })
-	const analyticsDb = drizzle(analyticsPool)
-	await migrate(analyticsDb, {
-		migrationsFolder: path.resolve(__dirname, '../db/migrations/analytics'),
-		migrationsTable: 'drizzle_migrations_analytics',
-	})
-	await analyticsPool.end()
+	try {
+		const analyticsDb = drizzle(analyticsPool)
+		await migrate(analyticsDb, {
+			migrationsFolder: path.resolve(__dirname, '../db/migrations/analytics'),
+			migrationsTable: 'drizzle_migrations_analytics',
+		})
+	} catch (error) {
+		console.error(
+			'[TEST SETUP ERROR] Failed to apply analytics migrations:',
+			error,
+		)
+		throw error
+	} finally {
+		await analyticsPool.end()
+	}
 
 	migrated = true
 }
