@@ -1,10 +1,10 @@
+import { httpUrlSchema } from '@min-url/contracts/schemas'
 import { z } from 'zod'
 
 export const urlSchema = z.object({
 	url: z
 		.string()
 		.trim()
-		.max(2048, 'URL must not exceed 2048 characters')
 		.transform((val) => {
 			let formatted = val
 			if (
@@ -15,14 +15,7 @@ export const urlSchema = z.object({
 			}
 			return formatted
 		})
-		.refine((val) => {
-			try {
-				const url = new URL(val)
-				return url.protocol === 'http:' || url.protocol === 'https:'
-			} catch {
-				return false
-			}
-		}),
+		.pipe(httpUrlSchema),
 })
 
 export type UrlSchema = z.infer<typeof urlSchema>
