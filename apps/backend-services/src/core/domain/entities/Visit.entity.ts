@@ -34,7 +34,7 @@ export class Visit {
 		this._ipAddress = props.ipAddress
 		this._userAgent = props.userAgent
 		this._referer = props.referer
-		this._visitedAt = props.visitedAt
+		this._visitedAt = new Date(props.visitedAt.getTime())
 	}
 
 	// Getters
@@ -59,7 +59,7 @@ export class Visit {
 	}
 
 	get visitedAt(): Date {
-		return this._visitedAt
+		return new Date(this._visitedAt.getTime())
 	}
 
 	// Factory Methods

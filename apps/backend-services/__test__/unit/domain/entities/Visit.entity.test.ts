@@ -67,4 +67,25 @@ describe('Visit Entity (Unit Test)', () => {
 		expect(visit.shortUrlId).toBe('shorturl-uuid-456')
 		expect(visit.visitedAt).toEqual(fixedDate)
 	})
+
+	it('Should protect visitedAt from external mutations (defensive copy)', () => {
+		const initialDate = new Date('2026-07-25T12:00:00Z')
+		const visit = Visit.reconstitute({
+			id: 'visit-uuid-123',
+			shortUrlId: 'shorturl-uuid-456',
+			ipAddress: IpAddress.createOrUnknown('192.168.1.1'),
+			userAgent: UserAgent.create('Mozilla/5.0...'),
+			referer: Referer.create('https://google.com'),
+			visitedAt: initialDate,
+		})
+
+		// 1. Mutating the input date object passed to reconstitute should NOT alter internal state
+		initialDate.setFullYear(1990)
+		expect(visit.visitedAt.getFullYear()).toBe(2026)
+
+		// 2. Mutating the returned date object from getter should NOT alter internal state
+		const retrievedDate = visit.visitedAt
+		retrievedDate.setFullYear(1999)
+		expect(visit.visitedAt.getFullYear()).toBe(2026)
+	})
 })
