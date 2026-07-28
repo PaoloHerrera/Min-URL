@@ -28,6 +28,12 @@ describe('Referer Value Object (Unit Test)', () => {
 		expect(referer.domain).toBe('unknown')
 	})
 
+	it('Should fallback to unknown domain when URL is valid but has empty hostname (e.g. about:blank)', () => {
+		const referer = Referer.create('about:blank')
+		expect(referer.value).toBe('about:blank')
+		expect(referer.domain).toBe('unknown')
+	})
+
 	it('Should truncate Referer strings exceeding standard web URL length limit (2048 chars)', () => {
 		const excessivelyLongUrl = `https://example.com/${'a'.repeat(2100)}`
 		const referer = Referer.create(excessivelyLongUrl)

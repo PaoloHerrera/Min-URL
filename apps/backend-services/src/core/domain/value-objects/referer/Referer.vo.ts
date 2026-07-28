@@ -35,7 +35,8 @@ export class Referer {
 
 		try {
 			const parsed = new URL(urlStr)
-			return parsed.hostname.replace(WWW_PREFIX_REGEX, '')
+			const domain = parsed.hostname.replace(WWW_PREFIX_REGEX, '').trim()
+			return domain.length > 0 ? domain : 'unknown'
 		} catch (_error) {
 			return 'unknown'
 		}
