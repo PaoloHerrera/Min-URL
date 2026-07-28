@@ -46,4 +46,14 @@ describe('httpUrlSchema (Contracts Unit Test)', () => {
 		})
 		expect(result.success).toBe(false)
 	})
+
+	it('should enforce httpUrlSchema in shortenAnonymousResponseSchema', () => {
+		const result = shortenAnonymousResponseSchema.safeParse({
+			originalUrl: 'javascript:alert("xss")',
+			shortUrl: 'http://murl.cl/abc123',
+			slug: 'abc123',
+			createdAt: new Date().toISOString(),
+		})
+		expect(result.success).toBe(false)
+	})
 })
