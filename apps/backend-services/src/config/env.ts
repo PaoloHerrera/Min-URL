@@ -1,6 +1,6 @@
 import { z } from 'zod'
 
-const envSchema = z.object({
+export const envSchema = z.object({
 	PORT: z.coerce.number().default(3001),
 	NODE_ENV: z.enum(['development', 'production', 'test']),
 	REDIRECTOR_URL: z.url().min(1, 'REDIRECTOR_URL is required'),
@@ -11,7 +11,7 @@ const envSchema = z.object({
 		.string()
 		.min(32, 'INTERNAL_SECRET must be at least 32 characters long'),
 	CORS_ALLOWED_ORIGINS: z.string().min(1, 'CORS_ALLOWED_ORIGINS is required'),
-	ENABLE_SWAGGER: z.coerce.boolean().default(false),
+	ENABLE_SWAGGER: z.stringbool().default(false),
 })
 
 export type Env = z.infer<typeof envSchema>
