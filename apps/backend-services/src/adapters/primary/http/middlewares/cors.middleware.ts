@@ -1,9 +1,10 @@
+import { env } from '@/config/env.ts'
 import cors from 'cors'
 
 export const corsMiddleware = () =>
 	cors({
 		origin: (origin, callback) => {
-			const origins = process.env.CORS_ALLOWED_ORIGINS?.split(',') || [
+			const origins = env.CORS_ALLOWED_ORIGINS?.split(',') || [
 				'http://localhost:4321',
 			]
 

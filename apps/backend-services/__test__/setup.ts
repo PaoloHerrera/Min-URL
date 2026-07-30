@@ -4,6 +4,7 @@ import dotenv from 'dotenv'
 import pg from 'pg'
 import { drizzle } from 'drizzle-orm/node-postgres'
 import { migrate } from 'drizzle-orm/node-postgres/migrator'
+import { env } from '../src/config/env.ts'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
@@ -15,23 +16,8 @@ let migrated = false
 export async function setup() {
 	if (migrated) return
 
-	const TEST_URL = process.env.DATABASE_URL
-	const ADMIN_URL = process.env.ADMIN_URL
-
-	if (!TEST_URL) {
-		throw new Error(
-			'[TEST SETUP] DATABASE_URL is not defined in .env.test. Please configure it before running integration tests.',
-		)
-	}
-
-	if (!ADMIN_URL) {
-		throw new Error(
-			'[TEST SETUP] ADMIN_URL is not defined in .env.test. Please configure it before running integration tests.',
-		)
-	}
-
 	// 1. Recreate test database
-	const admin = new pg.Client({ connectionString: ADMIN_URL })
+	const admin = new pg.Client({ connectionString: env.ADMIN_URL })
 	await admin.connect()
 	try {
 		await admin.query('DROP DATABASE IF EXISTS min_url_test WITH (FORCE)')
@@ -43,7 +29,7 @@ export async function setup() {
 	// 2. Apply core migrations (short_urls) directly via drizzle migrator.
 	// Using the programmatic API avoids drizzle-kit CLI auto-loading .env,
 	// which would override DATABASE_URL with the dev database URL.
-	const corePool = new pg.Pool({ connectionString: TEST_URL })
+	const corePool = new pg.Pool({ connectionString: env.DATABASE_URL })
 	try {
 		const coreDb = drizzle(corePool)
 		await migrate(coreDb, {
@@ -58,7 +44,7 @@ export async function setup() {
 	}
 
 	// 3. Apply analytics migrations (visits) directly via drizzle migrator.
-	const analyticsPool = new pg.Pool({ connectionString: TEST_URL })
+	const analyticsPool = new pg.Pool({ connectionString: env.DATABASE_URL })
 	try {
 		const analyticsDb = drizzle(analyticsPool)
 		await migrate(analyticsDb, {
