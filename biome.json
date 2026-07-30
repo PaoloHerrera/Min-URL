@@ -60,7 +60,8 @@
 				"frontend-landing/**",
 				"tests/**",
 				"**/*.spec.ts",
-				"**/env.schemas.ts"
+				"**/env.schemas.ts",
+				"**/src/config/env.ts"
 			],
 			"linter": {
 				"rules": {
@@ -125,6 +126,16 @@
 					"style": {
 						"noDefaultExport": "off",
 						"useNamingConvention": "off"
+					}
+				}
+			}
+		},
+		{
+			"include": ["**/packages/contracts/**", "packages/contracts/**"],
+			"linter": {
+				"rules": {
+					"correctness": {
+						"noUndeclaredDependencies": "off"
 					}
 				}
 			}

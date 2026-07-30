@@ -1,8 +1,10 @@
-import { describe, expect, it, vi, afterEach, beforeEach } from 'vitest'
-import { verifyInternalToken } from '@/adapters/primary/http/middlewares/verifyInternalToken.middleware.ts'
+import { describe, expect, it, vi } from 'vitest'
+import { createVerifyInternalTokenMiddleware } from '@/adapters/primary/http/middlewares/verifyInternalToken.middleware.ts'
+import { INTERNAL_TOKEN_ERROR_RESPONSES } from '@min-url/contracts/errors'
 import type { Request, Response } from 'express'
 
-const SECRET = 'super_secret_and_secure_token'
+const TEST_SECRET = 'unit_test_secret_12345678901234567890'
+const verifyTokenMiddleware = createVerifyInternalTokenMiddleware(TEST_SECRET)
 
 const makeMocks = (authorization?: string) => ({
 	req: {
@@ -15,19 +17,11 @@ const makeMocks = (authorization?: string) => ({
 	next: vi.fn(),
 })
 
-describe('verifyInternalToken Middleware', () => {
-	beforeEach(() => {
-		vi.stubEnv('INTERNAL_SECRET', SECRET)
-	})
+describe('verifyInternalToken Middleware (Self-Contained Unit Test)', () => {
+	it('Should call next() if the token matches the injected secret', () => {
+		const { req, res, next } = makeMocks(`Bearer ${TEST_SECRET}`)
 
-	afterEach(() => {
-		vi.unstubAllEnvs()
-	})
-
-	it('Should call next() if the token is valid', () => {
-		const { req, res, next } = makeMocks(`Bearer ${SECRET}`)
-
-		verifyInternalToken(req as Request, res as Response, next)
+		verifyTokenMiddleware(req as Request, res as Response, next)
 
 		expect(next).toHaveBeenCalled()
 		expect(res.status).not.toHaveBeenCalled()
@@ -36,24 +30,71 @@ describe('verifyInternalToken Middleware', () => {
 	it('Should return 401 if the Authorization header is missing', () => {
 		const { req, res, next } = makeMocks()
 
-		verifyInternalToken(req as Request, res as Response, next)
+		verifyTokenMiddleware(req as Request, res as Response, next)
 
 		expect(next).not.toHaveBeenCalled()
 		expect(res.status).toHaveBeenCalledWith(401)
-		expect(res.json).toHaveBeenCalledWith({
-			message: 'Authorization header missing',
-		})
+		expect(res.json).toHaveBeenCalledWith(
+			INTERNAL_TOKEN_ERROR_RESPONSES.missingHeader,
+		)
 	})
 
 	it('Should return 401 if the Authorization header is invalid or malformed', () => {
 		const { req, res, next } = makeMocks('Bearer invalid-token')
 
-		verifyInternalToken(req as Request, res as Response, next)
+		verifyTokenMiddleware(req as Request, res as Response, next)
 
 		expect(next).not.toHaveBeenCalled()
 		expect(res.status).toHaveBeenCalledWith(401)
-		expect(res.json).toHaveBeenCalledWith({
-			message: 'Invalid or malformed Authorization header',
-		})
+		expect(res.json).toHaveBeenCalledWith(
+			INTERNAL_TOKEN_ERROR_RESPONSES.invalidHeader,
+		)
+	})
+
+	it('Should return 401 if the Authorization header token is empty', () => {
+		const { req, res, next } = makeMocks('Bearer ')
+
+		verifyTokenMiddleware(req as Request, res as Response, next)
+
+		expect(next).not.toHaveBeenCalled()
+		expect(res.status).toHaveBeenCalledWith(401)
+		expect(res.json).toHaveBeenCalledWith(
+			INTERNAL_TOKEN_ERROR_RESPONSES.missingHeader,
+		)
+	})
+
+	it('Should return 401 if scheme is NOT Bearer even with valid secret', () => {
+		const { req, res, next } = makeMocks(`Basic ${TEST_SECRET}`)
+
+		verifyTokenMiddleware(req as Request, res as Response, next)
+
+		expect(next).not.toHaveBeenCalled()
+		expect(res.status).toHaveBeenCalledWith(401)
+		expect(res.json).toHaveBeenCalledWith(
+			INTERNAL_TOKEN_ERROR_RESPONSES.invalidHeader,
+		)
+	})
+
+	it('Should handle multiple spaces around Bearer scheme and valid secret correctly', () => {
+		const { req, res, next } = makeMocks(
+			`        Bearer            ${TEST_SECRET}   `,
+		)
+
+		verifyTokenMiddleware(req as Request, res as Response, next)
+
+		expect(next).toHaveBeenCalled()
+		expect(res.status).not.toHaveBeenCalled()
+	})
+
+	it('Should return 401 if extra tokens are present in Authorization header', () => {
+		const { req, res, next } = makeMocks(`Bearer ${TEST_SECRET} extra_token`)
+
+		verifyTokenMiddleware(req as Request, res as Response, next)
+
+		expect(next).not.toHaveBeenCalled()
+		expect(res.status).toHaveBeenCalledWith(401)
+		expect(res.json).toHaveBeenCalledWith(
+			INTERNAL_TOKEN_ERROR_RESPONSES.invalidHeader,
+		)
 	})
 })

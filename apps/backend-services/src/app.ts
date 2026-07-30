@@ -1,16 +1,11 @@
-import path from 'node:path'
-import { fileURLToPath } from 'node:url'
 import { corsMiddleware } from '@/adapters/primary/http/middlewares/cors.middleware.ts'
 import { errorHandler } from '@/adapters/primary/http/middlewares/errorHandler.middleware.ts'
 import { routesInternal } from '@/adapters/primary/http/routes/internal.route.ts'
 import { routesShortUrl } from '@/adapters/primary/http/routes/shorturl.route.ts'
-import dotenv from 'dotenv'
 import express, { type Request, type Response } from 'express'
 import swaggerUi from 'swagger-ui-express'
+import { env } from './config/env.ts'
 import { swaggerDocument } from './swagger.ts'
-
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = path.dirname(__filename)
 
 const app = express()
 app.use(express.json())
@@ -18,11 +13,7 @@ app.use(corsMiddleware())
 app.disable('x-powered-by')
 
 // Habilitar trust proxy
-app.set('trust proxy', true)
-
-// Configuración de dotenv apuntando a la raíz del servicio
-const envPath = path.join(__dirname, '../.env')
-dotenv.config({ path: envPath })
+app.set('trust proxy', 1)
 
 // Routes
 app.use('/', routesShortUrl)
@@ -39,10 +30,7 @@ app.get('/favicon.ico', (_req: Request, res: Response) => {
 })
 
 // Swagger UI
-if (
-	process.env.NODE_ENV !== 'production' ||
-	process.env.ENABLE_SWAGGER === 'true'
-) {
+if (env.NODE_ENV !== 'production' || env.ENABLE_SWAGGER === true) {
 	app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument))
 }
 

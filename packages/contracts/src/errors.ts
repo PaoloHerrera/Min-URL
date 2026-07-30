@@ -18,3 +18,13 @@ export type SlugErrorCode =
 
 export type ApiErrorCode =
 	(typeof API_ERROR_CODES)[keyof typeof API_ERROR_CODES]
+
+export const INTERNAL_TOKEN_ERROR_MESSAGES = {
+	missingHeader: 'Authorization header missing',
+	invalidHeader: 'Invalid or malformed Authorization header',
+} as const
+
+export const INTERNAL_TOKEN_ERROR_RESPONSES = {
+	missingHeader: { message: INTERNAL_TOKEN_ERROR_MESSAGES.missingHeader },
+	invalidHeader: { message: INTERNAL_TOKEN_ERROR_MESSAGES.invalidHeader },
+} as const

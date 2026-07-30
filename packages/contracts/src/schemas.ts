@@ -1,6 +1,12 @@
 import { z } from 'zod'
 
 export const MAX_URL_LENGTH = 2048
+export const MIN_SLUG_LENGTH = 6
+export const MAX_SLUG_LENGTH = 12
+
+export const slugRegex = new RegExp(
+	`^[a-zA-Z0-9]{${MIN_SLUG_LENGTH},${MAX_SLUG_LENGTH}}$`,
+)
 
 export const httpUrlSchema = z
 	.url()
@@ -41,5 +47,3 @@ export const shortenAnonymousResponseSchema = z.object({
 	slug: z.string(),
 	createdAt: z.iso.datetime(),
 })
-
-export const slugRegex = /^[a-zA-Z0-9]{6,12}$/

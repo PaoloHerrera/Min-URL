@@ -1,3 +1,4 @@
+import { env } from '@/config/env.ts'
 import type { CaptchaServicePort } from '@/core/ports/outbound/CaptchaServicePort.interface.ts'
 import axios from 'axios'
 
@@ -5,7 +6,7 @@ export class TurnstileCaptchaService implements CaptchaServicePort {
 	private readonly secretKey: string
 
 	constructor() {
-		this.secretKey = process.env.TURNSTILE_SECRET_KEY as string
+		this.secretKey = env.TURNSTILE_SECRET_KEY
 	}
 
 	public async verify(token: string): Promise<boolean> {

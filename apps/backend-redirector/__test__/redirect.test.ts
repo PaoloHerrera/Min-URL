@@ -1,8 +1,9 @@
-import { describe, expect, it, vi, afterEach } from 'vitest'
+import { afterEach, describe, expect, it, vi } from 'vitest'
 import { app } from '../src/app.ts'
+import { env } from '../src/config/env.ts'
 
-const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:4321'
-const INTERNAL_SECRET = process.env.INTERNAL_SECRET || 'secret'
+const FRONTEND_URL = env.FRONTEND_URL
+const INTERNAL_SECRET = env.INTERNAL_SECRET
 
 afterEach(() => {
 	vi.restoreAllMocks()
@@ -124,44 +125,9 @@ describe('GET /:slug', () => {
 	})
 
 	describe('Environment variable validation', () => {
-		it('Should redirect to error page if INTERNAL_SECRET is not set', async () => {
-			const fetchSpy = mockFetch(500, null)
-
-			vi.stubEnv('INTERNAL_SECRET', '')
-
-			const response = await requestUrl('/secretless')
-
-			expect(response.statusCode).toBe(302)
-			expect(response.headers.location).toBe(`${FRONTEND_URL}/error`)
-			// Check if fetch was not called
-			expect(fetchSpy).not.toHaveBeenCalled()
-		})
-
-		it('Should redirect to error page if BACKEND_API_URL is not set', async () => {
-			const fetchSpy = mockFetch(500, null)
-
-			vi.stubEnv('BACKEND_API_URL', '')
-
-			const response = await requestUrl('/backendless')
-
-			expect(response.statusCode).toBe(302)
-			expect(response.headers.location).toBe(`${FRONTEND_URL}/error`)
-
-			// Check if fetch was not called
-			expect(fetchSpy).not.toHaveBeenCalled()
-		})
-
-		it('Should redirect to error page if FRONTEND_URL is not set', async () => {
-			const fetchSpy = mockFetch(500, null)
-			vi.stubEnv('FRONTEND_URL', '')
-
-			const response = await requestUrl('/frontendless')
-
-			expect(response.statusCode).toBe(500)
-			expect(response.body).toBe('Internal Server Error')
-
-			// Check if fetch was not called
-			expect(fetchSpy).not.toHaveBeenCalled()
+		it('Should validate required environment variables at startup', () => {
+			expect(FRONTEND_URL).toBeDefined()
+			expect(INTERNAL_SECRET.length).toBeGreaterThanOrEqual(32)
 		})
 	})
 })

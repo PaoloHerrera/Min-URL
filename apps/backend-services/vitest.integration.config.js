@@ -1,17 +1,17 @@
-import { defineConfig } from 'vitest/config'
-import { fileURLToPath } from 'node:url'
 import path from 'node:path'
+import { fileURLToPath } from 'node:url'
+import dotenv from 'dotenv'
+import { defineConfig } from 'vitest/config'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
+
+dotenv.config({ path: path.resolve(__dirname, '.env.test') })
 
 export default defineConfig({
 	test: {
 		include: ['__test__/integration/**/*.test.ts'],
 		globalSetup: ['./__test__/setup.ts'],
-		env: {
-			DATABASE_URL: 'postgres://admin:admin@localhost:5432/min_url_test',
-		},
 	},
 	resolve: {
 		alias: {

@@ -1,3 +1,4 @@
+import { env } from '@/config/env.ts'
 import type { ShortenUrlAnonymousPort } from '@/core/ports/inbound/ShortenUrlAnonymousPort.interface.ts'
 import type { VisitShortUrlPort } from '@/core/ports/inbound/VisitShortUrlPort.interface.ts'
 import type {
@@ -44,7 +45,7 @@ export class UrlController {
 
 		const response: ShortenAnonymousResponse = {
 			originalUrl: shortUrl.originalUrl.value,
-			shortUrl: `${process.env.REDIRECTOR_URL || 'https://murl.cl'}/${shortUrl.slug.value}`,
+			shortUrl: `${env.REDIRECTOR_URL || 'https://murl.cl'}/${shortUrl.slug.value}`,
 			slug: shortUrl.slug.value,
 			createdAt: shortUrl.createdAt.toISOString(),
 		}

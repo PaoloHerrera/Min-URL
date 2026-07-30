@@ -3,11 +3,21 @@
 	"extends": ["../../biome.json"],
 	"overrides": [
 		{
-			"include": ["**/env.schemas.ts"],
+			"include": ["**/env.ts"],
 			"linter": {
 				"rules": {
 					"style": {
 						"useNamingConvention": "off"
+					}
+				}
+			}
+		},
+		{
+			"include": ["vitest.config.ts"],
+			"linter": {
+				"rules": {
+					"correctness": {
+						"noNodejsModules": "off"
 					}
 				}
 			}

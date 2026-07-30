@@ -52,7 +52,7 @@ export class AuthService {
 
 	async verifyRefreshToken(token: string) {
 		const { sub, username } = await this.jwtService.verifyAsync(token, {
-			secret: process.env.REFRESH_TOKEN_SECRET || 'secret',
+			secret: process.env.REFRESH_TOKEN_SECRET,
 		})
 		return { userId: sub, username }
 	}

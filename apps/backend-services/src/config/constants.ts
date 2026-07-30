@@ -1,14 +1,9 @@
-export const REDIRECTOR_URL = process.env.REDIRECTOR_URL
+import { MAX_SLUG_LENGTH, MIN_SLUG_LENGTH } from '@min-url/contracts/schemas'
 
 export const SHORTURL_VALUES = {
-	initialLength: 6,
+	initialLength: MIN_SLUG_LENGTH,
 	maxAttempts: 20,
-	maxLength: 12,
-}
-
-export const LIMITS_VALUES = {
-	limitShortUrlPerDay: 100,
-	limitQrCodePerDay: 5,
+	maxLength: MAX_SLUG_LENGTH,
 }
 
 export const FORBIDDEN_EXTENSIONS = [

@@ -49,11 +49,17 @@ export class ShortUrl {
 		this._title = props.title
 		this._clicksCount = props.clicksCount ?? 0
 		this._passwordHash = props.passwordHash ?? null
-		this._expirationDate = props.expirationDate ?? null
-		this._expiredAt = props.expiredAt ?? null
-		this._createdAt = props.createdAt
-		this._updatedAt = props.updatedAt
-		this._deletedAt = props.deletedAt ?? null
+		this._expirationDate = props.expirationDate
+			? new Date(props.expirationDate.getTime())
+			: null
+		this._expiredAt = props.expiredAt
+			? new Date(props.expiredAt.getTime())
+			: null
+		this._createdAt = new Date(props.createdAt.getTime())
+		this._updatedAt = new Date(props.updatedAt.getTime())
+		this._deletedAt = props.deletedAt
+			? new Date(props.deletedAt.getTime())
+			: null
 	}
 
 	// Getters
@@ -92,22 +98,24 @@ export class ShortUrl {
 
 	get expirationDate(): Date | null {
 		return this._expirationDate
+			? new Date(this._expirationDate.getTime())
+			: null
 	}
 
 	get expiredAt(): Date | null {
-		return this._expiredAt
+		return this._expiredAt ? new Date(this._expiredAt.getTime()) : null
 	}
 
 	get createdAt(): Date {
-		return this._createdAt
+		return new Date(this._createdAt.getTime())
 	}
 
 	get updatedAt(): Date {
-		return this._updatedAt
+		return new Date(this._updatedAt.getTime())
 	}
 
 	get deletedAt(): Date | null {
-		return this._deletedAt
+		return this._deletedAt ? new Date(this._deletedAt.getTime()) : null
 	}
 
 	// Methods
@@ -140,32 +148,12 @@ export class ShortUrl {
 		return !!this._deletedAt
 	}
 
-	public restore(): void {
-		this._deletedAt = null
-		this._updatedAt = new Date()
-	}
-
 	public setExpired(expiredAt: Date): void {
-		this._expiredAt = expiredAt
+		this._expiredAt = new Date(expiredAt.getTime())
 		this._updatedAt = new Date()
 	}
 
 	public isExpired(): boolean {
 		return !!this._expiredAt && this._expiredAt < new Date()
-	}
-
-	public unsetExpired(): void {
-		this._expiredAt = null
-		this._updatedAt = new Date()
-	}
-
-	public setPassword(passwordHash: Password): void {
-		this._passwordHash = passwordHash
-		this._updatedAt = new Date()
-	}
-
-	public removePassword(): void {
-		this._passwordHash = null
-		this._updatedAt = new Date()
 	}
 }
