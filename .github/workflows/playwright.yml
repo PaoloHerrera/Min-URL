@@ -1,31 +1,26 @@
 name: Playwright Tests
 on:
+  workflow_dispatch:
   push:
     branches: [master]
   pull_request:
     branches: [master]
+  release:
+    types: [published]
 jobs:
   test:
     timeout-minutes: 60
     runs-on: ubuntu-24.04
     env:
       PORT: 3001
-      DB_NAME: min_url_test
-      DB_USER: admin
-      DB_PASS: admin
-      DB_HOST: localhost
-      DB_PORT: 5432
-      API_KEY: ci_test_api_key_placeholder
-      SECRET_HASH: ci_test_sec_hash
-      LOCAL_IP: 127.0.0.1
+      DATABASE_URL: postgres://admin:admin@localhost:5432/min_url_test
+      ADMIN_URL: postgres://admin:admin@localhost:5432/postgres
+      INTERNAL_SECRET: ci_test_internal_secret_32_characters_min
+      CORS_ALLOWED_ORIGINS: http://localhost:4321,https://min-url.com,http://localhost:5173
       TURNSTILE_SITEKEY: 1x00000000000000000000AA
       TURNSTILE_SECRET_KEY: 1x0000000000000000000000000000000AA
-      CLOUDINARY_CLOUD_NAME: ci_test_cloudinary_cloud
-      CLOUDINARY_API_KEY: ci_test_cloudinary_api_key
-      CLOUDINARY_API_SECRET: ci_test_cloudinary_api_secret
       NODE_ENV: test
       REDIRECTOR_URL: http://localhost:3002
-      SESSION_SECRET: ci_test_session_secret_at_least_32_characters
       REDIS_URL: localhost
       REDIS_PORT: 6379
     services:
@@ -64,9 +59,9 @@ jobs:
       - name: Install dependencies
         run: bun install
 
-      # Initialize Database
-      - name: Initialize Database
-        run: PGPASSWORD=admin psql -h localhost -U admin -d min_url_test -f backend-services/db/init.sql
+      # Initialize Database Migrations
+      - name: Initialize Database Migrations
+        run: bun --cwd apps/backend-services run db:migrate
 
       # Install Playwright Browsers (Chromium only to speed up CI)
       - name: Install Playwright Browsers
