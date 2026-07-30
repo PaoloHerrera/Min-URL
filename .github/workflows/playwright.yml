@@ -15,6 +15,8 @@ jobs:
       PORT: 3001
       DATABASE_URL: postgres://admin:admin@localhost:5432/min_url_test
       ADMIN_URL: postgres://admin:admin@localhost:5432/postgres
+      FRONTEND_URL: http://localhost:4321
+      BACKEND_API_URL: http://localhost:3001
       INTERNAL_SECRET: ci_test_internal_secret_32_characters_min
       CORS_ALLOWED_ORIGINS: http://localhost:4321,https://min-url.com,http://localhost:5173
       TURNSTILE_SITEKEY: 1x00000000000000000000AA
