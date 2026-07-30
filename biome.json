@@ -60,7 +60,8 @@
 				"frontend-landing/**",
 				"tests/**",
 				"**/*.spec.ts",
-				"**/env.schemas.ts"
+				"**/env.schemas.ts",
+				"**/src/config/env.ts"
 			],
 			"linter": {
 				"rules": {
