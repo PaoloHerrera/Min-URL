@@ -1,2 +1,9 @@
-// Test environment setup for backend-redirector
-// Environment variables are loaded dynamically from .env.test in vitest.config.ts
+import path from 'node:path'
+import { fileURLToPath } from 'node:url'
+import dotenv from 'dotenv'
+
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
+
+// Load .env.test environment variables into Vitest worker thread
+dotenv.config({ path: path.resolve(__dirname, '../.env.test') })
