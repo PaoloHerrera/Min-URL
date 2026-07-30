@@ -131,6 +131,16 @@
 			}
 		},
 		{
+			"include": ["**/packages/contracts/**", "packages/contracts/**"],
+			"linter": {
+				"rules": {
+					"correctness": {
+						"noUndeclaredDependencies": "off"
+					}
+				}
+			}
+		},
+		{
 			"include": ["**/backend-redirector/**", "backend-redirector/**"],
 			"linter": {
 				"rules": {
