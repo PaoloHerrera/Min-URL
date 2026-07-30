@@ -38,4 +38,29 @@ describe('Environment Config Schema (Unit Test)', () => {
 
 		expect(parsed.ENABLE_SWAGGER).toBe(false)
 	})
+
+	it('Should throw validation error when PORT is empty string (Fail-Fast)', () => {
+		expect(() =>
+			envSchema.parse({
+				...validBaseEnv,
+				PORT: '',
+			}),
+		).toThrow()
+	})
+
+	it('Should throw validation error when PORT is out of valid range (0 or > 65535)', () => {
+		expect(() =>
+			envSchema.parse({
+				...validBaseEnv,
+				PORT: '0',
+			}),
+		).toThrow()
+
+		expect(() =>
+			envSchema.parse({
+				...validBaseEnv,
+				PORT: '70000',
+			}),
+		).toThrow()
+	})
 })

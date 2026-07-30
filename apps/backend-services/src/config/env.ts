@@ -2,7 +2,7 @@ import '@/bootstrap-env.ts'
 import { z } from 'zod'
 
 export const envSchema = z.object({
-	PORT: z.coerce.number().default(3001),
+	PORT: z.coerce.number().int().min(1).max(65535).default(3001),
 	NODE_ENV: z.enum(['development', 'production', 'test']),
 	REDIRECTOR_URL: z.url().min(1, 'REDIRECTOR_URL is required'),
 	DATABASE_URL: z.string().min(1, 'DATABASE_URL is required'),
