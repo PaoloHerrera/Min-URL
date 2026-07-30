@@ -7,6 +7,7 @@ import { routesShortUrl } from '@/adapters/primary/http/routes/shorturl.route.ts
 import dotenv from 'dotenv'
 import express, { type Request, type Response } from 'express'
 import swaggerUi from 'swagger-ui-express'
+import { env } from './config/env.ts'
 import { swaggerDocument } from './swagger.ts'
 
 const __filename = fileURLToPath(import.meta.url)
@@ -18,7 +19,7 @@ app.use(corsMiddleware())
 app.disable('x-powered-by')
 
 // Habilitar trust proxy
-app.set('trust proxy', true)
+app.set('trust proxy', 1)
 
 // Configuración de dotenv apuntando a la raíz del servicio
 const envPath = path.join(__dirname, '../.env')
@@ -39,10 +40,7 @@ app.get('/favicon.ico', (_req: Request, res: Response) => {
 })
 
 // Swagger UI
-if (
-	process.env.NODE_ENV !== 'production' ||
-	process.env.ENABLE_SWAGGER === 'true'
-) {
+if (env.NODE_ENV !== 'production' || env.ENABLE_SWAGGER === true) {
 	app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument))
 }
 
