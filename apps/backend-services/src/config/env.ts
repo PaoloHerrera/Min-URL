@@ -1,3 +1,4 @@
+import '@/bootstrap-env.ts'
 import { z } from 'zod'
 
 export const envSchema = z.object({
