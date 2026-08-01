@@ -22,6 +22,9 @@ const publicSlugSchema = z.object({
 	queryAt: z.string().datetime(),
 })
 
+//Sleep Helper
+const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
+
 // Insert test data before all tests
 beforeAll(async () => {
 	// 1. Create a public slug
@@ -246,5 +249,27 @@ describe('GET /internal/slug-data/:slug', () => {
 			.get('/internal/slug-data/public')
 			.set('Authorization', 'Bearer invalid-secret')
 		expect(response.statusCode).toBe(401)
+	})
+
+	describe('Verify persistence data', () => {
+		it('Should do not update time in short_urls table if user visit the link', async () => {
+			const shortUrl = await repo.getUrlBySlug('public')
+			const initialTime = shortUrl?.updatedAt
+
+			await sleep(50)
+
+			const response = await request(app)
+				.get('/internal/slug-data/public')
+				.set('Authorization', `Bearer ${process.env.INTERNAL_SECRET}`)
+				.set('User-Agent', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)')
+				.set('X-Forwarded-For', '198.51.100.42')
+
+			expect(response.statusCode).toBe(200)
+
+			const updatedShortUrl = await repo.getUrlBySlug('public')
+			expect(updatedShortUrl?.updatedAt.getTime()).toEqual(
+				initialTime?.getTime(),
+			)
+		})
 	})
 })
