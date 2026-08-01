@@ -35,7 +35,6 @@ export class DrizzleVisitRepository implements VisitRepositoryPort {
 				.update(shortUrls)
 				.set({
 					clicksCount: sql`${shortUrls.clicksCount} + 1`,
-					updatedAt: new Date(),
 				})
 				.where(eq(shortUrls.id, visit.shortUrlId))
 		})
