@@ -31,11 +31,10 @@ export class UrlController {
 			turnstileToken,
 		}: ShortenAnonymousRequest = req.body
 
-		const clientIp =
-			req.body.ip ||
-			req.headers['x-forwarded-for'] ||
-			req.socket.remoteAddress ||
-			'unknown'
+		const clientIp = extractClientIp(
+			req.headers['x-forwarded-for'],
+			req.socket.remoteAddress,
+		)
 
 		const shortUrl = await this.shortenUrlAnonymousPort.execute({
 			originalUrl,
