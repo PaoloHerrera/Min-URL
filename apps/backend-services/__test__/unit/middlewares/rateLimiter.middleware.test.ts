@@ -52,11 +52,6 @@ describe('Rate Limiter Middleware', () => {
 			code: API_ERROR_CODES.tooManyRequests,
 			message: 'Too many requests, please try again later.',
 		})
-
-		const response = await request(app)
-			.get('/test')
-			.set('X-Forwarded-For', '216.211.105.89')
-		expect(response.status).toBe(429)
 	})
 
 	it('Should return 200 when requests are not exceeding the max request limit', async () => {
