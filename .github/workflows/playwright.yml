@@ -25,6 +25,9 @@ jobs:
       REDIRECTOR_URL: http://localhost:3002
       REDIS_URL: localhost
       REDIS_PORT: 6379
+      RATE_LIMIT_ENABLED: true
+      RATE_LIMIT_WINDOW_MS: 60000
+      RATE_LIMIT_MAX_REQUESTS: 60
     services:
       postgres:
         image: postgres:16.0
