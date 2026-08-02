@@ -52,6 +52,9 @@ describe('Rate Limiter Middleware', () => {
 			code: API_ERROR_CODES.tooManyRequests,
 			message: 'Too many requests, please try again later.',
 		})
+		expect(failed[0].headers['ratelimit-limit']).toBe('10')
+		expect(failed[0].headers['ratelimit-remaining']).toBe('0')
+		expect(failed[0].headers['ratelimit-reset']).toBeDefined()
 	})
 
 	it('Should return 200 when requests are not exceeding the max request limit', async () => {
