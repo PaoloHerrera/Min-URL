@@ -11,6 +11,7 @@ import { Geolocation } from '@/core/domain/value-objects/geolocation/Geolocation
 import {
 	CaptchaVerificationError,
 	ForbiddenExtensionError,
+	SlugAlreadyExistsError,
 	SlugGenerationExhaustedError,
 } from '../../../src/core/domain/errors/domain.errors.ts'
 
@@ -124,5 +125,34 @@ describe('ShortenUrlAnonymousUseCase', () => {
 		expect(result).toBeInstanceOf(ShortUrl)
 		expect(result.ipAddress.geolocation).toBeNull()
 		expect(mockShortUrlRepository.save).toHaveBeenCalledWith(result)
+	})
+
+	it('Should retry saving with a new slug if ShortUrlRepository throws SlugAlreadyExistsError on initial attempt', async () => {
+		mockShortUrlRepository.save = vi
+			.fn()
+			.mockRejectedValueOnce(new SlugAlreadyExistsError('slug11'))
+			.mockResolvedValueOnce(undefined)
+
+		mockSlugGenerator.generateUniqueSlug = vi
+			.fn()
+			.mockResolvedValueOnce('slug11')
+			.mockResolvedValueOnce('slug22')
+
+		const result = await useCase.execute(validInput)
+
+		expect(result).toBeInstanceOf(ShortUrl)
+		expect(result.slug.value).toBe('slug22')
+		expect(mockShortUrlRepository.save).toHaveBeenCalledTimes(2)
+	})
+
+	it('Should throw SlugAlreadyExistsError if all 3 retries fail due to continuous slug collisions', async () => {
+		mockShortUrlRepository.save = vi
+			.fn()
+			.mockRejectedValue(new SlugAlreadyExistsError('collid'))
+
+		await expect(useCase.execute(validInput)).rejects.toThrow(
+			SlugAlreadyExistsError,
+		)
+		expect(mockShortUrlRepository.save).toHaveBeenCalledTimes(3)
 	})
 })

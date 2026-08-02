@@ -7,6 +7,7 @@ import type { CreateShortUrlInput } from '../domain/entities/ShortUrl.entity.ts'
 import {
 	CaptchaVerificationError,
 	ForbiddenExtensionError,
+	SlugAlreadyExistsError,
 } from '../domain/errors/domain.errors.ts'
 import { IpAddress } from '../domain/value-objects/ip-address/IpAddress.vo.ts'
 import { Slug } from '../domain/value-objects/slug/Slug.vo.ts'
@@ -33,40 +34,68 @@ export class ShortenUrlAnonymous implements ShortenUrlAnonymousPort {
 	}
 
 	async execute(input: ShortenUrlAnonymousInput): Promise<ShortUrl> {
-		const { originalUrl, captchaToken, clientIp } = input
+		await this.ensureValidCaptcha(input.captchaToken)
+		const targetUrlVo = this.ensureAllowedTargetUrl(input.originalUrl)
+		const ipAddressVo = await this.resolveIpAddress(input.clientIp)
 
+		return await this.createAndSaveWithSlugRetry(targetUrlVo, ipAddressVo)
+	}
+
+	private async ensureValidCaptcha(captchaToken: string): Promise<void> {
 		const isCaptchaValid = await this.props.captchaServices.verify(captchaToken)
 		if (!isCaptchaValid) {
 			throw new CaptchaVerificationError()
 		}
+	}
 
+	private ensureAllowedTargetUrl(originalUrl: string): TargetUrl {
 		const targetUrlVo = TargetUrl.create(originalUrl)
-
 		const isForbidden = this.props.forbiddenExtensions.check(targetUrlVo)
 		if (isForbidden) {
 			throw new ForbiddenExtensionError(targetUrlVo.value)
 		}
+		return targetUrlVo
+	}
 
-		const generatedSlug =
-			await this.props.slugGenerator.generateUniqueSlug(targetUrlVo)
-		const slugVo = Slug.create(generatedSlug)
-
-		const initialIpVo = IpAddress.createOrUnknown(clientIp)
+	private async resolveIpAddress(clientIp?: string): Promise<IpAddress> {
+		const initialIpVo = IpAddress.createOrUnknown(clientIp ?? '')
 		const userLocation =
 			await this.props.ipGeolocationResolver.resolve(initialIpVo)
-		const ipAddressVo = IpAddress.createOrUnknown(clientIp, userLocation)
+		return IpAddress.createOrUnknown(clientIp ?? '', userLocation)
+	}
 
-		const createShortUrlInput: CreateShortUrlInput = {
-			originalUrl: targetUrlVo,
-			slug: slugVo,
-			ipAddress: ipAddressVo,
-			purpose: 'direct',
-			title: 'Untitled',
+	private async createAndSaveWithSlugRetry(
+		targetUrlVo: TargetUrl,
+		ipAddressVo: IpAddress,
+	): Promise<ShortUrl> {
+		const MAX_ATTEMPTS = 3
+		let lastError: unknown
+
+		for (let attempt = 0; attempt < MAX_ATTEMPTS; attempt++) {
+			try {
+				const generatedSlug =
+					await this.props.slugGenerator.generateUniqueSlug(targetUrlVo)
+				const slugVo = Slug.create(generatedSlug)
+
+				const createShortUrlInput: CreateShortUrlInput = {
+					originalUrl: targetUrlVo,
+					slug: slugVo,
+					ipAddress: ipAddressVo,
+					purpose: 'direct',
+					title: 'Untitled',
+				}
+
+				const shortUrlEntity = ShortUrl.create(createShortUrlInput)
+				await this.props.shortUrlRepository.save(shortUrlEntity)
+				return shortUrlEntity
+			} catch (error) {
+				if (!(error instanceof SlugAlreadyExistsError)) {
+					throw error
+				}
+				lastError = error
+			}
 		}
 
-		const shortUrlEntity = ShortUrl.create(createShortUrlInput)
-		await this.props.shortUrlRepository.save(shortUrlEntity)
-
-		return shortUrlEntity
+		throw lastError
 	}
 }

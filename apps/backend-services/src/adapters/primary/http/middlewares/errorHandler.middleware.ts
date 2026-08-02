@@ -1,12 +1,13 @@
-import { API_ERROR_CODES } from '@min-url/contracts/errors'
 import {
 	DomainError,
+	SlugAlreadyExistsError,
 	SlugGenerationExhaustedError,
 	SlugIsDeletedError,
 	SlugIsExpiredError,
 	SlugNotFoundError,
 } from '@/core/domain/errors/domain.errors.ts'
 import type { ErrorResponsePayload } from '@min-url/contracts/dto'
+import { API_ERROR_CODES } from '@min-url/contracts/errors'
 import type { NextFunction, Request, Response } from 'express'
 
 export const errorHandler = (
@@ -36,6 +37,11 @@ export const errorHandler = (
 
 		if (error instanceof SlugGenerationExhaustedError) {
 			res.status(503).json(payload)
+			return
+		}
+
+		if (error instanceof SlugAlreadyExistsError) {
+			res.status(409).json(payload)
 			return
 		}
 
