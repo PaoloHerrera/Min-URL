@@ -13,6 +13,9 @@ export const envSchema = z.object({
 		.min(32, 'INTERNAL_SECRET must be at least 32 characters long'),
 	CORS_ALLOWED_ORIGINS: z.string().min(1, 'CORS_ALLOWED_ORIGINS is required'),
 	ENABLE_SWAGGER: z.stringbool().default(false),
+	RATE_LIMIT_ENABLED: z.stringbool().default(true),
+	RATE_LIMIT_WINDOW_MS: z.coerce.number().int().min(1000).default(60000),
+	RATE_LIMIT_MAX_REQUESTS: z.coerce.number().int().min(1).default(60),
 })
 
 export type Env = z.infer<typeof envSchema>
