@@ -1,4 +1,3 @@
-import { randomUUID } from 'node:crypto'
 import type { TargetUrl } from '@/core/domain/value-objects/target-url/TargetUrl.vo.ts'
 import type { ShortUrlRepositoryPort } from '@/core/ports/outbound/ShortUrlRepositoryPort.interface.ts'
 import type { SlugGeneratorPort } from '@/core/ports/outbound/SlugGeneratorPort.interface.ts'
@@ -38,7 +37,7 @@ export class RandomBase62SlugGenerator implements SlugGeneratorPort {
 		let attempts = 0
 
 		while (attempts < this.config.maxAttempts) {
-			const inputForSlug = `${url.value}-${randomUUID()}`
+			const inputForSlug = `${url.value}-${crypto.randomUUID()}`
 			const base62Hash = base64ToBase62(generateHash(inputForSlug))
 			const slug = base62Hash.substring(0, length)
 			// Check availability

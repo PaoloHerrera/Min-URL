@@ -90,3 +90,10 @@ export class SlugIsDeletedError extends DomainError {
 		super(`Slug is deleted: ${slug}`)
 	}
 }
+
+export class SlugAlreadyExistsError extends DomainError {
+	readonly code = SLUG_ERROR_CODES.slugAlreadyExists
+	constructor(slug: string) {
+		super(`The short URL slug '${slug}' is already taken.`)
+	}
+}

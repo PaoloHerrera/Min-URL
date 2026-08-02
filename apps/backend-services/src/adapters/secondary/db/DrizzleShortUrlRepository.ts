@@ -5,8 +5,11 @@ import {
 } from '@/adapters/secondary/db/mappers/short-url.mapper.ts'
 import { shortUrls } from '@/adapters/secondary/db/schema/short-urls.schema.ts'
 import type { ShortUrl } from '@/core/domain/entities/ShortUrl.entity.ts'
+import { SlugAlreadyExistsError } from '@/core/domain/errors/domain.errors'
 import type { ShortUrlRepositoryPort } from '@/core/ports/outbound/ShortUrlRepositoryPort.interface.ts'
 import { count, eq } from 'drizzle-orm'
+import { DrizzleQueryError } from 'drizzle-orm'
+import { DatabaseError } from 'pg'
 
 export class DrizzleShortUrlRepository implements ShortUrlRepositoryPort {
 	async isSlugAvailable(slug: string): Promise<boolean> {
@@ -22,10 +25,26 @@ export class DrizzleShortUrlRepository implements ShortUrlRepositoryPort {
 		// clicksCount is excluded from updates — it is maintained atomically
 		// by DrizzleVisitRepository.save() via clicks_count = clicks_count + 1.
 		const { clicksCount: _omit, ...updateData } = data
-		await db
-			.insert(shortUrls)
-			.values(data)
-			.onConflictDoUpdate({ target: shortUrls.id, set: updateData })
+
+		try {
+			await db
+				.insert(shortUrls)
+				.values(data)
+				.onConflictDoUpdate({ target: shortUrls.id, set: updateData })
+		} catch (error) {
+			if (
+				error instanceof DrizzleQueryError &&
+				error.cause instanceof DatabaseError &&
+				error.cause.code === '23505'
+			) {
+				console.error(
+					`Slug collision for ${data.slug}. Retrying with a different slug...`,
+				)
+
+				throw new SlugAlreadyExistsError(data.slug)
+			}
+			throw error
+		}
 	}
 
 	async getUrlBySlug(slug: string): Promise<ShortUrl | null> {

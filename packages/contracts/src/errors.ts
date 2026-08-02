@@ -4,6 +4,7 @@ export const SLUG_ERROR_CODES = {
 	slugIsExpired: 'SLUG_IS_EXPIRED',
 	slugIsDeleted: 'SLUG_IS_DELETED',
 	slugGenerationExhausted: 'SLUG_GENERATION_EXHAUSTED',
+	slugAlreadyExists: 'SLUG_ALREADY_EXISTS',
 } as const
 
 export const API_ERROR_CODES = {
