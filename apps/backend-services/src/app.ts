@@ -1,5 +1,6 @@
 import { corsMiddleware } from '@/adapters/primary/http/middlewares/cors.middleware.ts'
 import { errorHandler } from '@/adapters/primary/http/middlewares/errorHandler.middleware.ts'
+import { rateLimiter } from '@/adapters/primary/http/middlewares/rateLimiter.middleware.ts'
 import { routesInternal } from '@/adapters/primary/http/routes/internal.route.ts'
 import { routesShortUrl } from '@/adapters/primary/http/routes/shorturl.route.ts'
 import express, { type Request, type Response } from 'express'
@@ -14,6 +15,15 @@ app.disable('x-powered-by')
 
 // Habilitar trust proxy
 app.set('trust proxy', 1)
+
+// Rate Limiter
+app.use(
+	rateLimiter({
+		enabled: env.RATE_LIMIT_ENABLED,
+		windowMs: env.RATE_LIMIT_WINDOW_MS,
+		maxRequests: env.RATE_LIMIT_MAX_REQUESTS,
+	}),
+)
 
 // Routes
 app.use('/', routesShortUrl)

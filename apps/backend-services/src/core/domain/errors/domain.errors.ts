@@ -97,3 +97,10 @@ export class SlugAlreadyExistsError extends DomainError {
 		super(`The short URL slug '${slug}' is already taken.`)
 	}
 }
+
+export class TooManyRequestsError extends DomainError {
+	readonly code = API_ERROR_CODES.tooManyRequests
+	constructor(message = 'Too many requests, please try again later.') {
+		super(message)
+	}
+}

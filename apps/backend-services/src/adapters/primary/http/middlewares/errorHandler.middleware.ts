@@ -5,6 +5,7 @@ import {
 	SlugIsDeletedError,
 	SlugIsExpiredError,
 	SlugNotFoundError,
+	TooManyRequestsError,
 } from '@/core/domain/errors/domain.errors.ts'
 import type { ErrorResponsePayload } from '@min-url/contracts/dto'
 import { API_ERROR_CODES } from '@min-url/contracts/errors'
@@ -42,6 +43,11 @@ export const errorHandler = (
 
 		if (error instanceof SlugAlreadyExistsError) {
 			res.status(409).json(payload)
+			return
+		}
+
+		if (error instanceof TooManyRequestsError) {
+			res.status(429).json(payload)
 			return
 		}
 

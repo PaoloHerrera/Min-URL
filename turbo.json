@@ -26,7 +26,10 @@
 				"NODE_ENV",
 				"REDIRECTOR_URL",
 				"REDIS_URL",
-				"REDIS_PORT"
+				"REDIS_PORT",
+				"RATE_LIMIT_ENABLED",
+				"RATE_LIMIT_WINDOW_MS",
+				"RATE_LIMIT_MAX_REQUESTS"
 			],
 			"outputs": []
 		},
