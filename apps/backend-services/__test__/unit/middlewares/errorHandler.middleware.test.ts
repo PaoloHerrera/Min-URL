@@ -7,6 +7,8 @@ import {
 	SlugIsExpiredError,
 	SlugIsDeletedError,
 	SlugGenerationExhaustedError,
+	SlugAlreadyExistsError,
+	TooManyRequestsError,
 	InvalidUrlError,
 } from '@/core/domain/errors/domain.errors.ts'
 
@@ -15,7 +17,7 @@ describe('errorHandler (Unit Test)', () => {
 
 	it('Should return 404 for SlugNotFoundError', async () => {
 		app = express()
-		app.get('/test', (req, res, next) => {
+		app.get('/test', (_req, _res, next) => {
 			next(new SlugNotFoundError('abc'))
 		})
 		app.use(errorHandler)
@@ -30,7 +32,7 @@ describe('errorHandler (Unit Test)', () => {
 
 	it('Should return 410 for SlugIsExpiredError', async () => {
 		app = express()
-		app.get('/test', (req, res, next) => {
+		app.get('/test', (_req, _res, next) => {
 			next(new SlugIsExpiredError('abc'))
 		})
 		app.use(errorHandler)
@@ -45,7 +47,7 @@ describe('errorHandler (Unit Test)', () => {
 
 	it('Should return 410 for SlugIsDeletedError', async () => {
 		app = express()
-		app.get('/test', (req, res, next) => {
+		app.get('/test', (_req, _res, next) => {
 			next(new SlugIsDeletedError('abc'))
 		})
 		app.use(errorHandler)
@@ -60,7 +62,7 @@ describe('errorHandler (Unit Test)', () => {
 
 	it('Should return 503 for SlugGenerationExhaustedError', async () => {
 		app = express()
-		app.get('/test', (req, res, next) => {
+		app.get('/test', (_req, _res, next) => {
 			next(new SlugGenerationExhaustedError())
 		})
 		app.use(errorHandler)
@@ -73,9 +75,39 @@ describe('errorHandler (Unit Test)', () => {
 		})
 	})
 
+	it('Should return 409 for SlugAlreadyExistsError', async () => {
+		app = express()
+		app.get('/test', (_req, _res, next) => {
+			next(new SlugAlreadyExistsError('abc'))
+		})
+		app.use(errorHandler)
+
+		const response = await request(app).get('/test')
+		expect(response.status).toBe(409)
+		expect(response.body).toEqual({
+			code: 'SLUG_ALREADY_EXISTS',
+			message: "The short URL slug 'abc' is already taken.",
+		})
+	})
+
+	it('Should return 429 for TooManyRequestsError', async () => {
+		app = express()
+		app.get('/test', (_req, _res, next) => {
+			next(new TooManyRequestsError())
+		})
+		app.use(errorHandler)
+
+		const response = await request(app).get('/test')
+		expect(response.status).toBe(429)
+		expect(response.body).toEqual({
+			code: 'TOO_MANY_REQUESTS',
+			message: 'Too many requests, please try again later.',
+		})
+	})
+
 	it('Should return 400 for generic DomainError (like InvalidUrlError)', async () => {
 		app = express()
-		app.get('/test', (req, res, next) => {
+		app.get('/test', (_req, _res, next) => {
 			next(new InvalidUrlError('invalid-url'))
 		})
 		app.use(errorHandler)
@@ -92,7 +124,7 @@ describe('errorHandler (Unit Test)', () => {
 		app = express()
 		const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
 
-		app.get('/test', (req, res, next) => {
+		app.get('/test', (_req, _res, next) => {
 			next(new Error('Something blew up'))
 		})
 		app.use(errorHandler)
