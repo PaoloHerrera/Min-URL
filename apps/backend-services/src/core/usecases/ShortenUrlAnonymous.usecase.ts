@@ -8,7 +8,6 @@ import {
 	CaptchaVerificationError,
 	ForbiddenExtensionError,
 	SlugAlreadyExistsError,
-	SlugGenerationExhaustedError,
 } from '../domain/errors/domain.errors.ts'
 import { IpAddress } from '../domain/value-objects/ip-address/IpAddress.vo.ts'
 import { Slug } from '../domain/value-objects/slug/Slug.vo.ts'
@@ -69,10 +68,10 @@ export class ShortenUrlAnonymous implements ShortenUrlAnonymousPort {
 		targetUrlVo: TargetUrl,
 		ipAddressVo: IpAddress,
 	): Promise<ShortUrl> {
-		let attempts = 0
 		const MAX_ATTEMPTS = 3
+		let lastError: unknown
 
-		while (attempts < MAX_ATTEMPTS) {
+		for (let attempt = 0; attempt < MAX_ATTEMPTS; attempt++) {
 			try {
 				const generatedSlug =
 					await this.props.slugGenerator.generateUniqueSlug(targetUrlVo)
@@ -90,17 +89,13 @@ export class ShortenUrlAnonymous implements ShortenUrlAnonymousPort {
 				await this.props.shortUrlRepository.save(shortUrlEntity)
 				return shortUrlEntity
 			} catch (error) {
-				if (
-					error instanceof SlugAlreadyExistsError &&
-					attempts < MAX_ATTEMPTS - 1
-				) {
-					attempts++
-					continue
+				if (!(error instanceof SlugAlreadyExistsError)) {
+					throw error
 				}
-				throw error
+				lastError = error
 			}
 		}
 
-		throw new SlugGenerationExhaustedError()
+		throw lastError
 	}
 }
