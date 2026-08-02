@@ -12,6 +12,7 @@ export const API_ERROR_CODES = {
 	invalidUrl: 'INVALID_URL',
 	badRequest: 'BAD_REQUEST',
 	internalServerError: 'INTERNAL_SERVER_ERROR',
+	tooManyRequests: 'TOO_MANY_REQUESTS',
 } as const
 
 export type SlugErrorCode =
