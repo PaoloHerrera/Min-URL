@@ -8,7 +8,7 @@ import type { ShortUrl } from '@/core/domain/entities/ShortUrl.entity.ts'
 import { SlugAlreadyExistsError } from '@/core/domain/errors/domain.errors'
 import type { ShortUrlRepositoryPort } from '@/core/ports/outbound/ShortUrlRepositoryPort.interface.ts'
 import { count, eq } from 'drizzle-orm'
-import { DrizzleQueryError } from 'drizzle-orm'
+import { DrizzleQueryError } from 'drizzle-orm/errors'
 import { DatabaseError } from 'pg'
 
 export class DrizzleShortUrlRepository implements ShortUrlRepositoryPort {
@@ -35,7 +35,8 @@ export class DrizzleShortUrlRepository implements ShortUrlRepositoryPort {
 			if (
 				error instanceof DrizzleQueryError &&
 				error.cause instanceof DatabaseError &&
-				error.cause.code === '23505'
+				error.cause.code === '23505' &&
+				error.cause.constraint === 'short_urls_slug_unique'
 			) {
 				console.error(
 					`Slug collision for ${data.slug}. Retrying with a different slug...`,
