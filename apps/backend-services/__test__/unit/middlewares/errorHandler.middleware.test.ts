@@ -11,6 +11,7 @@ import {
 	TooManyRequestsError,
 	InvalidUrlError,
 } from '@/core/domain/errors/domain.errors.ts'
+import { PayloadTooLargeError } from '@/adapters/primary/http/errors/http.errors.ts'
 
 describe('errorHandler (Unit Test)', () => {
 	let app: express.Express
@@ -87,6 +88,21 @@ describe('errorHandler (Unit Test)', () => {
 		expect(response.body).toEqual({
 			code: 'SLUG_ALREADY_EXISTS',
 			message: "The short URL slug 'abc' is already taken.",
+		})
+	})
+
+	it('Should return 413 for PayloadTooLargeError', async () => {
+		app = express()
+		app.get('/test', (_req, _res, next) => {
+			next(new PayloadTooLargeError())
+		})
+		app.use(errorHandler)
+
+		const response = await request(app).get('/test')
+		expect(response.status).toBe(413)
+		expect(response.body).toEqual({
+			code: 'PAYLOAD_TOO_LARGE',
+			message: 'Payload is too large',
 		})
 	})
 
