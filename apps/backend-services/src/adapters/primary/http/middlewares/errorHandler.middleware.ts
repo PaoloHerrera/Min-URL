@@ -1,15 +1,8 @@
-import {
-	DomainError,
-	SlugAlreadyExistsError,
-	SlugGenerationExhaustedError,
-	SlugIsDeletedError,
-	SlugIsExpiredError,
-	SlugNotFoundError,
-	TooManyRequestsError,
-} from '@/core/domain/errors/domain.errors.ts'
+import { DomainError } from '@/core/domain/errors/domain.errors.ts'
 import type { ErrorResponsePayload } from '@min-url/contracts/dto'
 import { API_ERROR_CODES } from '@min-url/contracts/errors'
 import type { NextFunction, Request, Response } from 'express'
+import { HttpError } from '../errors/http.errors.ts'
 
 export const errorHandler = (
 	error: Error,
@@ -23,35 +16,17 @@ export const errorHandler = (
 			message: error.message,
 		}
 
-		if (error instanceof SlugNotFoundError) {
-			res.status(404).json(payload)
-			return
+		res.status(error.statusCode).json(payload)
+		return
+	}
+
+	if (error instanceof HttpError) {
+		const payload: ErrorResponsePayload = {
+			code: error.code,
+			message: error.message,
 		}
 
-		if (
-			error instanceof SlugIsDeletedError ||
-			error instanceof SlugIsExpiredError
-		) {
-			res.status(410).json(payload)
-			return
-		}
-
-		if (error instanceof SlugGenerationExhaustedError) {
-			res.status(503).json(payload)
-			return
-		}
-
-		if (error instanceof SlugAlreadyExistsError) {
-			res.status(409).json(payload)
-			return
-		}
-
-		if (error instanceof TooManyRequestsError) {
-			res.status(429).json(payload)
-			return
-		}
-
-		res.status(400).json(payload)
+		res.status(error.statusCode).json(payload)
 		return
 	}
 
