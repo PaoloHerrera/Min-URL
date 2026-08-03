@@ -15,11 +15,27 @@ export const API_ERROR_CODES = {
 	tooManyRequests: 'TOO_MANY_REQUESTS',
 } as const
 
+export const HTTP_ERROR_CODES = {
+	payloadTooLarge: {
+		code: 'PAYLOAD_TOO_LARGE',
+		message: 'Payload is too large',
+		statusCode: 413,
+	},
+	invalidJson: {
+		code: 'INVALID_JSON',
+		message: 'Invalid JSON',
+		statusCode: 400,
+	},
+} as const
+
 export type SlugErrorCode =
 	(typeof SLUG_ERROR_CODES)[keyof typeof SLUG_ERROR_CODES]
 
 export type ApiErrorCode =
 	(typeof API_ERROR_CODES)[keyof typeof API_ERROR_CODES]
+
+export type HttpErrorCode =
+	(typeof HTTP_ERROR_CODES)[keyof typeof HTTP_ERROR_CODES]
 
 export const INTERNAL_TOKEN_ERROR_MESSAGES = {
 	missingHeader: 'Authorization header missing',
