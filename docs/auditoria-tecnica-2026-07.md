@@ -299,20 +299,20 @@ Estado: ⏳ pendiente · 🔧 en curso · ✅ resuelto · ➖ descartado/wontfix
 
 ### Seguridad
 
-| ID         | Hallazgo                                    | Estado | Notas / PR                                  |
-| ---------- | ------------------------------------------- | ------ | ------------------------------------------- |
-| SEC-C1     | Fallback `\|\| 'secret'` JWT                | ⏳     | Fase 0                                      |
-| SEC-C2     | Credenciales/puertos docker-compose         | ⏳     | Fase 0 (compose dev) + paso 54 (prod)       |
-| SEC-A1     | Rate limiting ausente (backend-services)    | ⏳     | **Antes de `verify-password`** (ADR-003)    |
-| SEC-A2     | CORS reflexivo con credenciales             | ⏳     | Fase 0 / paso 20 del plan                   |
-| SEC-A3     | Identidad `idUsers: 1` hardcodeada          | ⏳     | Parte 1B (better-auth + DB)                 |
-| SEC-M1     | Sin bloqueo IPs privadas en TargetUrl       | ⏳     | Fase 1 o Cap 4                              |
-| SEC-M2     | `z.url()` acepta `javascript:` en contracts | ⏳     | Fase 0 (`httpUrlSchema`)                    |
-| SEC-M3     | Token interno no timing-safe                | ⏳     | Fase 0                                      |
-| SEC-M4     | Spoofing de IP (trust proxy / body.ip)      | ⏳     | Fase 0                                      |
-| SEC-M5     | OAuth sin `state`, callback relativa        | ⏳     | Parte 1B                                    |
-| SEC-M6     | Refresh sin rotación; access 24h            | ⏳     | Parte 1B (better-auth lo resuelve)          |
-| SEC-B1-B12 | Bajos (ver tabla)                           | ⏳     | B3 y B8 cierran en Parte 1B; B2/B5 en Cap 4 |
+| ID         | Hallazgo                                    | Estado | Notas / PR                                                                             |
+| ---------- | ------------------------------------------- | ------ | -------------------------------------------------------------------------------------- |
+| SEC-C1     | Fallback `\|\| 'secret'` JWT                | ⏳     | Fase 0                                                                                 |
+| SEC-C2     | Credenciales/puertos docker-compose         | ⏳     | Fase 0 (compose dev) + paso 54 (prod)                                                  |
+| SEC-A1     | Rate limiting ausente (backend-services)    | ⏳     | **Antes de `verify-password`** (ADR-003)                                               |
+| SEC-A2     | CORS reflexivo con credenciales             | ⏳     | Fase 0 / paso 20 del plan                                                              |
+| SEC-A3     | Identidad `idUsers: 1` hardcodeada          | ⏳     | Parte 1B (better-auth + DB)                                                            |
+| SEC-M1     | Sin bloqueo IPs privadas en TargetUrl       | ⏳     | Fase 1 o Cap 4                                                                         |
+| SEC-M2     | `z.url()` acepta `javascript:` en contracts | ⏳     | Fase 0 (`httpUrlSchema`)                                                               |
+| SEC-M3     | Token interno no timing-safe                | ⏳     | Fase 0                                                                                 |
+| SEC-M4     | Spoofing de IP (trust proxy / body.ip)      | ⏳     | Fase 0                                                                                 |
+| SEC-M5     | OAuth sin `state`, callback relativa        | ⏳     | Parte 1B                                                                               |
+| SEC-M6     | Refresh sin rotación; access 24h            | ⏳     | Parte 1B (better-auth lo resuelve)                                                     |
+| SEC-B1-B12 | Bajos (ver tabla)                           | 🔧     | SEC-B9 (payload limit 5KB) y SEC-B2 (helmet) resueltos en backend-services (Issue #37) |
 
 ### Arquitectura / Código
 

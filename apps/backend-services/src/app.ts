@@ -7,11 +7,15 @@ import express, { type Request, type Response } from 'express'
 import swaggerUi from 'swagger-ui-express'
 import { env } from './config/env.ts'
 import { swaggerDocument } from './swagger.ts'
+import helmet from 'helmet'
 
 const app = express()
-app.use(express.json())
 app.use(corsMiddleware())
-app.disable('x-powered-by')
+app.use(
+	helmet({
+		xFrameOptions: { action: 'deny' },
+	}),
+)
 
 // Habilitar trust proxy
 app.set('trust proxy', 1)
