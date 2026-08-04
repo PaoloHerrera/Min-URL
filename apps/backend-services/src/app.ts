@@ -10,12 +10,12 @@ import { swaggerDocument } from './swagger.ts'
 import helmet from 'helmet'
 
 const app = express()
-app.use(corsMiddleware())
 app.use(
 	helmet({
 		xFrameOptions: { action: 'deny' },
 	}),
 )
+app.use(corsMiddleware())
 
 // Habilitar trust proxy
 app.set('trust proxy', 1)
