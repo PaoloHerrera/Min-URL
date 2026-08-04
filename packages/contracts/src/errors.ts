@@ -35,7 +35,7 @@ export type ApiErrorCode =
 	(typeof API_ERROR_CODES)[keyof typeof API_ERROR_CODES]
 
 export type HttpErrorCode =
-	(typeof HTTP_ERROR_CODES)[keyof typeof HTTP_ERROR_CODES]
+	(typeof HTTP_ERROR_CODES)[keyof typeof HTTP_ERROR_CODES]['code']
 
 export const INTERNAL_TOKEN_ERROR_MESSAGES = {
 	missingHeader: 'Authorization header missing',
