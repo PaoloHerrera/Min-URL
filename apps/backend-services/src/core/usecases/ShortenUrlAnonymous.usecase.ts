@@ -5,13 +5,13 @@ import type {
 import { ShortUrl } from '../domain/entities/ShortUrl.entity.ts'
 import type { CreateShortUrlInput } from '../domain/entities/ShortUrl.entity.ts'
 import {
-	CaptchaVerificationError,
 	ForbiddenExtensionError,
 	SlugAlreadyExistsError,
 } from '../domain/errors/domain.errors.ts'
 import { IpAddress } from '../domain/value-objects/ip-address/IpAddress.vo.ts'
 import { Slug } from '../domain/value-objects/slug/Slug.vo.ts'
 import { TargetUrl } from '../domain/value-objects/target-url/TargetUrl.vo.ts'
+import { CaptchaVerificationError } from '../errors/application.errors.ts'
 import type { CaptchaServicePort } from '../ports/outbound/CaptchaServicePort.interface.ts'
 import type { ForbiddenExtensionsPort } from '../ports/outbound/ForbiddenExtensionsPort.interface.ts'
 import type { IpGeolocationResolverPort } from '../ports/outbound/IpGeolocationResolverPort.interface.ts'

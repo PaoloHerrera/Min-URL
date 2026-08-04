@@ -1,4 +1,13 @@
-import { DomainError } from '@/core/domain/errors/domain.errors.ts'
+import { AdaptersError } from '@/adapters/secondary/errors/adapters.errors.ts'
+import {
+	DomainError,
+	SlugAlreadyExistsError,
+	SlugGenerationExhaustedError,
+	SlugIsDeletedError,
+	SlugIsExpiredError,
+	SlugNotFoundError,
+} from '@/core/domain/errors/domain.errors.ts'
+import { ApplicationError } from '@/core/errors/application.errors.ts'
 import type { ErrorResponsePayload } from '@min-url/contracts/dto'
 import { API_ERROR_CODES } from '@min-url/contracts/errors'
 import type { NextFunction, Request, Response } from 'express'
@@ -16,7 +25,29 @@ export const errorHandler = (
 			message: error.message,
 		}
 
-		res.status(error.statusCode).json(payload)
+		if (error instanceof SlugNotFoundError) {
+			res.status(404).json(payload)
+			return
+		}
+
+		if (
+			error instanceof SlugIsDeletedError ||
+			error instanceof SlugIsExpiredError
+		) {
+			res.status(410).json(payload)
+			return
+		}
+
+		if (error instanceof SlugGenerationExhaustedError) {
+			res.status(503).json(payload)
+			return
+		}
+
+		if (error instanceof SlugAlreadyExistsError) {
+			res.status(409).json(payload)
+			return
+		}
+		res.status(400).json(payload)
 		return
 	}
 
@@ -27,6 +58,24 @@ export const errorHandler = (
 		}
 
 		res.status(error.statusCode).json(payload)
+		return
+	}
+
+	if (error instanceof ApplicationError) {
+		const payload: ErrorResponsePayload = {
+			code: error.code,
+			message: error.message,
+		}
+		res.status(422).json(payload)
+		return
+	}
+
+	if (error instanceof AdaptersError) {
+		const payload: ErrorResponsePayload = {
+			code: error.code,
+			message: error.message,
+		}
+		res.status(503).json(payload)
 		return
 	}
 

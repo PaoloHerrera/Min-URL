@@ -2,11 +2,9 @@ import { API_ERROR_CODES, SLUG_ERROR_CODES } from '@min-url/contracts/errors'
 
 export class DomainError extends Error {
 	readonly code: string = API_ERROR_CODES.badRequest
-	readonly statusCode: number = 400
 
-	constructor(message: string, statusCode?: number) {
+	constructor(message: string) {
 		super(message)
-		this.statusCode = statusCode || this.statusCode
 		this.name = this.constructor.name
 		Object.setPrototypeOf(this, new.target.prototype)
 	}
@@ -15,7 +13,7 @@ export class DomainError extends Error {
 export class InvalidUrlError extends DomainError {
 	readonly code = API_ERROR_CODES.invalidUrl
 	constructor(url: string) {
-		super(`Invalid URL: ${url}`, 400)
+		super(`Invalid URL: ${url}`)
 	}
 }
 
@@ -49,6 +47,9 @@ export class InvalidGeolocationError extends DomainError {
 
 export class InvalidVisitError extends DomainError {
 	readonly code = 'INVALID_VISIT'
+	constructor(message: string) {
+		super(`${message}`)
+	}
 }
 
 export class ForbiddenExtensionError extends DomainError {
@@ -58,51 +59,37 @@ export class ForbiddenExtensionError extends DomainError {
 	}
 }
 
-export class CaptchaVerificationError extends DomainError {
-	readonly code = 'CAPTCHA_VERIFICATION_FAILED'
-	constructor() {
-		super('Invalid captcha token')
-	}
-}
-
 export class SlugGenerationExhaustedError extends DomainError {
 	readonly code = SLUG_ERROR_CODES.slugGenerationExhausted
 	constructor() {
-		super('Error creating Short URL. Please try again later.', 503)
+		super('Error creating Short URL. Please try again later.')
 	}
 }
 
 export class SlugNotFoundError extends DomainError {
 	readonly code = SLUG_ERROR_CODES.slugNotFound
 	constructor(slug: string) {
-		super(`Slug not found: ${slug}`, 404)
+		super(`Slug not found: ${slug}`)
 	}
 }
 
 export class SlugIsExpiredError extends DomainError {
 	readonly code = SLUG_ERROR_CODES.slugIsExpired
 	constructor(slug: string) {
-		super(`Slug is expired: ${slug}`, 410)
+		super(`Slug is expired: ${slug}`)
 	}
 }
 
 export class SlugIsDeletedError extends DomainError {
 	readonly code = SLUG_ERROR_CODES.slugIsDeleted
 	constructor(slug: string) {
-		super(`Slug is deleted: ${slug}`, 410)
+		super(`Slug is deleted: ${slug}`)
 	}
 }
 
 export class SlugAlreadyExistsError extends DomainError {
 	readonly code = SLUG_ERROR_CODES.slugAlreadyExists
 	constructor(slug: string) {
-		super(`The short URL slug '${slug}' is already taken.`, 409)
-	}
-}
-
-export class TooManyRequestsError extends DomainError {
-	readonly code = API_ERROR_CODES.tooManyRequests
-	constructor(message = 'Too many requests, please try again later.') {
-		super(message, 429)
+		super(`The short URL slug '${slug}' is already taken.`)
 	}
 }

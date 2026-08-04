@@ -1,4 +1,4 @@
-import { HTTP_ERROR_CODES } from '@min-url/contracts/errors'
+import { API_ERROR_CODES, HTTP_ERROR_CODES } from '@min-url/contracts/errors'
 
 export class HttpError extends Error {
 	readonly code: Readonly<string>
@@ -27,6 +27,16 @@ export class InvalidJsonError extends HttpError {
 			HTTP_ERROR_CODES.invalidJson.message,
 			HTTP_ERROR_CODES.invalidJson.code,
 			HTTP_ERROR_CODES.invalidJson.statusCode,
+		)
+	}
+}
+
+export class TooManyRequestsError extends HttpError {
+	constructor() {
+		super(
+			'Too many requests, please try again later.',
+			API_ERROR_CODES.tooManyRequests,
+			429,
 		)
 	}
 }
