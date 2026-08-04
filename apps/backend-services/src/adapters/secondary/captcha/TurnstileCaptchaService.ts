@@ -1,6 +1,7 @@
 import { env } from '@/config/env.ts'
 import type { CaptchaServicePort } from '@/core/ports/outbound/CaptchaServicePort.interface.ts'
 import axios from 'axios'
+import { CaptchaServiceError } from '../errors/adapters.errors.ts'
 
 export class TurnstileCaptchaService implements CaptchaServicePort {
 	private readonly secretKey: string
@@ -22,7 +23,7 @@ export class TurnstileCaptchaService implements CaptchaServicePort {
 			return response.data.success
 		} catch (error) {
 			console.error('Turnstile Captcha API communication failure:', error)
-			throw error
+			throw new CaptchaServiceError()
 		}
 	}
 }

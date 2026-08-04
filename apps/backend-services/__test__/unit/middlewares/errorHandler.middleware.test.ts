@@ -8,10 +8,14 @@ import {
 	SlugIsDeletedError,
 	SlugGenerationExhaustedError,
 	SlugAlreadyExistsError,
-	TooManyRequestsError,
 	InvalidUrlError,
 } from '@/core/domain/errors/domain.errors.ts'
-import { PayloadTooLargeError } from '@/adapters/primary/http/errors/http.errors.ts'
+import {
+	TooManyRequestsError,
+	PayloadTooLargeError,
+} from '@/adapters/primary/http/errors/http.errors.ts'
+import { CaptchaVerificationError } from '@/core/errors/application.errors.ts'
+import { CaptchaServiceError } from '@/adapters/secondary/errors/adapters.errors.ts'
 
 describe('errorHandler (Unit Test)', () => {
 	let app: express.Express
@@ -106,6 +110,21 @@ describe('errorHandler (Unit Test)', () => {
 		})
 	})
 
+	it('Should return 422 for CaptchaVerificationError', async () => {
+		app = express()
+		app.get('/test', (_req, _res, next) => {
+			next(new CaptchaVerificationError())
+		})
+		app.use(errorHandler)
+
+		const response = await request(app).get('/test')
+		expect(response.status).toBe(422)
+		expect(response.body).toEqual({
+			code: 'INVALID_CAPTCHA_TOKEN',
+			message: 'Invalid captcha token. Please try again.',
+		})
+	})
+
 	it('Should return 429 for TooManyRequestsError', async () => {
 		app = express()
 		app.get('/test', (_req, _res, next) => {
@@ -153,5 +172,21 @@ describe('errorHandler (Unit Test)', () => {
 		})
 
 		consoleSpy.mockRestore()
+	})
+
+	it('Should return 503 for CaptchaServiceError', async () => {
+		app = express()
+		app.get('/test', (_req, _res, next) => {
+			next(new CaptchaServiceError())
+		})
+		app.use(errorHandler)
+
+		const response = await request(app).get('/test')
+		expect(response.status).toBe(503)
+		expect(response.body).toEqual({
+			code: 'CAPTCHA_SERVICE_ERROR',
+			message:
+				'Error to connect with the CAPTCHA service. Please try again later.',
+		})
 	})
 })

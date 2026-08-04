@@ -9,11 +9,11 @@ import { ShortUrl } from '@/core/domain/entities/ShortUrl.entity.ts'
 import { Geolocation } from '@/core/domain/value-objects/geolocation/Geolocation.vo.ts'
 
 import {
-	CaptchaVerificationError,
 	ForbiddenExtensionError,
 	SlugAlreadyExistsError,
 	SlugGenerationExhaustedError,
-} from '../../../src/core/domain/errors/domain.errors.ts'
+} from '@/core/domain/errors/domain.errors.ts'
+import { CaptchaVerificationError } from '@/core/errors/application.errors.ts'
 
 describe('ShortenUrlAnonymousUseCase', () => {
 	let mockShortUrlRepository: ShortUrlRepositoryPort
