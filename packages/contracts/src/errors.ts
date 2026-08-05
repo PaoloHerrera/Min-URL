@@ -121,7 +121,7 @@ export const INTERNAL_TOKEN_ERROR_RESPONSES = {
 	invalidHeader: { message: INTERNAL_TOKEN_ERROR_MESSAGES.invalidHeader },
 } as const
 
-const ERROR_CODE_TO_HTTP_STATUS: Record<HttpErrorCodes, number> = {
+const ERROR_CODE_TO_HTTP_STATUS = {
 	[SLUG_ERROR.invalidSlug.code]: 400,
 	[SLUG_ERROR.slugNotFound.code]: 404,
 	[SLUG_ERROR.slugIsExpired.code]: 410,
@@ -138,7 +138,7 @@ const ERROR_CODE_TO_HTTP_STATUS: Record<HttpErrorCodes, number> = {
 	[INFRA_ERROR.badRequest.code]: 400,
 	[INFRA_ERROR.internalServerError.code]: 500,
 	[INFRA_ERROR.captchaServiceError.code]: 503,
-} as const
+} satisfies Record<HttpErrorCodes, number>
 
 export const resolveHttpStatusCode = (
 	code?: string,
