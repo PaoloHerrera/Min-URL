@@ -94,8 +94,20 @@ describe('validateBody Middleware (Unit Test)', () => {
 		expect(errorArg.message).toBe('Invalid request body')
 	})
 
-	it('Should handle undefined or null req.body gracefully by passing InvalidPayloadError to next', () => {
+	it('Should handle undefined req.body gracefully by passing InvalidPayloadError to next', () => {
 		const req = { body: undefined } as unknown as Request
+		const res = {} as Response
+		const next = vi.fn()
+
+		validateBody(sampleSchema)(req, res, next)
+
+		expect(next).toHaveBeenCalledTimes(1)
+		const errorArg = next.mock.calls[0][0]
+		expect(errorArg).toBeInstanceOf(InvalidPayloadError)
+	})
+
+	it('Should handle null req.body gracefully by passing InvalidPayloadError to next', () => {
+		const req = { body: null } as unknown as Request
 		const res = {} as Response
 		const next = vi.fn()
 
