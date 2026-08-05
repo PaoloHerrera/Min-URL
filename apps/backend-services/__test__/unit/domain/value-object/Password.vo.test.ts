@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest'
+import { InvalidPasswordError } from '@/core/domain/errors/domain.errors.ts'
 import { Password } from '@/core/domain/value-objects/password/Password.vo.ts'
 
 describe('Password Value Object', () => {
@@ -24,7 +25,7 @@ describe('Password Value Object', () => {
 			'Password too long (more than 16 characters)',
 		],
 	])('Should throw error for invalid password - %s (%s)', (password) => {
-		expect(() => Password.create(password)).toThrow('Invalid password')
+		expect(() => Password.create(password)).toThrow(InvalidPasswordError)
 	})
 
 	describe('verify()', () => {

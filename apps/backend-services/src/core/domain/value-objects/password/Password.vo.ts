@@ -1,4 +1,5 @@
 import crypto from 'node:crypto'
+import { InvalidPasswordError } from '@/core/domain/errors/domain.errors.ts'
 import { passwordSchema } from './password.schema.ts'
 
 export class Password {
@@ -15,7 +16,7 @@ export class Password {
 	static create(password: string): Password {
 		const validate = passwordSchema.safeParse({ password })
 		if (!validate.success) {
-			throw new Error('Invalid password')
+			throw new InvalidPasswordError()
 		}
 		const salt = crypto.randomBytes(16).toString('hex')
 		const hash = crypto.scryptSync(password, salt, 64).toString('hex')

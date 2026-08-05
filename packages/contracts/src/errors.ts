@@ -46,6 +46,10 @@ export const VALIDATION_ERROR = {
 		code: 'INVALID_GEOLOCATION',
 		message: 'Invalid geolocation coordinates format.',
 	},
+	invalidPassword: {
+		code: 'INVALID_PASSWORD',
+		message: 'The provided password does not meet requirements.',
+	},
 } as const
 
 export const SECURITY_ERROR = {
@@ -130,6 +134,7 @@ const ERROR_CODE_TO_HTTP_STATUS = {
 	[SLUG_ERROR.slugAlreadyExists.code]: 409,
 	[VALIDATION_ERROR.invalidUrl.code]: 400,
 	[VALIDATION_ERROR.forbiddenExtension.code]: 400,
+	[VALIDATION_ERROR.invalidPassword.code]: 400,
 	[SECURITY_ERROR.invalidPayload.code]: 400,
 	[SECURITY_ERROR.invalidJson.code]: 400,
 	[SECURITY_ERROR.invalidCaptchaToken.code]: 422,
