@@ -1,7 +1,7 @@
+import { CaptchaServiceError } from '@/adapters/errors/infra.errors.ts'
 import { env } from '@/config/env.ts'
 import type { CaptchaServicePort } from '@/core/ports/outbound/CaptchaServicePort.interface.ts'
 import axios from 'axios'
-import { CaptchaServiceError } from '../errors/adapters.errors.ts'
 
 export class TurnstileCaptchaService implements CaptchaServicePort {
 	private readonly secretKey: string

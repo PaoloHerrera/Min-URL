@@ -1,7 +1,8 @@
-import { API_ERROR_CODES, SLUG_ERROR_CODES } from '@min-url/contracts/errors'
+import type { DomainErrorCodes } from '@min-url/contracts/errors'
+import { SLUG_ERROR, VALIDATION_ERROR } from '@min-url/contracts/errors'
 
-export class DomainError extends Error {
-	readonly code: string = API_ERROR_CODES.badRequest
+export abstract class DomainError extends Error {
+	abstract readonly code: DomainErrorCodes
 
 	constructor(message: string) {
 		super(message)
@@ -11,85 +12,71 @@ export class DomainError extends Error {
 }
 
 export class InvalidUrlError extends DomainError {
-	readonly code = API_ERROR_CODES.invalidUrl
-	constructor(url: string) {
-		super(`Invalid URL: ${url}`)
+	readonly code = VALIDATION_ERROR.invalidUrl.code
+	constructor() {
+		super(VALIDATION_ERROR.invalidUrl.message)
 	}
 }
 
 export class InvalidSlugError extends DomainError {
-	readonly code = SLUG_ERROR_CODES.invalidSlug
-	constructor(slug: string) {
-		super(`Invalid slug: ${slug}`)
-	}
-}
-
-export class InvalidIpAddressError extends DomainError {
-	readonly code = 'INVALID_IP_ADDRESS'
-	constructor(ip: string) {
-		super(`Invalid IP address: ${ip}`)
-	}
-}
-
-export class InvalidPasswordError extends DomainError {
-	readonly code = 'INVALID_PASSWORD'
+	readonly code = SLUG_ERROR.invalidSlug.code
 	constructor() {
-		super('Invalid password')
+		super(SLUG_ERROR.invalidSlug.message)
 	}
 }
 
 export class InvalidGeolocationError extends DomainError {
-	readonly code = 'INVALID_GEOLOCATION'
-	constructor(message: string) {
-		super(`${message}`)
+	readonly code = VALIDATION_ERROR.invalidGeolocation.code
+	constructor() {
+		super(VALIDATION_ERROR.invalidGeolocation.message)
 	}
 }
 
 export class InvalidVisitError extends DomainError {
-	readonly code = 'INVALID_VISIT'
-	constructor(message: string) {
-		super(`${message}`)
+	readonly code = VALIDATION_ERROR.invalidVisit.code
+	constructor() {
+		super(VALIDATION_ERROR.invalidVisit.message)
 	}
 }
 
 export class ForbiddenExtensionError extends DomainError {
-	readonly code = 'FORBIDDEN_EXTENSION'
-	constructor(url: string) {
-		super(`URL contains a forbidden file extension: ${url}`)
+	readonly code = VALIDATION_ERROR.forbiddenExtension.code
+	constructor() {
+		super(VALIDATION_ERROR.forbiddenExtension.message)
 	}
 }
 
 export class SlugGenerationExhaustedError extends DomainError {
-	readonly code = SLUG_ERROR_CODES.slugGenerationExhausted
+	readonly code = SLUG_ERROR.slugGenerationExhausted.code
 	constructor() {
-		super('Error creating Short URL. Please try again later.')
+		super(SLUG_ERROR.slugGenerationExhausted.message)
 	}
 }
 
 export class SlugNotFoundError extends DomainError {
-	readonly code = SLUG_ERROR_CODES.slugNotFound
-	constructor(slug: string) {
-		super(`Slug not found: ${slug}`)
+	readonly code = SLUG_ERROR.slugNotFound.code
+	constructor() {
+		super(SLUG_ERROR.slugNotFound.message)
 	}
 }
 
 export class SlugIsExpiredError extends DomainError {
-	readonly code = SLUG_ERROR_CODES.slugIsExpired
-	constructor(slug: string) {
-		super(`Slug is expired: ${slug}`)
+	readonly code = SLUG_ERROR.slugIsExpired.code
+	constructor() {
+		super(SLUG_ERROR.slugIsExpired.message)
 	}
 }
 
 export class SlugIsDeletedError extends DomainError {
-	readonly code = SLUG_ERROR_CODES.slugIsDeleted
-	constructor(slug: string) {
-		super(`Slug is deleted: ${slug}`)
+	readonly code = SLUG_ERROR.slugIsDeleted.code
+	constructor() {
+		super(SLUG_ERROR.slugIsDeleted.message)
 	}
 }
 
 export class SlugAlreadyExistsError extends DomainError {
-	readonly code = SLUG_ERROR_CODES.slugAlreadyExists
-	constructor(slug: string) {
-		super(`The short URL slug '${slug}' is already taken.`)
+	readonly code = SLUG_ERROR.slugAlreadyExists.code
+	constructor() {
+		super(SLUG_ERROR.slugAlreadyExists.message)
 	}
 }

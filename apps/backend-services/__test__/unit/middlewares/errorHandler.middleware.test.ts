@@ -13,9 +13,15 @@ import {
 import {
 	TooManyRequestsError,
 	PayloadTooLargeError,
-} from '@/adapters/primary/http/errors/http.errors.ts'
+	CaptchaServiceError,
+} from '@/adapters/errors/infra.errors.ts'
 import { CaptchaVerificationError } from '@/core/errors/application.errors.ts'
-import { CaptchaServiceError } from '@/adapters/secondary/errors/adapters.errors.ts'
+import {
+	SLUG_ERROR,
+	VALIDATION_ERROR,
+	SECURITY_ERROR,
+	INFRA_ERROR,
+} from '@min-url/contracts/errors'
 
 describe('errorHandler (Unit Test)', () => {
 	let app: express.Express
@@ -23,45 +29,45 @@ describe('errorHandler (Unit Test)', () => {
 	it('Should return 404 for SlugNotFoundError', async () => {
 		app = express()
 		app.get('/test', (_req, _res, next) => {
-			next(new SlugNotFoundError('abc'))
+			next(new SlugNotFoundError())
 		})
 		app.use(errorHandler)
 
 		const response = await request(app).get('/test')
 		expect(response.status).toBe(404)
 		expect(response.body).toEqual({
-			code: 'SLUG_NOT_FOUND',
-			message: 'Slug not found: abc',
+			code: SLUG_ERROR.slugNotFound.code,
+			message: SLUG_ERROR.slugNotFound.message,
 		})
 	})
 
 	it('Should return 410 for SlugIsExpiredError', async () => {
 		app = express()
 		app.get('/test', (_req, _res, next) => {
-			next(new SlugIsExpiredError('abc'))
+			next(new SlugIsExpiredError())
 		})
 		app.use(errorHandler)
 
 		const response = await request(app).get('/test')
 		expect(response.status).toBe(410)
 		expect(response.body).toEqual({
-			code: 'SLUG_IS_EXPIRED',
-			message: 'Slug is expired: abc',
+			code: SLUG_ERROR.slugIsExpired.code,
+			message: SLUG_ERROR.slugIsExpired.message,
 		})
 	})
 
 	it('Should return 410 for SlugIsDeletedError', async () => {
 		app = express()
 		app.get('/test', (_req, _res, next) => {
-			next(new SlugIsDeletedError('abc'))
+			next(new SlugIsDeletedError())
 		})
 		app.use(errorHandler)
 
 		const response = await request(app).get('/test')
 		expect(response.status).toBe(410)
 		expect(response.body).toEqual({
-			code: 'SLUG_IS_DELETED',
-			message: 'Slug is deleted: abc',
+			code: SLUG_ERROR.slugIsDeleted.code,
+			message: SLUG_ERROR.slugIsDeleted.message,
 		})
 	})
 
@@ -75,23 +81,23 @@ describe('errorHandler (Unit Test)', () => {
 		const response = await request(app).get('/test')
 		expect(response.status).toBe(503)
 		expect(response.body).toEqual({
-			code: 'SLUG_GENERATION_EXHAUSTED',
-			message: 'Error creating Short URL. Please try again later.',
+			code: SLUG_ERROR.slugGenerationExhausted.code,
+			message: SLUG_ERROR.slugGenerationExhausted.message,
 		})
 	})
 
 	it('Should return 409 for SlugAlreadyExistsError', async () => {
 		app = express()
 		app.get('/test', (_req, _res, next) => {
-			next(new SlugAlreadyExistsError('abc'))
+			next(new SlugAlreadyExistsError())
 		})
 		app.use(errorHandler)
 
 		const response = await request(app).get('/test')
 		expect(response.status).toBe(409)
 		expect(response.body).toEqual({
-			code: 'SLUG_ALREADY_EXISTS',
-			message: "The short URL slug 'abc' is already taken.",
+			code: SLUG_ERROR.slugAlreadyExists.code,
+			message: SLUG_ERROR.slugAlreadyExists.message,
 		})
 	})
 
@@ -105,8 +111,8 @@ describe('errorHandler (Unit Test)', () => {
 		const response = await request(app).get('/test')
 		expect(response.status).toBe(413)
 		expect(response.body).toEqual({
-			code: 'PAYLOAD_TOO_LARGE',
-			message: 'Payload is too large',
+			code: SECURITY_ERROR.payloadTooLarge.code,
+			message: SECURITY_ERROR.payloadTooLarge.message,
 		})
 	})
 
@@ -120,8 +126,8 @@ describe('errorHandler (Unit Test)', () => {
 		const response = await request(app).get('/test')
 		expect(response.status).toBe(422)
 		expect(response.body).toEqual({
-			code: 'INVALID_CAPTCHA_TOKEN',
-			message: 'Invalid captcha token. Please try again.',
+			code: SECURITY_ERROR.invalidCaptchaToken.code,
+			message: SECURITY_ERROR.invalidCaptchaToken.message,
 		})
 	})
 
@@ -135,23 +141,23 @@ describe('errorHandler (Unit Test)', () => {
 		const response = await request(app).get('/test')
 		expect(response.status).toBe(429)
 		expect(response.body).toEqual({
-			code: 'TOO_MANY_REQUESTS',
-			message: 'Too many requests, please try again later.',
+			code: SECURITY_ERROR.tooManyRequests.code,
+			message: SECURITY_ERROR.tooManyRequests.message,
 		})
 	})
 
 	it('Should return 400 for generic DomainError (like InvalidUrlError)', async () => {
 		app = express()
 		app.get('/test', (_req, _res, next) => {
-			next(new InvalidUrlError('invalid-url'))
+			next(new InvalidUrlError())
 		})
 		app.use(errorHandler)
 
 		const response = await request(app).get('/test')
 		expect(response.status).toBe(400)
 		expect(response.body).toEqual({
-			code: 'INVALID_URL',
-			message: 'Invalid URL: invalid-url',
+			code: VALIDATION_ERROR.invalidUrl.code,
+			message: VALIDATION_ERROR.invalidUrl.message,
 		})
 	})
 
@@ -167,8 +173,8 @@ describe('errorHandler (Unit Test)', () => {
 		const response = await request(app).get('/test')
 		expect(response.status).toBe(500)
 		expect(response.body).toEqual({
-			code: 'INTERNAL_SERVER_ERROR',
-			message: 'An unexpected internal server error occurred.',
+			code: INFRA_ERROR.internalServerError.code,
+			message: INFRA_ERROR.internalServerError.message,
 		})
 
 		consoleSpy.mockRestore()
@@ -184,9 +190,8 @@ describe('errorHandler (Unit Test)', () => {
 		const response = await request(app).get('/test')
 		expect(response.status).toBe(503)
 		expect(response.body).toEqual({
-			code: 'CAPTCHA_SERVICE_ERROR',
-			message:
-				'Error to connect with the CAPTCHA service. Please try again later.',
+			code: INFRA_ERROR.captchaServiceError.code,
+			message: INFRA_ERROR.captchaServiceError.message,
 		})
 	})
 })

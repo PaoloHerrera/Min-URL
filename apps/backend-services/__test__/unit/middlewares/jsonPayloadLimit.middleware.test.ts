@@ -3,7 +3,7 @@ import { describe, expect, it } from 'vitest'
 import express from 'express'
 import { jsonPayloadLimit } from '@/adapters/primary/http/middlewares/jsonPayloadLimit.middleware.ts'
 import { errorHandler } from '@/adapters/primary/http/middlewares/errorHandler.middleware.ts'
-import { HTTP_ERROR_CODES } from '@min-url/contracts/errors'
+import { SECURITY_ERROR } from '@min-url/contracts/errors'
 
 const createTestApp = (limit: number) => {
 	const testApp = express()
@@ -26,8 +26,8 @@ describe('jsonPayloadLimit (Unit Test)', () => {
 			})
 		expect(response.status).toBe(413)
 		expect(response.body).toEqual({
-			code: HTTP_ERROR_CODES.payloadTooLarge.code,
-			message: HTTP_ERROR_CODES.payloadTooLarge.message,
+			code: SECURITY_ERROR.payloadTooLarge.code,
+			message: SECURITY_ERROR.payloadTooLarge.message,
 		})
 	})
 
@@ -47,8 +47,8 @@ describe('jsonPayloadLimit (Unit Test)', () => {
 			.send('invalid json')
 		expect(response.status).toBe(400)
 		expect(response.body).toEqual({
-			code: HTTP_ERROR_CODES.invalidJson.code,
-			message: HTTP_ERROR_CODES.invalidJson.message,
+			code: SECURITY_ERROR.invalidJson.code,
+			message: SECURITY_ERROR.invalidJson.message,
 		})
 	})
 })

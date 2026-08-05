@@ -42,7 +42,7 @@ export class DrizzleShortUrlRepository implements ShortUrlRepositoryPort {
 					`Slug collision for ${data.slug}. Retrying with a different slug...`,
 				)
 
-				throw new SlugAlreadyExistsError(data.slug)
+				throw new SlugAlreadyExistsError()
 			}
 			throw error
 		}

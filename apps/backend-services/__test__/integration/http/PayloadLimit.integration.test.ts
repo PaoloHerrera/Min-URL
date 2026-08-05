@@ -1,7 +1,7 @@
 import request from 'supertest'
 import { describe, it, expect } from 'vitest'
 import { app } from '@/app.ts'
-import { HTTP_ERROR_CODES } from '@min-url/contracts/errors'
+import { SECURITY_ERROR } from '@min-url/contracts/errors'
 
 describe('POST /direct/shorten payload limit & JSON syntax integration tests', () => {
 	it('Should return 413 error if the JSON Body exceeds 5KB', async () => {
@@ -17,8 +17,8 @@ describe('POST /direct/shorten payload limit & JSON syntax integration tests', (
 
 		expect(response.status).toBe(413)
 		expect(response.body).toEqual({
-			code: HTTP_ERROR_CODES.payloadTooLarge.code,
-			message: HTTP_ERROR_CODES.payloadTooLarge.message,
+			code: SECURITY_ERROR.payloadTooLarge.code,
+			message: SECURITY_ERROR.payloadTooLarge.message,
 		})
 	})
 
@@ -30,8 +30,8 @@ describe('POST /direct/shorten payload limit & JSON syntax integration tests', (
 
 		expect(response.status).toBe(400)
 		expect(response.body).toEqual({
-			code: HTTP_ERROR_CODES.invalidJson.code,
-			message: HTTP_ERROR_CODES.invalidJson.message,
+			code: SECURITY_ERROR.invalidJson.code,
+			message: SECURITY_ERROR.invalidJson.message,
 		})
 	})
 

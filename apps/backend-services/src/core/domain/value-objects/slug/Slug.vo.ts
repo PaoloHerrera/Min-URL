@@ -28,7 +28,7 @@ export class Slug {
 
 	private validate(): void {
 		if (!slugRegex.test(this.value)) {
-			throw new InvalidSlugError(this.value)
+			throw new InvalidSlugError()
 		}
 	}
 }
