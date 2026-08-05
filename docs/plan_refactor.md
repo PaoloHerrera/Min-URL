@@ -1,7 +1,7 @@
 # Plan de Refactor — Min-URL
 
-> Última actualización: 2026-07-28
-> Estado: Aprobado — En implementación
+> Última actualización: 2026-08-05
+> Estado: Aprobado — En implementación (Fase 1)
 
 ---
 
@@ -60,7 +60,6 @@ backend-services/src/
 │   │   ├── value-objects/             # Objetos de Valor autovalidados (DDD)
 │   │   │   ├── Geolocation.vo.ts
 │   │   │   ├── IpAddress.vo.ts
-│   │   │   ├── Password.vo.ts
 │   │   │   ├── Slug.vo.ts
 │   │   │   └── TargetUrl.vo.ts
 │   │   ├── errors/                    # Excepciones de negocio tipadas
@@ -136,12 +135,10 @@ backend-services/src/
       - Si el slug no existe → Lanza SlugNotFoundError (HTTP 404 - SLUG_NOT_FOUND)
       - Si el slug está eliminado lógicamente → Lanza SlugIsDeletedError (HTTP 410 Gone - SLUG_IS_DELETED)
       - Si el slug ha expirado → Lanza SlugIsExpiredError (HTTP 410 Gone - SLUG_IS_EXPIRED)
-      - Si el slug requiere contraseña → Devuelve HTTP 200 con { slug, password: true } (ocultando originalUrl)
-      - Si el slug es público y activo → Devuelve HTTP 200 con { slug, password: false, originalUrl }
+      - Si el slug está activo → Devuelve HTTP 200 con { slug, originalUrl } (Nota: la protección de URLs con contraseña fue retirada del alcance MVP mediante la regla YAGNI para evitar sobre-ingeniería innecesaria previa a la fase de observabilidad).
    d. Cualquier excepción es interceptada por errorHandler.middleware.ts para mapear los códigos HTTP y JSON correspondientes.
 4. backend-redirector captura el resultado:
-   - Si recibe HTTP 200 con password=true → 302 a frontend-landing/password-protected
-   - Si recibe HTTP 200 con password=false → HTTP 302 Found → originalUrl
+   - Si recibe HTTP 200 → HTTP 302 Found → originalUrl
    - Si recibe HTTP 410 con SLUG_IS_EXPIRED → Renderiza pantalla "Enlace Expirado"
    - Si recibe HTTP 410 con SLUG_IS_DELETED → Renderiza pantalla "Enlace Eliminado"
    - Si recibe HTTP 404 o cualquier otro → Renderiza pantalla pública de error 404
@@ -256,6 +253,7 @@ Parte 1A (CU1+CU2)
 | ORM                  | Drizzle ORM             | SQL-first, tipado nativo de JSONB, liviano para Bun y alineado al rediseño del ADR 004.                     |
 | Zod version          | 3.23.x unificado        | Estable, soporte amplio, compatible con fastify-type-provider-zod                                           |
 | Click tracking Cap 1 | Síncrono (sin Redis)    | Simplificar MVP, medir impacto en Cap 2                                                                     |
+| URL Passwords (MVP)  | Retirado (YAGNI)        | Eliminar sobre-ingeniería de claves por URL en MVP para enfocarse en observar tráfico base en Cap 2.        |
 | Click tracking Cap 2 | Redis Streams           | Comparar sync vs async usando colas de eventos (Streams) como experimento                                   |
 | Shared package       | `@min-url/contracts`    | Tipos y schemas compartidos entre todos los packages                                                        |
 | Mensajería           | Redis Streams           | Suficiente para click tracking. Kafka/RabbitMQ sería overkill para este volumen. ADR documenta la decisión. |
