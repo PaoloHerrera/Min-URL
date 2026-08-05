@@ -1,22 +1,18 @@
-import type { ErrorResponsePayload } from '@min-url/contracts/dto'
-import { API_ERROR_CODES } from '@min-url/contracts/errors'
+import { InvalidPayloadError } from '@/adapters/errors/infra.errors.ts'
 import type { NextFunction, Request, Response } from 'express'
 import type { z } from 'zod'
 
-export const validateBody = (schema: z.ZodSchema) => {
-	return (req: Request, res: Response, next: NextFunction): void => {
+export const validateBody =
+	(schema: z.ZodTypeAny) =>
+	(req: Request, _res: Response, next: NextFunction) => {
 		const result = schema.safeParse(req.body)
 
 		if (!result.success) {
-			const payload: ErrorResponsePayload = {
-				code: API_ERROR_CODES.invalidPayload,
-				message: result.error.issues[0]?.message || 'Invalid request body',
-			}
-			res.status(400).json(payload)
-			return
+			const errorMessage =
+				result.error.issues[0]?.message || 'Invalid request body'
+			return next(new InvalidPayloadError(errorMessage))
 		}
 
 		req.body = result.data
 		next()
 	}
-}

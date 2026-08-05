@@ -52,7 +52,7 @@ export class ShortenUrlAnonymous implements ShortenUrlAnonymousPort {
 		const targetUrlVo = TargetUrl.create(originalUrl)
 		const isForbidden = this.props.forbiddenExtensions.check(targetUrlVo)
 		if (isForbidden) {
-			throw new ForbiddenExtensionError(targetUrlVo.value)
+			throw new ForbiddenExtensionError()
 		}
 		return targetUrlVo
 	}

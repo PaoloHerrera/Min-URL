@@ -1,9 +1,9 @@
-import { json } from 'express'
-import type { NextFunction, Request, Response } from 'express'
 import {
 	InvalidJsonError,
 	PayloadTooLargeError,
-} from '../errors/http.errors.ts'
+} from '@/adapters/errors/infra.errors.ts'
+import { json } from 'express'
+import type { NextFunction, Request, Response } from 'express'
 
 interface BodyParserError extends Error {
 	type?: string

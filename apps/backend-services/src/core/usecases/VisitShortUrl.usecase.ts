@@ -1,12 +1,12 @@
-import type {
-	VisitShortUrlInput,
-	VisitShortUrlPort,
-} from '@/core/ports/inbound/VisitShortUrlPort.interface.ts'
 import type { ShortUrl } from '@/core/domain/entities/ShortUrl.entity.ts'
 import { Visit } from '@/core/domain/entities/Visit.entity.ts'
 import { IpAddress } from '@/core/domain/value-objects/ip-address/IpAddress.vo.ts'
 import { Referer } from '@/core/domain/value-objects/referer/Referer.vo.ts'
 import { UserAgent } from '@/core/domain/value-objects/user-agent/UserAgent.vo.ts'
+import type {
+	VisitShortUrlInput,
+	VisitShortUrlPort,
+} from '@/core/ports/inbound/VisitShortUrlPort.interface.ts'
 import type { ShortUrlRepositoryPort } from '../ports/outbound/ShortUrlRepositoryPort.interface.ts'
 import type { VisitRepositoryPort } from '../ports/outbound/VisitRepositoryPort.interface.ts'
 
@@ -33,15 +33,15 @@ export class VisitShortUrl implements VisitShortUrlPort {
 		const shortUrlData = await this.shortUrlRepository.getUrlBySlug(slug)
 
 		if (!shortUrlData) {
-			throw new SlugNotFoundError(slug)
+			throw new SlugNotFoundError()
 		}
 
 		if (shortUrlData.isDeleted()) {
-			throw new SlugIsDeletedError(slug)
+			throw new SlugIsDeletedError()
 		}
 
 		if (shortUrlData.isExpired()) {
-			throw new SlugIsExpiredError(slug)
+			throw new SlugIsExpiredError()
 		}
 
 		const visit = Visit.create({

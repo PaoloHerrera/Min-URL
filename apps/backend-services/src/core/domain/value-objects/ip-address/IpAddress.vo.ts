@@ -1,4 +1,3 @@
-import { InvalidIpAddressError } from '../../errors/domain.errors.ts'
 import type { Geolocation } from '../geolocation/Geolocation.vo.ts'
 import { ipSchema } from './ipAddress.schema.ts'
 
@@ -39,17 +38,6 @@ export class IpAddress {
 		return new IpAddress({
 			ipAddress: parsed.data.ipAddress,
 			geolocation: geolocation ?? null,
-		})
-	}
-
-	static create(value: string): IpAddress {
-		const parsed = ipSchema.safeParse({ ipAddress: value })
-
-		if (!parsed.success) {
-			throw new InvalidIpAddressError(value)
-		}
-		return new IpAddress({
-			ipAddress: parsed.data.ipAddress,
 		})
 	}
 

@@ -82,17 +82,15 @@ export class Geolocation {
 
 		// Invariant
 		if (hasLat !== hasLng) {
-			throw new InvalidGeolocationError(
-				'Latitude and Longitude must both be provided together or both be empty.',
-			)
+			throw new InvalidGeolocationError()
 		}
 
 		if (hasLat && (latitude < -90 || latitude > 90)) {
-			throw new InvalidGeolocationError('Invalid latitude')
+			throw new InvalidGeolocationError()
 		}
 
 		if (hasLng && (longitude < -180 || longitude > 180)) {
-			throw new InvalidGeolocationError('Invalid longitude')
+			throw new InvalidGeolocationError()
 		}
 	}
 }

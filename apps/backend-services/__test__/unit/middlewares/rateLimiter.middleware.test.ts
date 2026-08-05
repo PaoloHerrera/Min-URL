@@ -3,7 +3,7 @@ import express from 'express'
 import request from 'supertest'
 import { rateLimiter } from '@/adapters/primary/http/middlewares/rateLimiter.middleware.ts'
 import { errorHandler } from '@/adapters/primary/http/middlewares/errorHandler.middleware.ts'
-import { API_ERROR_CODES } from '@min-url/contracts/errors'
+import { SECURITY_ERROR } from '@min-url/contracts/errors'
 
 describe('Rate Limiter Middleware', () => {
 	const config = {
@@ -49,8 +49,8 @@ describe('Rate Limiter Middleware', () => {
 		expect(success.length).toBe(10)
 		expect(failed.length).toBe(1)
 		expect(failed[0].body).toEqual({
-			code: API_ERROR_CODES.tooManyRequests,
-			message: 'Too many requests, please try again later.',
+			code: SECURITY_ERROR.tooManyRequests.code,
+			message: SECURITY_ERROR.tooManyRequests.message,
 		})
 		expect(failed[0].headers['ratelimit-limit']).toBe('10')
 		expect(failed[0].headers['ratelimit-remaining']).toBe('0')

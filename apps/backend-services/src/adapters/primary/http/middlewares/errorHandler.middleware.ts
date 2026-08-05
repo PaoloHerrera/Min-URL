@@ -1,17 +1,9 @@
-import { AdaptersError } from '@/adapters/secondary/errors/adapters.errors.ts'
-import {
-	DomainError,
-	SlugAlreadyExistsError,
-	SlugGenerationExhaustedError,
-	SlugIsDeletedError,
-	SlugIsExpiredError,
-	SlugNotFoundError,
-} from '@/core/domain/errors/domain.errors.ts'
+import { InfraError } from '@/adapters/errors/infra.errors.ts'
+import { DomainError } from '@/core/domain/errors/domain.errors.ts'
 import { ApplicationError } from '@/core/errors/application.errors.ts'
 import type { ErrorResponsePayload } from '@min-url/contracts/dto'
-import { API_ERROR_CODES } from '@min-url/contracts/errors'
+import { INFRA_ERROR, resolveHttpStatusCode } from '@min-url/contracts/errors'
 import type { NextFunction, Request, Response } from 'express'
-import { HttpError } from '../errors/http.errors.ts'
 
 export const errorHandler = (
 	error: Error,
@@ -19,70 +11,24 @@ export const errorHandler = (
 	res: Response,
 	_next: NextFunction,
 ): void => {
-	if (error instanceof DomainError) {
-		const payload: ErrorResponsePayload = {
-			code: error.code || API_ERROR_CODES.badRequest,
-			message: error.message,
-		}
-
-		if (error instanceof SlugNotFoundError) {
-			res.status(404).json(payload)
-			return
-		}
-
-		if (
-			error instanceof SlugIsDeletedError ||
-			error instanceof SlugIsExpiredError
-		) {
-			res.status(410).json(payload)
-			return
-		}
-
-		if (error instanceof SlugGenerationExhaustedError) {
-			res.status(503).json(payload)
-			return
-		}
-
-		if (error instanceof SlugAlreadyExistsError) {
-			res.status(409).json(payload)
-			return
-		}
-		res.status(400).json(payload)
-		return
-	}
-
-	if (error instanceof HttpError) {
-		const payload: ErrorResponsePayload = {
+	if (
+		error instanceof DomainError ||
+		error instanceof ApplicationError ||
+		error instanceof InfraError
+	) {
+		const statusCode = resolveHttpStatusCode(error.code)
+		const responsePayload: ErrorResponsePayload = {
 			code: error.code,
 			message: error.message,
 		}
-
-		res.status(error.statusCode).json(payload)
-		return
-	}
-
-	if (error instanceof ApplicationError) {
-		const payload: ErrorResponsePayload = {
-			code: error.code,
-			message: error.message,
-		}
-		res.status(422).json(payload)
-		return
-	}
-
-	if (error instanceof AdaptersError) {
-		const payload: ErrorResponsePayload = {
-			code: error.code,
-			message: error.message,
-		}
-		res.status(503).json(payload)
+		res.status(statusCode).json(responsePayload)
 		return
 	}
 
 	console.error('Unhandled Server Error:', error)
 	const internalPayload: ErrorResponsePayload = {
-		code: API_ERROR_CODES.internalServerError,
-		message: 'An unexpected internal server error occurred.',
+		code: INFRA_ERROR.internalServerError.code,
+		message: INFRA_ERROR.internalServerError.message,
 	}
 	res.status(500).json(internalPayload)
 }

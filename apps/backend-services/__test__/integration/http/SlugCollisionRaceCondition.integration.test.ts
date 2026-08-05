@@ -69,7 +69,7 @@ describe('POST /direct/shorten - Concurrent Slug Collision Resilience', () => {
 	it('Should return HTTP 409 Conflict when all retries continuously suffer slug collisions', async () => {
 		// 1. Spy on DrizzleShortUrlRepository.prototype.save to continuously throw SlugAlreadyExistsError
 		vi.spyOn(DrizzleShortUrlRepository.prototype, 'save').mockRejectedValue(
-			new SlugAlreadyExistsError('colliding'),
+			new SlugAlreadyExistsError(),
 		)
 
 		// 2. Send HTTP request

@@ -1,6 +1,6 @@
+import { TooManyRequestsError } from '@/adapters/errors/infra.errors.ts'
 import type { NextFunction, Request, Response } from 'express'
 import { rateLimit } from 'express-rate-limit'
-import { TooManyRequestsError } from '../errors/http.errors.ts'
 
 /**
  * Rate limiter middleware to prevent abuse of the API.

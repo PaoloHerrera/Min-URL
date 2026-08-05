@@ -16,7 +16,7 @@ export class TargetUrl {
 		const parsed = urlSchema.safeParse({ url: _value })
 
 		if (!parsed.success) {
-			throw new InvalidUrlError(_value)
+			throw new InvalidUrlError()
 		}
 		return new TargetUrl(parsed.data.url)
 	}

@@ -18,7 +18,7 @@ const makePopulatedShortUrl = (inputDate: Date) => {
 		id: '01900000-0000-7000-8000-000000000001',
 		slug: Slug.create('defensive'),
 		originalUrl: TargetUrl.create('https://www.google.com'),
-		ipAddress: IpAddress.create('127.0.0.1'),
+		ipAddress: IpAddress.createOrUnknown('127.0.0.1'),
 		title: 'Defensive Test',
 		purpose: 'direct',
 		clicksCount: 0,
@@ -35,7 +35,7 @@ describe('ShortUrl Entity (Unit Test)', () => {
 	it('Should create ShortUrl entity successfully without password', () => {
 		const slug = Slug.create('google')
 		const originalUrl = TargetUrl.create('https://www.google.com')
-		const ipAddress = IpAddress.create('192.168.1.1')
+		const ipAddress = IpAddress.createOrUnknown('192.168.1.1')
 		const title = 'Google'
 		const purpose = 'direct' as const
 
@@ -62,7 +62,7 @@ describe('ShortUrl Entity (Unit Test)', () => {
 	it('Should create ShortUrl entity successfully with passwordHash', () => {
 		const slug = Slug.create('protected')
 		const originalUrl = TargetUrl.create('https://www.google.com')
-		const ipAddress = IpAddress.create('192.168.1.1')
+		const ipAddress = IpAddress.createOrUnknown('192.168.1.1')
 		const title = 'Protected Google'
 		const purpose = 'direct' as const
 		const passwordHash = Password.reconstitute('fakesalt:fakehash')
@@ -118,7 +118,7 @@ describe('ShortUrl Entity (Unit Test)', () => {
 			const shortUrl = ShortUrl.create({
 				slug: Slug.create('deleteme'),
 				originalUrl: TargetUrl.create('https://www.google.com'),
-				ipAddress: IpAddress.create('127.0.0.1'),
+				ipAddress: IpAddress.createOrUnknown('127.0.0.1'),
 				title: 'Delete Test',
 				purpose: 'direct',
 			})
@@ -136,7 +136,7 @@ describe('ShortUrl Entity (Unit Test)', () => {
 			const shortUrl = ShortUrl.create({
 				slug: Slug.create('expireme'),
 				originalUrl: TargetUrl.create('https://www.google.com'),
-				ipAddress: IpAddress.create('127.0.0.1'),
+				ipAddress: IpAddress.createOrUnknown('127.0.0.1'),
 				title: 'Expire Test',
 				purpose: 'direct',
 			})

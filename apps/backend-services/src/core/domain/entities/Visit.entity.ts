@@ -65,7 +65,7 @@ export class Visit {
 	// Factory Methods
 	public static create(input: CreateVisitInput): Visit {
 		if (!input.shortUrlId || input.shortUrlId.trim() === '') {
-			throw new InvalidVisitError('shortUrlId is required and cannot be empty')
+			throw new InvalidVisitError()
 		}
 
 		return new Visit({

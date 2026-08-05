@@ -1,7 +1,7 @@
-import { API_ERROR_CODES } from '@min-url/contracts/errors'
+import { SECURITY_ERROR } from '@min-url/contracts/errors'
 
-export class ApplicationError extends Error {
-	readonly code: string = API_ERROR_CODES.badRequest
+export abstract class ApplicationError extends Error {
+	abstract readonly code: string
 
 	constructor(message: string) {
 		super(message)
@@ -11,8 +11,8 @@ export class ApplicationError extends Error {
 }
 
 export class CaptchaVerificationError extends ApplicationError {
-	readonly code = 'INVALID_CAPTCHA_TOKEN'
+	readonly code = SECURITY_ERROR.invalidCaptchaToken.code
 	constructor() {
-		super('Invalid captcha token. Please try again.')
+		super(SECURITY_ERROR.invalidCaptchaToken.message)
 	}
 }

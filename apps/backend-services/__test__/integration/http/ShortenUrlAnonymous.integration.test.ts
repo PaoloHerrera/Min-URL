@@ -58,6 +58,5 @@ describe('POST /direct/shorten', () => {
 		expect(response.status).toBe(400)
 		expect(response.body).toHaveProperty('message')
 		expect(typeof response.body.message).toBe('string')
-		expect(response.body.message).toContain('2048')
 	})
 })

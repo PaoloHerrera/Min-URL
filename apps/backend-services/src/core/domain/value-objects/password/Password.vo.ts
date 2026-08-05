@@ -1,5 +1,5 @@
 import crypto from 'node:crypto'
-import { InvalidPasswordError } from '../../errors/domain.errors.ts'
+import { InvalidPasswordError } from '@/core/domain/errors/domain.errors.ts'
 import { passwordSchema } from './password.schema.ts'
 
 export class Password {

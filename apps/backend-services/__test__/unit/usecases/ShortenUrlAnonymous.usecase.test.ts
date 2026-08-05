@@ -130,7 +130,7 @@ describe('ShortenUrlAnonymousUseCase', () => {
 	it('Should retry saving with a new slug if ShortUrlRepository throws SlugAlreadyExistsError on initial attempt', async () => {
 		mockShortUrlRepository.save = vi
 			.fn()
-			.mockRejectedValueOnce(new SlugAlreadyExistsError('slug11'))
+			.mockRejectedValueOnce(new SlugAlreadyExistsError())
 			.mockResolvedValueOnce(undefined)
 
 		mockSlugGenerator.generateUniqueSlug = vi
@@ -148,7 +148,7 @@ describe('ShortenUrlAnonymousUseCase', () => {
 	it('Should throw SlugAlreadyExistsError if all 3 retries fail due to continuous slug collisions', async () => {
 		mockShortUrlRepository.save = vi
 			.fn()
-			.mockRejectedValue(new SlugAlreadyExistsError('collid'))
+			.mockRejectedValue(new SlugAlreadyExistsError())
 
 		await expect(useCase.execute(validInput)).rejects.toThrow(
 			SlugAlreadyExistsError,
