@@ -25,13 +25,6 @@ export class InvalidSlugError extends DomainError {
 	}
 }
 
-export class InvalidPasswordError extends DomainError {
-	readonly code = VALIDATION_ERROR.invalidPassword.code
-	constructor() {
-		super(VALIDATION_ERROR.invalidPassword.message)
-	}
-}
-
 export class InvalidGeolocationError extends DomainError {
 	readonly code = VALIDATION_ERROR.invalidGeolocation.code
 	constructor() {

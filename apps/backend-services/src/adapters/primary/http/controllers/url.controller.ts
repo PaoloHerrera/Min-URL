@@ -72,7 +72,6 @@ export class UrlController {
 
 		const response: SlugDataResponse = {
 			slug: shortUrl.slug.value,
-			password: !!shortUrl.passwordHash,
 			queryAt: new Date().toISOString(),
 		}
 

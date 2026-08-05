@@ -181,8 +181,6 @@ describe('GET /internal/slug-data/:slug', () => {
 		expect(parseResult.success).toBe(true)
 		if (parseResult.success) {
 			expect(parseResult.data.slug).toBe('protected')
-			expect(parseResult.data.password).toBe(true)
-			expect(parseResult.data.originalUrl).toBeUndefined()
 			expect(parseResult.data.createdAt).toBeUndefined()
 		}
 

@@ -25,7 +25,6 @@ export const httpUrlSchema = z
 
 export const slugDataResponseSchema = z.object({
 	slug: z.string(),
-	password: z.boolean(),
 	originalUrl: httpUrlSchema.optional(),
 	queryAt: z.iso.datetime(),
 })
