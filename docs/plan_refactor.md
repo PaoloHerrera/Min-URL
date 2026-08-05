@@ -36,7 +36,7 @@ El proyecto se estructura en **4 capítulos** de implementación, donde cada cap
 | 5   | Consumo frontend-landing    | ⏳     | Actualizar `frontend-landing` para consumir `@min-url/contracts` y conectar al backend.                                                   |
 | 6   | Tests unitarios             | ✅     | Contratos + schemas (Todos los unitarios de core/middlewares están verdes)                                                                |
 | 7   | Tests integración CU1       | ✅     | POST /direct/shorten con Turnstile mockeado y validación de entrada Zod                                                                   |
-| 8   | Tests integración CU2       | ✅     | GET /internal/slug-data/:slug — success, 404, password, expired, deleted (REST Semántico)                                                 |
+| 8   | Tests integración CU2       | ✅     | GET /internal/slug-data/:slug — success, 404, expired, deleted (REST Semántico)                                                           |
 | 9   | E2E Playwright              | ⏳     | Shorten + redirect end-to-end                                                                                                             |
 | 10  | Eliminar legacy             | ✅     | Eliminar carpetas legacy y archivos sueltos en la raíz (`routes/`, `controllers/`, `services/`, `middleware/`, `config/`)                 |
 | 11  | TS strict                   | ✅     | `strict: true` en backend-services y configuración de NodeNext/bundler ESM                                                                |

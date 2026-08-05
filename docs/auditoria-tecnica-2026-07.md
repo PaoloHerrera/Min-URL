@@ -316,18 +316,18 @@ Estado: ⏳ pendiente · 🔧 en curso · ✅ resuelto · ➖ descartado/wontfix
 
 ### Arquitectura / Código
 
-| ID     | Hallazgo                                                                     | Estado | Notas / PR                |
-| ------ | ---------------------------------------------------------------------------- | ------ | ------------------------- |
-| ARC-1  | Bug orden dotenv (`app.ts:25`)                                               | ⏳     | Fase 0 (env al bootstrap) |
-| ARC-2  | 410 semántico no manejado en redirector                                      | ⏳     | Paso 4                    |
-| ARC-3  | Contracts declarados pero no consumidos (redirector + landing)               | ⏳     | Pasos 4 y 5               |
-| ARC-4  | `/password-protected` inexistente en landing                                 | ⏳     | Paso 5                    |
-| ARC-5  | `expirationDate` zombie en `isExpired()`                                     | ⏳     | Paso 3 (CU2 tracking)     |
-| ARC-6  | `RedirectionService` ausente (lógica inline)                                 | ⏳     | Paso 4                    |
-| ARC-7  | `envSchema.safeParse` por request (redirector)                               | ⏳     | Paso 43                   |
-| ARC-8  | `fetch` sin keep-alive/timeout (redirector)                                  | ⏳     | Paso 45                   |
-| ARC-9  | Dashboard: stack divergente (Zustand vs TanStack Query), baseURL hardcodeada | ⏳     | Parte 1B                  |
-| ARC-10 | backend-users: scaffold mock (stubs, sin DB, sin strict, filter muerto)      | ⏳     | Parte 1B                  |
+| ID     | Hallazgo                                                                     | Estado             | Notas / PR                                                              |
+| ------ | ---------------------------------------------------------------------------- | ------------------ | ----------------------------------------------------------------------- |
+| ARC-1  | Bug orden dotenv (`app.ts:25`)                                               | ⏳                 | Fase 0 (env al bootstrap)                                               |
+| ARC-2  | 410 semántico no manejado en redirector                                      | ⏳                 | Paso 4                                                                  |
+| ARC-3  | Contracts declarados pero no consumidos (redirector + landing)               | ⏳                 | Pasos 4 y 5                                                             |
+| ARC-4  | `/password-protected` en landing                                             | 🚫 **DESESTIMADO** | Retirado del alcance MVP por YAGNI (PR #62 y PR #63 - Issues #60 y #61) |
+| ARC-5  | `expirationDate` zombie en `isExpired()`                                     | ⏳                 | Paso 3 (CU2 tracking)                                                   |
+| ARC-6  | `RedirectionService` ausente (lógica inline)                                 | ⏳                 | Paso 4                                                                  |
+| ARC-7  | `envSchema.safeParse` por request (redirector)                               | ⏳                 | Paso 43                                                                 |
+| ARC-8  | `fetch` sin keep-alive/timeout (redirector)                                  | ⏳                 | Paso 45                                                                 |
+| ARC-9  | Dashboard: stack divergente (Zustand vs TanStack Query), baseURL hardcodeada | ⏳                 | Parte 1B                                                                |
+| ARC-10 | backend-users: scaffold mock (stubs, sin DB, sin strict, filter muerto)      | ⏳                 | Parte 1B                                                                |
 
 ### Infra / Docs
 

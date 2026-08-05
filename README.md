@@ -28,7 +28,6 @@
 - 🌐 **i18n** — English public interface and Spanish internal docs
 - 🌙 **Dark Mode** — Modern UI with dark/light themes
 - 🚦 **Rate Limiting & Security** — Cloudflare Turnstile anti-bot verification, strict URL limits (max 2048 chars)
-- 🔒 **Password-protected URLs** — Domain-level support for protected links
 
 ---
 
@@ -79,12 +78,11 @@ Min-URL is a **Turborepo monorepo** composed of applications and shared packages
 1. User visits `http://localhost:3002/:slug` → **backend-redirector** (Fastify 5).
 2. Handler makes an internal call to **backend-services** (`GET /internal/slug-data/:slug`) passing `Authorization: Bearer <INTERNAL_SECRET>`.
 3. **backend-services** executes `VisitShortUrl.usecase`:
-   - Validates link status (active, password, expired, deleted).
+   - Validates link status (active, expired, deleted).
    - Resolves IP geolocation offline (`geoip-lite`) and parses User-Agent metadata.
    - **Atomically inserts visit event and increments `clicks_count`** in PostgreSQL using a single Drizzle DB transaction.
 4. **backend-redirector** receives response:
    - Active link → HTTP `302 Found` to `originalUrl`.
-   - Password-protected → HTTP `302 Found` to `/password-protected`.
    - Expired / Deleted → HTTP `410 Gone`.
 
 ---
@@ -272,7 +270,6 @@ bun run build
 
 ## 🗺 Roadmap
 
-- [ ] Password-protected URL unlock flow (UI)
 - [ ] Automatic URL expiration cron job
 - [ ] GitHub OAuth login
 - [ ] Public API access (purpose: `api`)
