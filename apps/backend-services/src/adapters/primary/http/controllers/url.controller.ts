@@ -72,11 +72,8 @@ export class UrlController {
 
 		const response: SlugDataResponse = {
 			slug: shortUrl.slug.value,
+			originalUrl: shortUrl.originalUrl.value,
 			queryAt: new Date().toISOString(),
-		}
-
-		if (!shortUrl.passwordHash) {
-			response.originalUrl = shortUrl.originalUrl.value
 		}
 
 		res.status(200).json(response)

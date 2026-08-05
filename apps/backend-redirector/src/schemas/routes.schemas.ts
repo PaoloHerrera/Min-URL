@@ -22,8 +22,7 @@ export type GetSlugSchema = z.infer<typeof getSlugSchema>
 
 export const slugDataSchema = z.object({
 	slug: z.string(),
-	originalUrl: z.url().optional(),
-	password: z.boolean(),
+	originalUrl: z.url(),
 })
 
 export type SlugDataSchema = z.infer<typeof slugDataSchema>

@@ -1,6 +1,5 @@
 import { v7 as uuidv7 } from 'uuid'
 import type { IpAddress } from '../value-objects/ip-address/IpAddress.vo.ts'
-import type { Password } from '../value-objects/password/Password.vo.ts'
 import type { Slug } from '../value-objects/slug/Slug.vo.ts'
 import type { TargetUrl } from '../value-objects/target-url/TargetUrl.vo.ts'
 
@@ -17,7 +16,6 @@ export interface ShortUrlProps {
 	purpose: 'direct' | 'qr' | 'api'
 	title: string | 'Untitled'
 	clicksCount?: number
-	passwordHash?: Password | null
 	expirationDate?: Date | null
 	expiredAt?: Date | null
 	createdAt: Date
@@ -33,7 +31,6 @@ export class ShortUrl {
 	private _purpose: 'direct' | 'qr' | 'api'
 	private _title: string
 	private readonly _clicksCount: number
-	private _passwordHash: Password | null
 	private readonly _expirationDate: Readonly<Date | null>
 	private _expiredAt: Date | null
 	private readonly _createdAt: Readonly<Date>
@@ -48,7 +45,6 @@ export class ShortUrl {
 		this._purpose = props.purpose
 		this._title = props.title
 		this._clicksCount = props.clicksCount ?? 0
-		this._passwordHash = props.passwordHash ?? null
 		this._expirationDate = props.expirationDate
 			? new Date(props.expirationDate.getTime())
 			: null
@@ -90,10 +86,6 @@ export class ShortUrl {
 
 	get clicksCount(): number {
 		return this._clicksCount
-	}
-
-	get passwordHash(): Password | null {
-		return this._passwordHash
 	}
 
 	get expirationDate(): Date | null {

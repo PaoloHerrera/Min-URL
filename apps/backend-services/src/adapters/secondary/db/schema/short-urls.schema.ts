@@ -18,7 +18,6 @@ export const shortUrls = pgTable('short_urls', {
 		.default('direct')
 		.notNull(),
 	clicksCount: integer('clicks_count').default(0).notNull(),
-	passwordHash: text('password_hash'),
 	ipAddress: varchar('ip_address', { length: 45 }).notNull(),
 	geolocation: jsonb('geolocation').$type<GeolocationProps>(),
 	expirationDate: timestamp('expiration_date', { withTimezone: true }),

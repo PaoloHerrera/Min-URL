@@ -7,7 +7,6 @@ import { ShortUrl } from '@/core/domain/entities/ShortUrl.entity.ts'
 import { TargetUrl } from '@/core/domain/value-objects/target-url/TargetUrl.vo.ts'
 import { Slug } from '@/core/domain/value-objects/slug/Slug.vo.ts'
 import { IpAddress } from '@/core/domain/value-objects/ip-address/IpAddress.vo.ts'
-import { Password } from '@/core/domain/value-objects/password/Password.vo.ts'
 import { db } from '@/adapters/secondary/db/connection.ts'
 import { sql } from 'drizzle-orm'
 
@@ -16,10 +15,9 @@ const repo = new DrizzleShortUrlRepository()
 // Public Slug Schema
 const publicSlugSchema = z.object({
 	slug: z.string(),
-	originalUrl: z.string().url().optional(),
-	password: z.boolean().default(false),
-	createdAt: z.string().datetime().optional(),
-	queryAt: z.string().datetime(),
+	originalUrl: z.url(),
+	createdAt: z.iso.datetime().optional(),
+	queryAt: z.iso.datetime(),
 })
 
 //Sleep Helper
@@ -36,7 +34,6 @@ beforeAll(async () => {
 			title: 'Google Public',
 			purpose: 'direct',
 			ipAddress: IpAddress.reconstitute({ ipAddress: '127.0.0.1' }),
-			passwordHash: null,
 			createdAt: new Date(),
 			updatedAt: new Date(),
 			deletedAt: null,
@@ -54,7 +51,6 @@ beforeAll(async () => {
 			title: 'Google Protected',
 			purpose: 'direct',
 			ipAddress: IpAddress.reconstitute({ ipAddress: '127.0.0.1' }),
-			passwordHash: Password.reconstitute('fakesalt:fakehash'),
 			createdAt: new Date(),
 			updatedAt: new Date(),
 			deletedAt: null,
@@ -72,7 +68,6 @@ beforeAll(async () => {
 			title: 'Google Expired',
 			purpose: 'direct',
 			ipAddress: IpAddress.reconstitute({ ipAddress: '127.0.0.1' }),
-			passwordHash: null,
 			createdAt: new Date(),
 			updatedAt: new Date(),
 			deletedAt: null,
@@ -90,7 +85,6 @@ beforeAll(async () => {
 			title: 'Google Deleted',
 			purpose: 'direct',
 			ipAddress: IpAddress.reconstitute({ ipAddress: '127.0.0.1' }),
-			passwordHash: null,
 			createdAt: new Date(),
 			updatedAt: new Date(),
 			deletedAt: new Date(),
@@ -116,7 +110,7 @@ afterAll(async () => {
 })
 
 describe('GET /internal/slug-data/:slug', () => {
-	it('Should return the original URL and password false if the slug exists and not be protected by a password', async () => {
+	it('Should return the original URL if the slug exists', async () => {
 		const response = await request(app)
 			.get('/internal/slug-data/public')
 			.set('Authorization', `Bearer ${process.env.INTERNAL_SECRET}`)
@@ -140,7 +134,6 @@ describe('GET /internal/slug-data/:slug', () => {
 		if (parseResult.success) {
 			expect(parseResult.data.slug).toBe('public')
 			expect(parseResult.data.originalUrl).toBe('https://www.google.com')
-			expect(parseResult.data.password).toBe(false)
 		}
 
 		// 3. Check DB visit record persistence
@@ -161,34 +154,6 @@ describe('GET /internal/slug-data/:slug', () => {
 			sql`SELECT clicks_count FROM short_urls WHERE id = '00000000-0000-0000-0000-000000000001'`,
 		)
 		expect(shortUrlRows.rows[0].clicks_count).toBe(1)
-	})
-
-	it('Should do not return the originalURL if the slug is protected by a password but still record the Visit', async () => {
-		const response = await request(app)
-			.get('/internal/slug-data/protected')
-			.set('Authorization', `Bearer ${process.env.INTERNAL_SECRET}`)
-			.set('User-Agent', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)')
-			.set('X-Forwarded-For', '198.51.100.42')
-
-		// 1. Check response status code and content type.
-		expect(response.statusCode).toBe(200)
-		expect(response.headers['content-type']).toBe(
-			'application/json; charset=utf-8',
-		)
-
-		// 2. Check payload properties and their types.
-		const parseResult = publicSlugSchema.safeParse(response.body)
-		expect(parseResult.success).toBe(true)
-		if (parseResult.success) {
-			expect(parseResult.data.slug).toBe('protected')
-			expect(parseResult.data.createdAt).toBeUndefined()
-		}
-
-		// 3. Check DB visit record persistence for protected link
-		const visitRows = await db.execute(
-			sql`SELECT * FROM visits WHERE short_url_id = '00000000-0000-0000-0000-000000000002'`,
-		)
-		expect(visitRows.rows.length).toBe(1)
 	})
 
 	it('Should return 404 if the slug does not exist and NOT record a Visit', async () => {

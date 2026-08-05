@@ -39,7 +39,6 @@ describe('GET /:slug', () => {
 	describe('Fetch to the backend API', () => {
 		it('Should redirect to the original URL if the slug is public', async () => {
 			const fetchSpy = mockFetch(200, {
-				password: false,
 				originalUrl: 'https://www.google.com',
 				slug: 'validslug',
 			})
@@ -51,20 +50,6 @@ describe('GET /:slug', () => {
 
 			// Check if fetch was called with the correct arguments and headers
 			assertInternalApiCall(fetchSpy, 'validslug')
-		})
-
-		it('Should redirect to the password protection page if the slug is password protected', async () => {
-			const fetchSpy = mockFetch(200, { password: true, slug: 'protected' })
-
-			const response = await requestUrl('/protected')
-
-			expect(response.statusCode).toBe(302)
-			expect(response.headers.location).toBe(
-				`${FRONTEND_URL}/password-protected?slug=${encodeURIComponent('protected')}`,
-			)
-
-			// Check if fetch was called with the correct arguments and headers
-			assertInternalApiCall(fetchSpy, 'protected')
 		})
 
 		it('Should redirect to the link-not-found page if the slug does not exist (404)', async () => {
