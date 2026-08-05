@@ -40,7 +40,6 @@ describe('httpUrlSchema (Contracts Unit Test)', () => {
 	it('should enforce httpUrlSchema in slugDataResponseSchema', () => {
 		const result = slugDataResponseSchema.safeParse({
 			slug: 'abc123',
-			password: false,
 			originalUrl: 'javascript:void(0)',
 			queryAt: new Date().toISOString(),
 		})

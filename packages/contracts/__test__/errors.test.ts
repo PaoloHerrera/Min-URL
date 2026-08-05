@@ -68,10 +68,6 @@ describe('Error HTTP Contract', () => {
 			error: 'FORBIDDEN_EXTENSION',
 			expected: 400,
 		},
-		{
-			error: 'INVALID_PASSWORD',
-			expected: 400,
-		},
 	] satisfies readonly {
 		error: HttpErrorCodes
 		expected: number
