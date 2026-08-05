@@ -1,0 +1,1 @@
+ALTER TABLE "short_urls" DROP COLUMN "password_hash";

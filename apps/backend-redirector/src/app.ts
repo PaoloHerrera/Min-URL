@@ -48,13 +48,7 @@ app
 
 			const data = await slugDataSchema.parseAsync(rawData)
 
-			if (data.password) {
-				return reply.redirect(
-					`${env.FRONTEND_URL}/password-protected?slug=${encodeURIComponent(slug)}`,
-				)
-			}
-
-			return reply.redirect(data.originalUrl as string)
+			return reply.redirect(data.originalUrl)
 		} catch (error) {
 			app.log.error(`Error al obtener el slug: ${error}`)
 			return reply.redirect(`${env.FRONTEND_URL}/error`)

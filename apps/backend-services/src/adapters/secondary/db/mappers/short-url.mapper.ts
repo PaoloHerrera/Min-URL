@@ -3,7 +3,6 @@ import { ShortUrl } from '@/core/domain/entities/ShortUrl.entity.ts'
 import { Geolocation } from '@/core/domain/value-objects/geolocation/Geolocation.vo.ts'
 import type { GeolocationProps } from '@/core/domain/value-objects/geolocation/Geolocation.vo.ts'
 import { IpAddress } from '@/core/domain/value-objects/ip-address/IpAddress.vo.ts'
-import { Password } from '@/core/domain/value-objects/password/Password.vo.ts'
 import { Slug } from '@/core/domain/value-objects/slug/Slug.vo.ts'
 import { TargetUrl } from '@/core/domain/value-objects/target-url/TargetUrl.vo.ts'
 
@@ -24,9 +23,6 @@ export const toDomain = (row: ShortUrlRow): ShortUrl => {
 				? Geolocation.reconstitute(row.geolocation as GeolocationProps)
 				: null,
 		}),
-		passwordHash: row.passwordHash
-			? Password.reconstitute(row.passwordHash)
-			: null,
 		expirationDate: row.expirationDate,
 		expiredAt: row.expiredAt,
 		createdAt: row.createdAt,
@@ -54,7 +50,6 @@ export const toPersistence = (entity: ShortUrl): ShortUrlInsert => {
 					timezone: entity.ipAddress.geolocation.timezone,
 				}
 			: null,
-		passwordHash: entity.passwordHash?.hash ?? null,
 		expirationDate: entity.expirationDate,
 		expiredAt: entity.expiredAt,
 		createdAt: entity.createdAt ?? new Date(),
