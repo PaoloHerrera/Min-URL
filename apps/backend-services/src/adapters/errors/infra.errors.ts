@@ -43,6 +43,13 @@ export class InvalidPayloadError extends InfraError {
 	}
 }
 
+export class InvalidCaptchaTokenError extends InfraError {
+	readonly code = SECURITY_ERROR.invalidCaptchaToken.code
+	constructor() {
+		super(SECURITY_ERROR.invalidCaptchaToken.message)
+	}
+}
+
 export class CaptchaServiceError extends InfraError {
 	readonly code = INFRA_ERROR.captchaServiceError.code
 	constructor() {

@@ -11,8 +11,6 @@ import {
 import { IpAddress } from '../domain/value-objects/ip-address/IpAddress.vo.ts'
 import { Slug } from '../domain/value-objects/slug/Slug.vo.ts'
 import { TargetUrl } from '../domain/value-objects/target-url/TargetUrl.vo.ts'
-import { CaptchaVerificationError } from '../errors/application.errors.ts'
-import type { CaptchaServicePort } from '../ports/outbound/CaptchaServicePort.interface.ts'
 import type { ForbiddenExtensionsPort } from '../ports/outbound/ForbiddenExtensionsPort.interface.ts'
 import type { IpGeolocationResolverPort } from '../ports/outbound/IpGeolocationResolverPort.interface.ts'
 import type { ShortUrlRepositoryPort } from '../ports/outbound/ShortUrlRepositoryPort.interface.ts'
@@ -20,7 +18,6 @@ import type { SlugGeneratorPort } from '../ports/outbound/SlugGeneratorPort.inte
 
 interface ShortenUrlAnonymousProps {
 	shortUrlRepository: ShortUrlRepositoryPort
-	captchaServices: CaptchaServicePort
 	slugGenerator: SlugGeneratorPort
 	forbiddenExtensions: ForbiddenExtensionsPort
 	ipGeolocationResolver: IpGeolocationResolverPort
@@ -34,18 +31,10 @@ export class ShortenUrlAnonymous implements ShortenUrlAnonymousPort {
 	}
 
 	async execute(input: ShortenUrlAnonymousInput): Promise<ShortUrl> {
-		await this.ensureValidCaptcha(input.captchaToken)
 		const targetUrlVo = this.ensureAllowedTargetUrl(input.originalUrl)
 		const ipAddressVo = await this.resolveIpAddress(input.clientIp)
 
 		return await this.createAndSaveWithSlugRetry(targetUrlVo, ipAddressVo)
-	}
-
-	private async ensureValidCaptcha(captchaToken: string): Promise<void> {
-		const isCaptchaValid = await this.props.captchaServices.verify(captchaToken)
-		if (!isCaptchaValid) {
-			throw new CaptchaVerificationError()
-		}
 	}
 
 	private ensureAllowedTargetUrl(originalUrl: string): TargetUrl {

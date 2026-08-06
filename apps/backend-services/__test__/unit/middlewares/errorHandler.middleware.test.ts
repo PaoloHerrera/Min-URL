@@ -14,8 +14,8 @@ import {
 	TooManyRequestsError,
 	PayloadTooLargeError,
 	CaptchaServiceError,
+	InvalidCaptchaTokenError,
 } from '@/adapters/errors/infra.errors.ts'
-import { CaptchaVerificationError } from '@/core/errors/application.errors.ts'
 import {
 	SLUG_ERROR,
 	VALIDATION_ERROR,
@@ -116,10 +116,10 @@ describe('errorHandler (Unit Test)', () => {
 		})
 	})
 
-	it('Should return 422 for CaptchaVerificationError', async () => {
+	it('Should return 422 for InvalidCaptchaTokenError', async () => {
 		app = express()
 		app.get('/test', (_req, _res, next) => {
-			next(new CaptchaVerificationError())
+			next(new InvalidCaptchaTokenError())
 		})
 		app.use(errorHandler)
 
