@@ -1,6 +1,5 @@
 import { InfraError } from '@/adapters/errors/infra.errors.ts'
 import { DomainError } from '@/core/domain/errors/domain.errors.ts'
-import { ApplicationError } from '@/core/errors/application.errors.ts'
 import type { ErrorResponsePayload } from '@min-url/contracts/dto'
 import { INFRA_ERROR, resolveHttpStatusCode } from '@min-url/contracts/errors'
 import type { NextFunction, Request, Response } from 'express'
@@ -11,11 +10,7 @@ export const errorHandler = (
 	res: Response,
 	_next: NextFunction,
 ): void => {
-	if (
-		error instanceof DomainError ||
-		error instanceof ApplicationError ||
-		error instanceof InfraError
-	) {
+	if (error instanceof DomainError || error instanceof InfraError) {
 		const statusCode = resolveHttpStatusCode(error.code)
 		const responsePayload: ErrorResponsePayload = {
 			code: error.code,

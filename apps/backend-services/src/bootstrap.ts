@@ -1,5 +1,6 @@
 import { UrlController } from '@/adapters/primary/http/controllers/url.controller.ts'
-import { TurnstileCaptchaService } from '@/adapters/secondary/captcha/TurnstileCaptchaService.ts'
+import { createVerifyCaptchaMiddleware } from '@/adapters/primary/http/middlewares/verifyCaptcha.middleware.ts'
+import { TurnstileCaptchaService } from '@/adapters/secondary/captcha/TurnstileCaptchaService'
 import { DrizzleShortUrlRepository } from '@/adapters/secondary/db/DrizzleShortUrlRepository.ts'
 import { DrizzleVisitRepository } from '@/adapters/secondary/db/DrizzleVisitRepository.ts'
 import { GeoIpLiteResolver } from '@/adapters/secondary/geoip/GeoIpLiteResolver.ts'
@@ -12,7 +13,7 @@ import { VisitShortUrl } from '@/core/usecases/VisitShortUrl.usecase.ts'
 // 1. Instanciar Adaptadores Secundarios (Infraestructura)
 const shortUrlRepository = new DrizzleShortUrlRepository()
 const visitRepository = new DrizzleVisitRepository()
-const captchaServices = new TurnstileCaptchaService()
+const captchaService = new TurnstileCaptchaService()
 
 // 2. Instanciar Servicios del Core / Dominio
 const slugGenerator = new RandomBase62SlugGenerator(shortUrlRepository, {
@@ -26,7 +27,6 @@ const ipGeolocationResolver = new GeoIpLiteResolver()
 // 3. Instanciar Casos de Uso (Aplicación)
 const shortenUrlAnonymousUseCase = new ShortenUrlAnonymous({
 	shortUrlRepository,
-	captchaServices,
 	slugGenerator,
 	forbiddenExtensions,
 	ipGeolocationResolver,
@@ -42,3 +42,6 @@ export const urlController = new UrlController(
 	shortenUrlAnonymousUseCase,
 	visitShortUrlUseCase,
 )
+
+export const verifyCaptchaMiddleware =
+	createVerifyCaptchaMiddleware(captchaService)

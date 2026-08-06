@@ -1,7 +1,6 @@
 import { describe, expect, it, vi, beforeEach } from 'vitest'
 import { ShortenUrlAnonymous } from '@/core/usecases/ShortenUrlAnonymous.usecase.ts'
 import type { ShortUrlRepositoryPort } from '@/core/ports/outbound/ShortUrlRepositoryPort.interface.ts'
-import type { CaptchaServicePort } from '@/core/ports/outbound/CaptchaServicePort.interface.ts'
 import type { SlugGeneratorPort } from '@/core/ports/outbound/SlugGeneratorPort.interface.ts'
 import type { ForbiddenExtensionsPort } from '@/core/ports/outbound/ForbiddenExtensionsPort.interface.ts'
 import type { IpGeolocationResolverPort } from '@/core/ports/outbound/IpGeolocationResolverPort.interface.ts'
@@ -13,11 +12,9 @@ import {
 	SlugAlreadyExistsError,
 	SlugGenerationExhaustedError,
 } from '@/core/domain/errors/domain.errors.ts'
-import { CaptchaVerificationError } from '@/core/errors/application.errors.ts'
 
 describe('ShortenUrlAnonymousUseCase', () => {
 	let mockShortUrlRepository: ShortUrlRepositoryPort
-	let mockCaptchaServices: CaptchaServicePort
 	let mockSlugGenerator: SlugGeneratorPort
 	let mockForbiddenExtensions: ForbiddenExtensionsPort
 	let mockIpGeolocationResolver: IpGeolocationResolverPort
@@ -34,10 +31,6 @@ describe('ShortenUrlAnonymousUseCase', () => {
 			save: vi.fn().mockResolvedValue(undefined),
 			isSlugAvailable: vi.fn().mockResolvedValue(true),
 			getUrlBySlug: vi.fn().mockResolvedValue(null),
-		}
-
-		mockCaptchaServices = {
-			verify: vi.fn().mockResolvedValue(true),
 		}
 
 		mockSlugGenerator = {
@@ -63,7 +56,6 @@ describe('ShortenUrlAnonymousUseCase', () => {
 
 		useCase = new ShortenUrlAnonymous({
 			shortUrlRepository: mockShortUrlRepository,
-			captchaServices: mockCaptchaServices,
 			slugGenerator: mockSlugGenerator,
 			forbiddenExtensions: mockForbiddenExtensions,
 			ipGeolocationResolver: mockIpGeolocationResolver,
@@ -76,22 +68,10 @@ describe('ShortenUrlAnonymousUseCase', () => {
 		expect(result).toBeInstanceOf(ShortUrl)
 		expect(result.originalUrl.value).toBe(validInput.originalUrl)
 		expect(result.slug.value).toBe('abc1234')
-		expect(mockCaptchaServices.verify).toHaveBeenCalledWith(
-			validInput.captchaToken,
-		)
 		expect(mockForbiddenExtensions.check).toHaveBeenCalled()
 		expect(mockSlugGenerator.generateUniqueSlug).toHaveBeenCalled()
 		expect(mockIpGeolocationResolver.resolve).toHaveBeenCalled()
 		expect(mockShortUrlRepository.save).toHaveBeenCalledWith(result)
-	})
-
-	it('Should throw CaptchaVerificationError if captcha token is invalid', async () => {
-		mockCaptchaServices.verify = vi.fn().mockResolvedValue(false)
-
-		await expect(useCase.execute(validInput)).rejects.toThrow(
-			CaptchaVerificationError,
-		)
-		expect(mockShortUrlRepository.save).not.toHaveBeenCalled()
 	})
 
 	it('Should throw ForbiddenExtensionError if target URL ends with a forbidden extension', async () => {
