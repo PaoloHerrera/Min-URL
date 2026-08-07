@@ -20,7 +20,7 @@
  */
 
 import request from 'supertest'
-import { describe, expect, it, vi } from 'vitest'
+import { describe, expect, it, vi, beforeAll, afterAll } from 'vitest'
 import { DrizzleShortUrlRepository } from '@/adapters/secondary/db/DrizzleShortUrlRepository.ts'
 import { SlugAlreadyExistsError } from '@/core/domain/errors/domain.errors.ts'
 import { createTestApp } from '../helpers/createTestApp.ts'
@@ -30,6 +30,19 @@ vi.mock('@/adapters/secondary/captcha/TurnstileCaptchaService.ts', () => ({
 		verify = vi.fn().mockResolvedValue(true)
 	},
 }))
+
+let app: ReturnType<typeof createTestApp>['app']
+let db: ReturnType<typeof createTestApp>['db']
+
+beforeAll(() => {
+	const testApp = createTestApp()
+	app = testApp.app
+	db = testApp.db
+})
+
+afterAll(() => {
+	db.close()
+})
 
 describe('POST /direct/shorten - Concurrent Slug Collision Resilience', () => {
 	const { app } = createTestApp()

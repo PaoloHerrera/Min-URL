@@ -1,7 +1,20 @@
 import request from 'supertest'
-import { describe, it, expect } from 'vitest'
+import { describe, it, expect, beforeAll, afterAll } from 'vitest'
 import { SECURITY_ERROR } from '@min-url/contracts/errors'
 import { createTestApp } from '../helpers/createTestApp.ts'
+
+let app: ReturnType<typeof createTestApp>['app']
+let db: ReturnType<typeof createTestApp>['db']
+
+beforeAll(() => {
+	const testApp = createTestApp()
+	app = testApp.app
+	db = testApp.db
+})
+
+afterAll(() => {
+	db.close()
+})
 
 describe('POST /direct/shorten payload limit & JSON syntax integration tests', () => {
 	const { app } = createTestApp()

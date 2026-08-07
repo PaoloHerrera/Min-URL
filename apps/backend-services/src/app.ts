@@ -26,6 +26,9 @@ export const buildApp = (env: Env, db: Db) => {
 
 	// CORS
 	const allowedOrigins = env.CORS_ALLOWED_ORIGINS.split(',')
+		.map((origin) => origin.trim())
+		.filter((origin) => origin.length > 0)
+
 	app.use(corsMiddleware(allowedOrigins))
 
 	// Trust reverse proxy (required for accurate req.ip behind load balancers)
@@ -48,8 +51,7 @@ export const buildApp = (env: Env, db: Db) => {
 	)
 
 	// Utility routes
-	app.get('/', (req: Request, res: Response) => {
-		console.log(`Client IP: ${req.ip}`)
+	app.get('/', (_req: Request, res: Response) => {
 		res.redirect('https://min-url.com')
 	})
 	app.get('/favicon.ico', (_req: Request, res: Response) => {

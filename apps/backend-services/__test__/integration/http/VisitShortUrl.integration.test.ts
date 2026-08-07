@@ -9,9 +9,6 @@ import { IpAddress } from '@/core/domain/value-objects/ip-address/IpAddress.vo.t
 import { sql } from 'drizzle-orm'
 import { createTestApp } from '../helpers/createTestApp.ts'
 
-const { app, db } = createTestApp()
-const repo = new DrizzleShortUrlRepository(db)
-
 // Public Slug Schema
 const publicSlugSchema = z.object({
 	slug: z.string(),
@@ -23,8 +20,17 @@ const publicSlugSchema = z.object({
 //Sleep Helper
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
 
+let app: ReturnType<typeof createTestApp>['app']
+let db: ReturnType<typeof createTestApp>['db']
+let repo: DrizzleShortUrlRepository
+
 // Insert test data before all tests
 beforeAll(async () => {
+	const testApp = createTestApp()
+	app = testApp.app
+	db = testApp.db
+	repo = new DrizzleShortUrlRepository(db)
+
 	// 1. Create a public slug
 	await repo.save(
 		ShortUrl.reconstitute({
@@ -107,6 +113,7 @@ afterAll(async () => {
 		protectedUrl.delete()
 		await repo.save(protectedUrl)
 	}
+	db.close()
 })
 
 describe('GET /internal/slug-data/:slug', () => {

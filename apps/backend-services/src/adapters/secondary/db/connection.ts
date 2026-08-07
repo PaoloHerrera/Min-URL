@@ -8,7 +8,9 @@ export const createDbConnection = (databaseUrl: string) => {
 		connectionString: databaseUrl,
 	})
 
-	return drizzle(pool, { schema: { shortUrls, visits } })
+	const db = drizzle(pool, { schema: { shortUrls, visits } })
+
+	return Object.assign(db, { close: () => pool.end() })
 }
 
 export type Db = ReturnType<typeof createDbConnection>
