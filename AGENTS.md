@@ -13,6 +13,7 @@ Min-URL is a URL shortener built as a **software engineering lab and portfolio p
 3. `docs/auditoria-tecnica-2026-07.md` — technical audit with a **remediation tracker**; mark items ✅ as they get fixed.
 4. `docs/casos_de_uso_mvp.md` — use cases with real flows and SLOs.
 5. `docs/SECURITY.md` — security policy and known debt.
+6. `personal_notes/roadmap_and_tracker.md` — **mirror of GitHub** (local-only, gitignored). It is the **photo of where we are**: a consolidated roadmap + issue/PR tracker that reflects the real state of GitHub. Whenever you open, close, or merge an issue/PR, update it to match GitHub — it must never describe work that doesn't exist there.
 
 ## Repo layout
 
@@ -55,14 +56,15 @@ Default ports: landing `:4321` · backend-services `:3001` (env `PORT`) · redir
 
 ## Current priorities (Fase 0 — see audit tracker)
 
-1. Security fixes: env validation at bootstrap in all services (kills `|| 'secret'`), CORS whitelist in backend-users, timing-safe internal token, `httpUrlSchema` in contracts, `trust proxy 1`.
-2. Rate limiting in backend-services **before** implementing `verify-password` (ADR-003: non-negotiable).
-3. Fix `playwright.yml` in CI (it references a non-existent `init.sql`).
-4. Complete plan step 4 (410 handling, contracts in redirector, `RedirectionService`) and step 5 (`/password-protected`, contracts in landing).
+1. **Issue #40: Graceful Shutdown**: Implement SIGTERM/SIGINT signal listeners and clean teardown for PostgreSQL connections in `backend-services`.
+2. Security fixes: CORS whitelist in backend-users, timing-safe internal token, `httpUrlSchema` in contracts, `trust proxy 1`.
+3. Rate limiting in backend-services **before** implementing `verify-password` (ADR-003: non-negotiable).
+4. Fix `playwright.yml` in CI (it references a non-existent `init.sql`).
+5. Complete plan step 4 (410 handling, contracts in redirector, `RedirectionService`) and step 5 (`/password-protected`, contracts in landing).
 
 ## Known gotchas
 
-- `backend-services` currently relies on **Bun auto-loading `.env`** (dotenv runs after imports evaluate); be careful when running with Node/tsx until the env-at-bootstrap fix lands.
+- `backend-services` environment loading is fully decoupled via `loadEnv()` and `parseEnv()` at bootstrap (Issue #41).
 - `backend-users` is a **mock**: `validateUser` returns `idUsers: 1` and `ProtectedService` is stubs. Do not build on top of it — it gets rebuilt in Part 1B.
 - The dashboard talks to a hardcoded `localhost:3000` legacy API; treat it as legacy until the Part 1B reconnect.
 - Click tracking is intentionally **synchronous** in Chapter 1 (ADR-006); only make it async if Chapter 2 measurements justify it.
