@@ -1,17 +1,23 @@
-import { urlController, verifyCaptchaMiddleware } from '@/bootstrap.ts'
+import type { UrlController } from '@/adapters/primary/http/controllers/url.controller.ts'
 import { shortenAnonymousRequestSchema } from '@min-url/contracts/schemas'
 import { Router } from 'express'
+import type { RequestHandler } from 'express'
 import { jsonPayloadLimit } from '../middlewares/jsonPayloadLimit.middleware.ts'
 import { validateBody } from '../middlewares/validateBody.middleware.ts'
 
-const routesShortUrl = Router()
+export const routesShortUrl = (
+	urlController: UrlController,
+	verifyCaptchaMiddleware: RequestHandler,
+) => {
+	const router = Router()
 
-routesShortUrl.post(
-	'/direct/shorten',
-	jsonPayloadLimit(5),
-	validateBody(shortenAnonymousRequestSchema),
-	verifyCaptchaMiddleware,
-	urlController.createAnonymous,
-)
+	router.post(
+		'/direct/shorten',
+		jsonPayloadLimit(5),
+		validateBody(shortenAnonymousRequestSchema),
+		verifyCaptchaMiddleware,
+		urlController.createAnonymous,
+	)
 
-export { routesShortUrl }
+	return router
+}

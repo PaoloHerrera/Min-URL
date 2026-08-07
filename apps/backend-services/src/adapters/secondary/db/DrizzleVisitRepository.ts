@@ -1,13 +1,19 @@
-import { db } from '@/adapters/secondary/db/connection.ts'
 import { shortUrls } from '@/adapters/secondary/db/schema/short-urls.schema.ts'
 import { visits } from '@/adapters/secondary/db/schema/visits.schema.ts'
+import type { Db } from '@/adapters/secondary/db/connection.ts'
 import type { Visit } from '@/core/domain/entities/Visit.entity.ts'
 import type { VisitRepositoryPort } from '@/core/ports/outbound/VisitRepositoryPort.interface.ts'
 import { eq, sql } from 'drizzle-orm'
 
 export class DrizzleVisitRepository implements VisitRepositoryPort {
+	private readonly db: Db
+
+	constructor(db: Db) {
+		this.db = db
+	}
+
 	async save(visit: Visit): Promise<void> {
-		await db.transaction(async (tx) => {
+		await this.db.transaction(async (tx) => {
 			await tx.insert(visits).values({
 				id: visit.id,
 				shortUrlId: visit.shortUrlId,

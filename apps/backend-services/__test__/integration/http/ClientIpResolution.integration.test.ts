@@ -1,7 +1,7 @@
 import request from 'supertest'
 import { describe, expect, it, vi } from 'vitest'
-import { app } from '@/app.ts'
 import { DrizzleShortUrlRepository } from '@/adapters/secondary/db/DrizzleShortUrlRepository.ts'
+import { createTestApp } from '../helpers/createTestApp.ts'
 
 vi.mock('@/adapters/secondary/captcha/TurnstileCaptchaService.ts', () => ({
 	TurnstileCaptchaService: class {
@@ -10,7 +10,9 @@ vi.mock('@/adapters/secondary/captcha/TurnstileCaptchaService.ts', () => ({
 }))
 
 describe('POST /direct/shorten', () => {
-	const repository = new DrizzleShortUrlRepository()
+	const { app, db } = createTestApp()
+	const repository = new DrizzleShortUrlRepository(db)
+
 	it('Should create shortened url using the real client IP and ignore req.body.ip', async () => {
 		const response = await request(app)
 			.post('/direct/shorten')

@@ -33,8 +33,3 @@ export const createVerifyInternalTokenMiddleware = (secret: string) => {
 		next()
 	}
 }
-
-import { env } from '@/config/env.ts'
-export const verifyInternalToken = createVerifyInternalTokenMiddleware(
-	env.INTERNAL_SECRET,
-)

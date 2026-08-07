@@ -21,9 +21,9 @@
 
 import request from 'supertest'
 import { describe, expect, it, vi } from 'vitest'
-import { app } from '@/app.ts'
 import { DrizzleShortUrlRepository } from '@/adapters/secondary/db/DrizzleShortUrlRepository.ts'
 import { SlugAlreadyExistsError } from '@/core/domain/errors/domain.errors.ts'
+import { createTestApp } from '../helpers/createTestApp.ts'
 
 vi.mock('@/adapters/secondary/captcha/TurnstileCaptchaService.ts', () => ({
 	TurnstileCaptchaService: class {
@@ -32,6 +32,8 @@ vi.mock('@/adapters/secondary/captcha/TurnstileCaptchaService.ts', () => ({
 }))
 
 describe('POST /direct/shorten - Concurrent Slug Collision Resilience', () => {
+	const { app } = createTestApp()
+
 	it('Should successfully create unique short URLs with HTTP 200 for concurrent requests even if initial candidate slugs collide', async () => {
 		// 1. Spy on crypto.randomUUID (Deterministic laboratory test harness)
 		const spy = vi.spyOn(globalThis.crypto, 'randomUUID')

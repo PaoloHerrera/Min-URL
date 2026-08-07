@@ -1,13 +1,13 @@
 import { CaptchaServiceError } from '@/adapters/errors/infra.errors.ts'
-import { env } from '@/config/env.ts'
+
 import type { CaptchaServicePort } from '@/core/ports/outbound/CaptchaServicePort.interface.ts'
 import axios from 'axios'
 
 export class TurnstileCaptchaService implements CaptchaServicePort {
 	private readonly secretKey: string
 
-	constructor() {
-		this.secretKey = env.TURNSTILE_SECRET_KEY
+	constructor(turnstileSecretKey: string) {
+		this.secretKey = turnstileSecretKey
 	}
 
 	public async verify(token: string): Promise<boolean> {

@@ -1,4 +1,4 @@
-import { describe, expect, it, vi, afterEach, beforeEach } from 'vitest'
+import { describe, expect, it } from 'vitest'
 import express from 'express'
 import request from 'supertest'
 import { corsMiddleware } from '@/adapters/primary/http/middlewares/cors.middleware.ts'
@@ -6,23 +6,16 @@ import { corsMiddleware } from '@/adapters/primary/http/middlewares/cors.middlew
 describe('corsMiddleware (Unit Test)', () => {
 	let app: express.Express
 
-	beforeEach(() => {
+	it('Should allow request and append header if origin is in the allowed list', async () => {
 		app = express()
-		app.use(corsMiddleware())
-		app.get('/test', (req, res) => {
+
+		const envAllowedOrigins = 'https://min-url.com,https://another.com'
+		const allowedOrigins = envAllowedOrigins.split(',')
+
+		app.use(corsMiddleware(allowedOrigins))
+		app.get('/test', (_req, res) => {
 			res.status(200).send('ok')
 		})
-	})
-
-	afterEach(() => {
-		vi.unstubAllEnvs()
-	})
-
-	it('Should allow request and append header if origin is in the allowed list', async () => {
-		vi.stubEnv(
-			'CORS_ALLOWED_ORIGINS',
-			'https://min-url.com,https://another.com',
-		)
 		const response = await request(app)
 			.get('/test')
 			.set('Origin', 'https://min-url.com')
@@ -33,19 +26,13 @@ describe('corsMiddleware (Unit Test)', () => {
 		)
 	})
 
-	it('Should default to localhost:4321 if CORS_ALLOWED_ORIGINS is not set', async () => {
-		const response = await request(app)
-			.get('/test')
-			.set('Origin', 'http://localhost:4321')
-
-		expect(response.status).toBe(200)
-		expect(response.headers['access-control-allow-origin']).toBe(
-			'http://localhost:4321',
-		)
-	})
-
 	it('Should deny request (throw error) if origin is not allowed', async () => {
-		vi.stubEnv('CORS_ALLOWED_ORIGINS', 'https://min-url.com')
+		app = express()
+
+		const envAllowedOrigins = 'https://min-url.com,https://another.com'
+		const allowedOrigins = envAllowedOrigins.split(',')
+
+		app.use(corsMiddleware(allowedOrigins))
 		const response = await request(app)
 			.get('/test')
 			.set('Origin', 'https://denied.com')

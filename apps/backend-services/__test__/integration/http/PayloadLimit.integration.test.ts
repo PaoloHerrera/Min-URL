@@ -1,9 +1,11 @@
 import request from 'supertest'
 import { describe, it, expect } from 'vitest'
-import { app } from '@/app.ts'
 import { SECURITY_ERROR } from '@min-url/contracts/errors'
+import { createTestApp } from '../helpers/createTestApp.ts'
 
 describe('POST /direct/shorten payload limit & JSON syntax integration tests', () => {
+	const { app } = createTestApp()
+
 	it('Should return 413 error if the JSON Body exceeds 5KB', async () => {
 		const largeUrl = `https://example.com/${'a'.repeat(5500)}`
 		const largePayload = {

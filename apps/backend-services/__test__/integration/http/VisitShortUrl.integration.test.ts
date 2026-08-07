@@ -1,16 +1,16 @@
 import request from 'supertest'
 import { describe, expect, it, beforeAll, afterAll } from 'vitest'
-import { app } from '@/app.ts'
 import z from 'zod'
 import { DrizzleShortUrlRepository } from '@/adapters/secondary/db/DrizzleShortUrlRepository.ts'
 import { ShortUrl } from '@/core/domain/entities/ShortUrl.entity.ts'
 import { TargetUrl } from '@/core/domain/value-objects/target-url/TargetUrl.vo.ts'
 import { Slug } from '@/core/domain/value-objects/slug/Slug.vo.ts'
 import { IpAddress } from '@/core/domain/value-objects/ip-address/IpAddress.vo.ts'
-import { db } from '@/adapters/secondary/db/connection.ts'
 import { sql } from 'drizzle-orm'
+import { createTestApp } from '../helpers/createTestApp.ts'
 
-const repo = new DrizzleShortUrlRepository()
+const { app, db } = createTestApp()
+const repo = new DrizzleShortUrlRepository(db)
 
 // Public Slug Schema
 const publicSlugSchema = z.object({

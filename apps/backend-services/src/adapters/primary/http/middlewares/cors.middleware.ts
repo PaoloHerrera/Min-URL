@@ -1,12 +1,9 @@
-import { env } from '@/config/env.ts'
 import cors from 'cors'
 
-export const corsMiddleware = () =>
+export const corsMiddleware = (allowedOrigins: string[]) =>
 	cors({
 		origin: (origin, callback) => {
-			const origins = env.CORS_ALLOWED_ORIGINS?.split(',') || [
-				'http://localhost:4321',
-			]
+			const origins = allowedOrigins
 
 			if (!origin || origins.includes(origin)) {
 				callback(null, true)

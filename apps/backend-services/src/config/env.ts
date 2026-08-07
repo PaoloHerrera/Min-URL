@@ -1,4 +1,3 @@
-import '@/bootstrap-env.ts'
 import { z } from 'zod'
 
 export const envSchema = z.object({
@@ -19,4 +18,5 @@ export const envSchema = z.object({
 })
 
 export type Env = z.infer<typeof envSchema>
-export const env = envSchema.parse(process.env)
+export const parseEnv = (env: Record<string, string | undefined>): Env =>
+	envSchema.parse(env)
