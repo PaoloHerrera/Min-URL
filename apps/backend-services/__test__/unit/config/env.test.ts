@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { envSchema } from '@/config/env.ts'
+import { parseEnv } from '@/config/env.ts'
 
 describe('Environment Config Schema (Unit Test)', () => {
 	const validBaseEnv = {
@@ -13,54 +13,39 @@ describe('Environment Config Schema (Unit Test)', () => {
 		CORS_ALLOWED_ORIGINS: 'http://localhost:4321',
 	}
 
-	it('Should parse ENABLE_SWAGGER as false when string "false" is provided', () => {
-		const parsed = envSchema.parse({
-			...validBaseEnv,
-			ENABLE_SWAGGER: 'false',
+	describe('ENABLE_SWAGGER boolean coercion', () => {
+		it.each([
+			{ input: 'false', expected: false },
+			{ input: 'true', expected: true },
+			{ input: undefined, expected: false },
+		])('Should parse "$input" as $expected', ({ input, expected }) => {
+			const parsed = parseEnv({ ...validBaseEnv, ENABLE_SWAGGER: input })
+			expect(parsed.ENABLE_SWAGGER).toBe(expected)
+		})
+	})
+
+	describe('PORT validation', () => {
+		it('Should throw when PORT is empty string (Fail-Fast)', () => {
+			expect(() => parseEnv({ ...validBaseEnv, PORT: '' })).toThrow()
 		})
 
-		expect(parsed.ENABLE_SWAGGER).toBe(false)
+		it.each(['0', '70000'])(
+			'Should throw when PORT is out of valid range (%s)',
+			(port) => {
+				expect(() => parseEnv({ ...validBaseEnv, PORT: port })).toThrow()
+			},
+		)
 	})
 
-	it('Should parse ENABLE_SWAGGER as true when string "true" is provided', () => {
-		const parsed = envSchema.parse({
-			...validBaseEnv,
-			ENABLE_SWAGGER: 'true',
+	describe('Required fields Fail-Fast validation', () => {
+		it.each([
+			'DATABASE_URL',
+			'ADMIN_URL',
+			'TURNSTILE_SECRET_KEY',
+			'INTERNAL_SECRET',
+			'CORS_ALLOWED_ORIGINS',
+		])('Should throw when %s is empty string', (field) => {
+			expect(() => parseEnv({ ...validBaseEnv, [field]: '' })).toThrow()
 		})
-
-		expect(parsed.ENABLE_SWAGGER).toBe(true)
-	})
-
-	it('Should default ENABLE_SWAGGER to false when undefined', () => {
-		const parsed = envSchema.parse({
-			...validBaseEnv,
-		})
-
-		expect(parsed.ENABLE_SWAGGER).toBe(false)
-	})
-
-	it('Should throw validation error when PORT is empty string (Fail-Fast)', () => {
-		expect(() =>
-			envSchema.parse({
-				...validBaseEnv,
-				PORT: '',
-			}),
-		).toThrow()
-	})
-
-	it('Should throw validation error when PORT is out of valid range (0 or > 65535)', () => {
-		expect(() =>
-			envSchema.parse({
-				...validBaseEnv,
-				PORT: '0',
-			}),
-		).toThrow()
-
-		expect(() =>
-			envSchema.parse({
-				...validBaseEnv,
-				PORT: '70000',
-			}),
-		).toThrow()
 	})
 })

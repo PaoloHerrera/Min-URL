@@ -4,12 +4,13 @@ import dotenv from 'dotenv'
 import pg from 'pg'
 import { drizzle } from 'drizzle-orm/node-postgres'
 import { migrate } from 'drizzle-orm/node-postgres/migrator'
-import { env } from '../src/config/env.ts'
-
+import { parseEnv } from '@/config/env.ts'
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 
 dotenv.config({ path: path.resolve(__dirname, '../.env.test'), override: true })
+
+const env = parseEnv(process.env)
 
 let migrated = false
 

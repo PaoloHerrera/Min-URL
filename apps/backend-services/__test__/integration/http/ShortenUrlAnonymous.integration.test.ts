@@ -1,6 +1,6 @@
 import request from 'supertest'
-import { describe, expect, it, vi } from 'vitest'
-import { app } from '@/app.ts'
+import { describe, expect, it, vi, beforeAll, afterAll } from 'vitest'
+import { createTestApp } from '../helpers/createTestApp.ts'
 
 vi.mock('@/adapters/secondary/captcha/TurnstileCaptchaService.ts', () => ({
 	TurnstileCaptchaService: class {
@@ -8,7 +8,22 @@ vi.mock('@/adapters/secondary/captcha/TurnstileCaptchaService.ts', () => ({
 	},
 }))
 
+let app: ReturnType<typeof createTestApp>['app']
+let db: ReturnType<typeof createTestApp>['db']
+
+beforeAll(() => {
+	const testApp = createTestApp()
+	app = testApp.app
+	db = testApp.db
+})
+
+afterAll(() => {
+	db.close()
+})
+
 describe('POST /direct/shorten', () => {
+	const { app } = createTestApp()
+
 	it('Should successfully create a shortened URL anonymously', async () => {
 		const response = await request(app).post('/direct/shorten').send({
 			originalUrl: 'https://www.google.com',

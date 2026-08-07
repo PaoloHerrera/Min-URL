@@ -1,9 +1,9 @@
-import { db } from '@/adapters/secondary/db/connection.ts'
 import {
 	toDomain,
 	toPersistence,
 } from '@/adapters/secondary/db/mappers/short-url.mapper.ts'
 import { shortUrls } from '@/adapters/secondary/db/schema/short-urls.schema.ts'
+import type { Db } from '@/adapters/secondary/db/connection.ts'
 import type { ShortUrl } from '@/core/domain/entities/ShortUrl.entity.ts'
 import { SlugAlreadyExistsError } from '@/core/domain/errors/domain.errors'
 import type { ShortUrlRepositoryPort } from '@/core/ports/outbound/ShortUrlRepositoryPort.interface.ts'
@@ -12,8 +12,14 @@ import { DrizzleQueryError } from 'drizzle-orm/errors'
 import { DatabaseError } from 'pg'
 
 export class DrizzleShortUrlRepository implements ShortUrlRepositoryPort {
+	private readonly db: Db
+
+	constructor(db: Db) {
+		this.db = db
+	}
+
 	async isSlugAvailable(slug: string): Promise<boolean> {
-		const [result] = await db
+		const [result] = await this.db
 			.select({ count: count() })
 			.from(shortUrls)
 			.where(eq(shortUrls.slug, slug))
@@ -27,7 +33,7 @@ export class DrizzleShortUrlRepository implements ShortUrlRepositoryPort {
 		const { clicksCount: _omit, ...updateData } = data
 
 		try {
-			await db
+			await this.db
 				.insert(shortUrls)
 				.values(data)
 				.onConflictDoUpdate({ target: shortUrls.id, set: updateData })
@@ -49,7 +55,7 @@ export class DrizzleShortUrlRepository implements ShortUrlRepositoryPort {
 	}
 
 	async getUrlBySlug(slug: string): Promise<ShortUrl | null> {
-		const [row] = await db
+		const [row] = await this.db
 			.select()
 			.from(shortUrls)
 			.where(eq(shortUrls.slug, slug))

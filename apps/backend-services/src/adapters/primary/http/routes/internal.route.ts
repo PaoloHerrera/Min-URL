@@ -1,13 +1,18 @@
-import { urlController } from '@/bootstrap.ts'
+import type { UrlController } from '@/adapters/primary/http/controllers/url.controller.ts'
 import { Router } from 'express'
-import { verifyInternalToken } from '../middlewares/verifyInternalToken.middleware.ts'
+import type { RequestHandler } from 'express'
 
-const router = Router()
+export const routesInternal = (
+	urlController: UrlController,
+	verifyInternalTokenMiddleware: RequestHandler,
+) => {
+	const router = Router()
 
-router.get(
-	'/slug-data/:slug',
-	verifyInternalToken,
-	urlController.resolveRedirect,
-)
+	router.get(
+		'/slug-data/:slug',
+		verifyInternalTokenMiddleware,
+		urlController.resolveRedirect,
+	)
 
-export { router as routesInternal }
+	return router
+}

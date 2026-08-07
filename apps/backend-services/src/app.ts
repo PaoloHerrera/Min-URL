@@ -3,52 +3,68 @@ import { errorHandler } from '@/adapters/primary/http/middlewares/errorHandler.m
 import { rateLimiter } from '@/adapters/primary/http/middlewares/rateLimiter.middleware.ts'
 import { routesInternal } from '@/adapters/primary/http/routes/internal.route.ts'
 import { routesShortUrl } from '@/adapters/primary/http/routes/shorturl.route.ts'
+import type { Db } from '@/adapters/secondary/db/connection.ts'
+import type { Env } from '@/config/env.ts'
 import express, { type Request, type Response } from 'express'
-import swaggerUi from 'swagger-ui-express'
-import { env } from './config/env.ts'
-import { swaggerDocument } from './swagger.ts'
 import helmet from 'helmet'
+import swaggerUi from 'swagger-ui-express'
+import { bootstrap } from './bootstrap.ts'
+import { swaggerDocument } from './swagger.ts'
 
-const app = express()
-app.use(
-	helmet({
-		xFrameOptions: { action: 'deny' },
-	}),
-)
-app.use(corsMiddleware())
+export const buildApp = (env: Env, db: Db) => {
+	const app = express()
 
-// Habilitar trust proxy
-app.set('trust proxy', 1)
+	// Resolve dependencies from the composition root
+	const {
+		urlController,
+		verifyCaptchaMiddleware,
+		verifyInternalTokenMiddleware,
+	} = bootstrap(env, db)
 
-// Rate Limiter
-app.use(
-	rateLimiter({
-		enabled: env.RATE_LIMIT_ENABLED,
-		windowMs: env.RATE_LIMIT_WINDOW_MS,
-		maxRequests: env.RATE_LIMIT_MAX_REQUESTS,
-	}),
-)
+	// Security headers
+	app.use(helmet({ xFrameOptions: { action: 'deny' } }))
 
-// Routes
-app.use('/', routesShortUrl)
-app.use('/internal', routesInternal)
+	// CORS
+	const allowedOrigins = env.CORS_ALLOWED_ORIGINS.split(',')
+		.map((origin) => origin.trim())
+		.filter((origin) => origin.length > 0)
 
-app.get('/', (req: Request, res: Response) => {
-	console.log(`IP del cliente: ${req.ip}`)
-	res.redirect('https://min-url.com')
-})
+	app.use(corsMiddleware(allowedOrigins))
 
-// favicon
-app.get('/favicon.ico', (_req: Request, res: Response) => {
-	res.status(204).end()
-})
+	// Trust reverse proxy (required for accurate req.ip behind load balancers)
+	app.set('trust proxy', 1)
 
-// Swagger UI
-if (env.NODE_ENV !== 'production' || env.ENABLE_SWAGGER === true) {
-	app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument))
+	// Rate limiting
+	app.use(
+		rateLimiter({
+			enabled: env.RATE_LIMIT_ENABLED,
+			windowMs: env.RATE_LIMIT_WINDOW_MS,
+			maxRequests: env.RATE_LIMIT_MAX_REQUESTS,
+		}),
+	)
+
+	// Application routes
+	app.use('/', routesShortUrl(urlController, verifyCaptchaMiddleware))
+	app.use(
+		'/internal',
+		routesInternal(urlController, verifyInternalTokenMiddleware),
+	)
+
+	// Utility routes
+	app.get('/', (_req: Request, res: Response) => {
+		res.redirect('https://min-url.com')
+	})
+	app.get('/favicon.ico', (_req: Request, res: Response) => {
+		res.status(204).end()
+	})
+
+	// API docs (disabled in production unless explicitly enabled)
+	if (env.NODE_ENV !== 'production' || env.ENABLE_SWAGGER === true) {
+		app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument))
+	}
+
+	// Centralized error handler (must be last)
+	app.use(errorHandler)
+
+	return app
 }
-
-// Errores centralizados
-app.use(errorHandler)
-
-export { app }

@@ -1,11 +1,16 @@
-import { env } from '@/config/env.ts'
 import { drizzle } from 'drizzle-orm/node-postgres'
 import pg from 'pg'
 import { shortUrls } from './schema/short-urls.schema.ts'
 import { visits } from './schema/visits.schema.ts'
 
-const pool = new pg.Pool({
-	connectionString: env.DATABASE_URL,
-})
+export const createDbConnection = (databaseUrl: string) => {
+	const pool = new pg.Pool({
+		connectionString: databaseUrl,
+	})
 
-export const db = drizzle(pool, { schema: { shortUrls, visits } })
+	const db = drizzle(pool, { schema: { shortUrls, visits } })
+
+	return Object.assign(db, { close: () => pool.end() })
+}
+
+export type Db = ReturnType<typeof createDbConnection>

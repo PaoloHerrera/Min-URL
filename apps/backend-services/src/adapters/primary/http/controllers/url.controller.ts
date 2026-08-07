@@ -1,4 +1,3 @@
-import { env } from '@/config/env.ts'
 import type { ShortenUrlAnonymousPort } from '@/core/ports/inbound/ShortenUrlAnonymousPort.interface.ts'
 import type { VisitShortUrlPort } from '@/core/ports/inbound/VisitShortUrlPort.interface.ts'
 import type {
@@ -12,13 +11,16 @@ import { extractClientIp } from '../utils/extractClientIp.ts'
 export class UrlController {
 	private readonly shortenUrlAnonymousPort: ShortenUrlAnonymousPort
 	private readonly visitShortUrlPort: VisitShortUrlPort
+	private readonly redirectorUrl: string
 
 	constructor(
 		shortenUrlAnonymousPort: ShortenUrlAnonymousPort,
 		visitShortUrlPort: VisitShortUrlPort,
+		redirectorUrl: string,
 	) {
 		this.shortenUrlAnonymousPort = shortenUrlAnonymousPort
 		this.visitShortUrlPort = visitShortUrlPort
+		this.redirectorUrl = redirectorUrl
 	}
 
 	public createAnonymous = async (
@@ -44,7 +46,7 @@ export class UrlController {
 
 		const response: ShortenAnonymousResponse = {
 			originalUrl: shortUrl.originalUrl.value,
-			shortUrl: `${env.REDIRECTOR_URL || 'https://murl.cl'}/${shortUrl.slug.value}`,
+			shortUrl: `${this.redirectorUrl}/${shortUrl.slug.value}`,
 			slug: shortUrl.slug.value,
 			createdAt: shortUrl.createdAt.toISOString(),
 		}

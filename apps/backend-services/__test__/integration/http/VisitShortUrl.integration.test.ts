@@ -1,16 +1,13 @@
 import request from 'supertest'
 import { describe, expect, it, beforeAll, afterAll } from 'vitest'
-import { app } from '@/app.ts'
 import z from 'zod'
 import { DrizzleShortUrlRepository } from '@/adapters/secondary/db/DrizzleShortUrlRepository.ts'
 import { ShortUrl } from '@/core/domain/entities/ShortUrl.entity.ts'
 import { TargetUrl } from '@/core/domain/value-objects/target-url/TargetUrl.vo.ts'
 import { Slug } from '@/core/domain/value-objects/slug/Slug.vo.ts'
 import { IpAddress } from '@/core/domain/value-objects/ip-address/IpAddress.vo.ts'
-import { db } from '@/adapters/secondary/db/connection.ts'
 import { sql } from 'drizzle-orm'
-
-const repo = new DrizzleShortUrlRepository()
+import { createTestApp } from '../helpers/createTestApp.ts'
 
 // Public Slug Schema
 const publicSlugSchema = z.object({
@@ -23,8 +20,17 @@ const publicSlugSchema = z.object({
 //Sleep Helper
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
 
+let app: ReturnType<typeof createTestApp>['app']
+let db: ReturnType<typeof createTestApp>['db']
+let repo: DrizzleShortUrlRepository
+
 // Insert test data before all tests
 beforeAll(async () => {
+	const testApp = createTestApp()
+	app = testApp.app
+	db = testApp.db
+	repo = new DrizzleShortUrlRepository(db)
+
 	// 1. Create a public slug
 	await repo.save(
 		ShortUrl.reconstitute({
@@ -107,6 +113,7 @@ afterAll(async () => {
 		protectedUrl.delete()
 		await repo.save(protectedUrl)
 	}
+	db.close()
 })
 
 describe('GET /internal/slug-data/:slug', () => {
