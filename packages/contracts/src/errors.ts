@@ -88,6 +88,10 @@ export const INFRA_ERROR = {
 		message:
 			'Captcha service is currently unavailable. Please try again later.',
 	},
+	databaseConnectionError: {
+		code: 'DATABASE_CONNECTION_ERROR',
+		message: 'Database connection error.',
+	},
 } as const
 
 type ValueOf<T> = T[keyof T]
@@ -107,7 +111,7 @@ export type HttpErrorCodes =
 	| SlugErrorCode
 	| Exclude<ValidationErrorCode, 'INVALID_VISIT' | 'INVALID_GEOLOCATION'>
 	| SecurityErrorCode
-	| InfraErrorCode
+	| Exclude<InfraErrorCode, 'DATABASE_CONNECTION_ERROR'>
 
 export type DomainErrorCodes = SlugErrorCode | ValidationErrorCode
 

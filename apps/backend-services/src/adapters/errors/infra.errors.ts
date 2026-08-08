@@ -70,3 +70,10 @@ export class InternalServerError extends InfraError {
 		super(INFRA_ERROR.internalServerError.message)
 	}
 }
+
+export class DatabaseConnectionError extends InfraError {
+	readonly code = INFRA_ERROR.databaseConnectionError.code
+	constructor() {
+		super(INFRA_ERROR.databaseConnectionError.message)
+	}
+}

@@ -1,3 +1,4 @@
+import { DatabaseConnectionError } from '@/adapters/errors/infra.errors.ts'
 import { drizzle } from 'drizzle-orm/node-postgres'
 import pg from 'pg'
 import { shortUrls } from './schema/short-urls.schema.ts'
@@ -14,3 +15,16 @@ export const createDbConnection = (databaseUrl: string) => {
 }
 
 export type Db = ReturnType<typeof createDbConnection>
+
+export const assertDatabaseAvailable = async (db: Db) => {
+	try {
+		await db.execute('SELECT 1')
+	} catch {
+		const error = new DatabaseConnectionError()
+		console.error(
+			`[FATAL] ${error.message} — Is docker compose up -d running? Check DATABASE_URL.`,
+		)
+		await db.close()
+		process.exit(1)
+	}
+}
