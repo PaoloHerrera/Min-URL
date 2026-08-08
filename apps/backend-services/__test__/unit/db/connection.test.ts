@@ -38,7 +38,7 @@ describe('assertDatabaseAvailable unit test', () => {
 
 	it('Should log and exit with code 1 when database is unavailable', async () => {
 		db.execute.mockRejectedValue(new Error('Database connection failed'))
-
+		db.close.mockResolvedValue(undefined)
 		await assertDatabaseAvailable(db as unknown as Db)
 
 		expect(db.close).toHaveBeenCalled()
@@ -48,5 +48,22 @@ describe('assertDatabaseAvailable unit test', () => {
 			expect.stringContaining('DATABASE_URL'),
 		)
 		expect(console.error).toHaveBeenCalledTimes(1)
+	})
+
+	it('Should print failed to close error message when db.close() fails', async () => {
+		db.execute.mockRejectedValue(new Error('Database connection failed'))
+		db.close.mockRejectedValue(new Error('Failed to close the database pool'))
+		await assertDatabaseAvailable(db as unknown as Db)
+		expect(db.close).toHaveBeenCalled()
+		expect(console.error).toHaveBeenNthCalledWith(
+			1,
+			expect.stringContaining('DATABASE_URL'),
+		)
+		expect(console.error).toHaveBeenNthCalledWith(
+			2,
+			expect.stringContaining('Failed to close the database pool'),
+		)
+		expect(console.error).toHaveBeenCalledTimes(2)
+		expect(process.exit).toHaveBeenCalledTimes(1)
 	})
 })

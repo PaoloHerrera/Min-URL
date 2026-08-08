@@ -24,7 +24,11 @@ export const assertDatabaseAvailable = async (db: Db) => {
 		console.error(
 			`[FATAL] ${error.message} — Is docker compose up -d running? Check DATABASE_URL.`,
 		)
-		await db.close()
+		try {
+			await db.close()
+		} catch {
+			console.error('[FATAL] Failed to close the database pool.')
+		}
 		process.exit(1)
 	}
 }
