@@ -309,7 +309,7 @@ Estado: ⏳ pendiente · 🔧 en curso · ✅ resuelto · ➖ descartado/wontfix
 | SEC-M1     | Sin bloqueo IPs privadas en TargetUrl       | ⏳     | Fase 1 o Cap 4                                                                         |
 | SEC-M2     | `z.url()` acepta `javascript:` en contracts | ⏳     | Fase 0 (`httpUrlSchema`)                                                               |
 | SEC-M3     | Token interno no timing-safe                | ⏳     | Fase 0                                                                                 |
-| SEC-M4     | Spoofing de IP (trust proxy / body.ip)      | ⏳     | Fase 0                                                                                 |
+| SEC-M4     | Spoofing de IP (trust proxy / body.ip)      | ✅     | `trust proxy 1` + `req.ip` nativo, `extractClientIp` eliminado (Issue #52)             |
 | SEC-M5     | OAuth sin `state`, callback relativa        | ⏳     | Parte 1B                                                                               |
 | SEC-M6     | Refresh sin rotación; access 24h            | ⏳     | Parte 1B (better-auth lo resuelve)                                                     |
 | SEC-B1-B12 | Bajos (ver tabla)                           | 🔧     | SEC-B9 (payload limit 5KB) y SEC-B2 (helmet) resueltos en backend-services (Issue #37) |
